@@ -49,6 +49,13 @@ public class PlayerScript : MonoBehaviour
     [Tooltip("生成するクローンのプレハブ（Inspectorで設定必須）")]
     public GameObject clonePrefab;
 
+    // ========== 弾生成用 =============
+    [Header("弾生成用のプレハブ")]
+    public GameObject Bullet;
+
+    [Header("発射位置（ShotPoint）")]
+    public Transform shotPoint;
+
     /// <summary>
     /// 初期化処理
     /// Rigidbody2Dコンポーネントを取得
@@ -82,6 +89,12 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             StopRecordingAndSpawnClone();
+        }
+
+        // 右クリックが押されたらクローンを生成
+        if (Input.GetMouseButtonDown(1))
+        {
+            Shot();
         }
     }
 
@@ -176,6 +189,13 @@ public class PlayerScript : MonoBehaviour
 
         Debug.Log("クローンを生成しました！新しい記録を開始します。");
     }
+
+    void Shot()
+    {
+        // 弾を生成
+        GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
+    }
+
 
     /// <summary>
     /// 他のコライダーと衝突した瞬間に呼ばれる
