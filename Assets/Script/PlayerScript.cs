@@ -1,97 +1,124 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
+using System.Threading;
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[‚ÌŠeƒtƒŒ[ƒ€‚Ìs“®‚ğ‹L˜^‚·‚éƒf[ƒ^ƒNƒ‰ƒX
-/// ƒX[ƒp[ƒ^ƒCƒ€ƒtƒH[ƒXƒEƒ‹ƒgƒ‰‚Ì‚æ‚¤‚ÈƒNƒ[ƒ“Ä¶ƒVƒXƒeƒ€‚Åg—p
+/// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌŠeï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìsï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½^ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½Nï¿½ï¿½ï¿½X
+/// ï¿½Xï¿½[ï¿½pï¿½[ï¿½^ï¿½Cï¿½ï¿½ï¿½tï¿½Hï¿½[ï¿½Xï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ì‚æ‚¤ï¿½ÈƒNï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Äï¿½ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½Ågï¿½p
 /// </summary>
 [System.Serializable]
 public class PlayerAction
 {
-    public float time;              // ‹L˜^ŠJn‚©‚ç‚ÌŒo‰ßŠÔ
-    public Vector2 position;        // ‚»‚Ì“_‚Å‚ÌƒvƒŒƒCƒ„[‚ÌˆÊ’u
-    public Vector2 velocity;        // ‚»‚Ì“_‚Å‚ÌƒvƒŒƒCƒ„[‚Ì‘¬“xi•¨—‰‰Z—pj
-    public bool jumpInput;          // ƒWƒƒƒ“ƒvƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚©‚Ç‚¤‚©
-    public float horizontalInput;   // ¶‰E‚Ì“ü—Í’li-1.0 ` 1.0j
+    public float time;              // ï¿½Lï¿½^ï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½ÌŒoï¿½ßï¿½ï¿½ï¿½
+    public Vector2 position;        // ï¿½ï¿½ï¿½Ìï¿½ï¿½_ï¿½Å‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌˆÊ’u
+    public Vector2 velocity;        // ï¿½ï¿½ï¿½Ìï¿½ï¿½_ï¿½Å‚Ìƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ì‘ï¿½ï¿½xï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½pï¿½j
+    public bool jumpInput;          // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½
+    public float horizontalInput;   // ï¿½ï¿½ï¿½Eï¿½Ì“ï¿½ï¿½Í’lï¿½i-1.0 ï¿½` 1.0ï¿½j
 }
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[ƒLƒƒƒ‰ƒNƒ^[‚ÌˆÚ“®EƒWƒƒƒ“ƒvEs“®‹L˜^‚ğŠÇ—‚·‚éƒXƒNƒŠƒvƒg
-/// ƒvƒŒƒCƒ„[‚Ì‘S‚Ä‚Ìs“®‚ğ‹L˜^‚µAw’èƒ^ƒCƒ~ƒ“ƒO‚ÅƒNƒ[ƒ“‚ğ¶¬‚·‚é
+/// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½ÌˆÚ“ï¿½ï¿½Eï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Eï¿½sï¿½ï¿½ï¿½Lï¿½^ï¿½ï¿½ï¿½Ç—ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½g
+/// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ì‘Sï¿½Ä‚Ìsï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½^ï¿½ï¿½ï¿½Aï¿½wï¿½ï¿½^ï¿½Cï¿½~ï¿½ï¿½ï¿½Oï¿½ÅƒNï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ğ¶ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 public class PlayerScript : MonoBehaviour
 {
-    // ========== ˆÚ“®ŠÖ˜A‚Ìƒpƒ‰ƒ[ƒ^ ==========
-    [Header("ˆÚ“®İ’è")]
-    [Tooltip("¶‰E‚ÌˆÚ“®‘¬“x")]
+    // ========== ï¿½Ú“ï¿½ï¿½Ö˜Aï¿½Ìƒpï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ ==========
+    [Header("ï¿½Ú“ï¿½ï¿½İ’ï¿½")]
+    [Tooltip("ï¿½ï¿½ï¿½Eï¿½ÌˆÚ“ï¿½ï¿½ï¿½ï¿½x")]
     public float moveSpeed = 5f;
 
-    [Tooltip("ƒWƒƒƒ“ƒv‚Ì‹­‚³iã•ûŒü‚Ì‰‘¬“xj")]
+    [Tooltip("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Ì‹ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½xï¿½j")]
     public float jumpForce = 7f;
 
-    // ========== ƒRƒ“ƒ|[ƒlƒ“ƒgQÆ ==========
-    private Rigidbody2D rb;          // •¨—‰‰Z—p‚ÌRigidbody2D
-    public bool isGrounded;          // ’n–Ê‚ÉÚ’n‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+    // ========== ï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½Qï¿½ï¿½ ==========
+    private Rigidbody2D rb;          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½pï¿½ï¿½Rigidbody2D
+    public bool isGrounded;          // ï¿½nï¿½Ê‚ÉÚ’nï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½
 
-    // ========== ‹L˜^ƒVƒXƒeƒ€ŠÖ˜A ==========
-    [Header("‹L˜^İ’è")]
-    [Tooltip("‹L˜^‚³‚ê‚½‘S‚Ä‚Ìs“®ƒf[ƒ^")]
+    // ========== ï¿½Lï¿½^ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½Ö˜A ==========
+    [Header("ï¿½Lï¿½^ï¿½İ’ï¿½")]
+    [Tooltip("ï¿½Lï¿½^ï¿½ï¿½ï¿½ê‚½ï¿½Sï¿½Ä‚Ìsï¿½ï¿½ï¿½fï¿½[ï¿½^")]
     private List<PlayerAction> recordedActions = new List<PlayerAction>();
 
-    [Tooltip("Œ»İ‹L˜^’†‚©‚Ç‚¤‚©")]
+    [Tooltip("ï¿½ï¿½ï¿½İ‹Lï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½")]
     private bool isRecording = true;
 
-    [Tooltip("‹L˜^ŠJn‚©‚ç‚ÌŒo‰ßŠÔ")]
+    [Tooltip("ï¿½Lï¿½^ï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½ÌŒoï¿½ßï¿½ï¿½ï¿½")]
     private float recordingTime = 0f;
 
-    // ========== ƒNƒ[ƒ“¶¬—p ==========
-    [Header("ƒNƒ[ƒ“İ’è")]
-    [Tooltip("¶¬‚·‚éƒNƒ[ƒ“‚ÌƒvƒŒƒnƒuiInspector‚Åİ’è•K{j")]
+    // ========== ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½p ==========
+    [Header("ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½İ’ï¿½")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½nï¿½uï¿½iInspectorï¿½Åİ’ï¿½Kï¿½{ï¿½j")]
     public GameObject clonePrefab;
 
-    // ========== ’e¶¬—p =============
-    [Header("’e¶¬—p‚ÌƒvƒŒƒnƒu")]
+    // ========== å¼¾ç”Ÿæˆç”¨ =============
+    [Header("å¼¾ç”Ÿæˆç”¨ã®ãƒ—ãƒ¬ãƒãƒ–")]
     public GameObject Bullet;
-
-    [Header("”­ËˆÊ’uiShotPointj")]
+    [Header("ï¿½ï¿½ï¿½ËˆÊ’uï¿½iShotPointï¿½j")]
     public Transform shotPoint;
 
     /// <summary>
-    /// ‰Šú‰»ˆ—
-    /// Rigidbody2DƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    /// Rigidbody2Dï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½ï¿½ï¿½æ“¾
     /// </summary>
     void Start()
     {
-        // Rigidbody2DƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾i•¨—‰‰Z‚É•K—vj
+        // Rigidbody2Dï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½gï¿½ï¿½ï¿½æ“¾ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½É•Kï¿½vï¿½j
         rb = GetComponent<Rigidbody2D>();
 
-        // ƒNƒ[ƒ“ƒvƒŒƒnƒu‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍŒx‚ğo‚·
+        // ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½nï¿½uï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½ÍŒxï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½
         if (clonePrefab == null)
         {
-            Debug.LogWarning("ClonePrefab‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñIInspector‚Åİ’è‚µ‚Ä‚­‚¾‚³‚¢B");
+            Debug.LogWarning("ClonePrefabï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½IInspectorï¿½Åİ’è‚µï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B");
         }
+        isRecording = false;
     }
 
     /// <summary>
-    /// –ˆƒtƒŒ[ƒ€ŒÄ‚Î‚ê‚éXVˆ—
-    /// ‹L˜^’†‚Í“ü—Í‚ğ‹L˜^‚µARƒL[‚ÅƒNƒ[ƒ“¶¬
+    /// ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ä‚Î‚ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½
+    /// ï¿½Lï¿½^ï¿½ï¿½ï¿½Í“ï¿½ï¿½Í‚ï¿½ï¿½Lï¿½^ï¿½ï¿½ï¿½ARï¿½Lï¿½[ï¿½ÅƒNï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     void Update()
     {
-        // ‹L˜^’†‚Ìê‡AƒvƒŒƒCƒ„[‚Ì“ü—Í‚Æó‘Ô‚ğ‹L˜^
+        // ï¿½ï¿½ï¿½Eï¿½Ì“ï¿½ï¿½Í‚ï¿½ï¿½æ“¾ï¿½i-1.0 ï¿½` 1.0 ï¿½Ì”ÍˆÍj
+        float horizontal = Input.GetAxis("Horizontal");
+        // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½{ï¿½^ï¿½ï¿½ï¿½iï¿½Xï¿½yï¿½[ï¿½Xï¿½Lï¿½[ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
+        bool jumpPressed = Input.GetKeyDown(KeyCode.Space);
+        // ï¿½Lï¿½^ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½é‚½ï¿½ß‚Ìï¿½ï¿½ï¿½ï¿½ï¿½
+        if (Mathf.Abs(horizontal) >= 0.01f || jumpPressed)
+        {
+            isRecording = true;
+        }
+
+        // ï¿½Lï¿½^ï¿½ï¿½ï¿½Ìê‡ï¿½Aï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ì“ï¿½ï¿½Í‚Æï¿½Ô‚ï¿½ï¿½Lï¿½^
         if (isRecording)
         {
             RecordPlayerInput();
         }
 
-        // RƒL[‚ª‰Ÿ‚³‚ê‚½‚çƒNƒ[ƒ“‚ğ¶¬
-        // ¦‚±‚±‚ÍD‚«‚Èƒ^ƒCƒ~ƒ“ƒO‚É•ÏX‰Â”\i€–SAƒ^ƒCƒ€ƒAƒEƒg‚È‚Çj
+        // Rï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ğ¶ï¿½
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÍDï¿½ï¿½ï¿½Èƒ^ï¿½Cï¿½~ï¿½ï¿½ï¿½Oï¿½É•ÏXï¿½Â”\ï¿½iï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½Aï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½È‚Çj
+        if (rb.linearVelocity == Vector2.zero && Mathf.Abs(horizontal) == 0.0f)
+        {
+            if (recordedActions.Count != 0)
+            {
+                Debug.Log("Counton");
+                StopRecordingAndSpawnClone();
+                if (isRecording)
+                {
+                    isRecording = false;
+                }
+            }
+            
+        }
+        //ï¿½ï¿½ï¿½İ‚ÌƒVï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
         if (Input.GetKeyDown(KeyCode.R))
         {
-            StopRecordingAndSpawnClone();
+            UnityEngine.SceneManagement.Scene currentScene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(currentScene.name);
         }
-
-        // ‰EƒNƒŠƒbƒN‚ª‰Ÿ‚³‚ê‚½‚çƒNƒ[ƒ“‚ğ¶¬
+        // å³ã‚¯ãƒªãƒƒã‚¯ãŒæŠ¼ã•ã‚ŒãŸã‚‰ã‚¯ãƒ­ãƒ¼ãƒ³ã‚’ç”Ÿæˆ
         if (Input.GetMouseButtonDown(1))
         {
             Shot();
@@ -99,127 +126,165 @@ public class PlayerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Ì“ü—Í‚Æó‘Ô‚ğ‹L˜^‚µAÀÛ‚ÌˆÚ“®ˆ—‚às‚¤
+    /// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ì“ï¿½ï¿½Í‚Æï¿½Ô‚ï¿½ï¿½Lï¿½^ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Û‚ÌˆÚ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
     /// </summary>
     void RecordPlayerInput()
     {
-        // ¶‰E‚Ì“ü—Í‚ğæ“¾i-1.0 ` 1.0 ‚Ì”ÍˆÍj
+        // ï¿½ï¿½ï¿½Eï¿½Ì“ï¿½ï¿½Í‚ï¿½ï¿½æ“¾ï¿½i-1.0 ï¿½` 1.0 ï¿½Ì”ÍˆÍj
         float horizontal = Input.GetAxis("Horizontal");
 
-        // ƒWƒƒƒ“ƒvƒ{ƒ^ƒ“iƒXƒy[ƒXƒL[j‚ª‰Ÿ‚³‚ê‚½‚©‚ğæ“¾
+        // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½{ï¿½^ï¿½ï¿½ï¿½iï¿½Xï¿½yï¿½[ï¿½Xï¿½Lï¿½[ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
         bool jumpPressed = Input.GetKeyDown(KeyCode.Space);
 
-        // ========== Œ»İ‚Ìó‘Ô‚ğ‹L˜^ ==========
+        // ========== ï¿½ï¿½ï¿½İ‚Ìï¿½Ô‚ï¿½ï¿½Lï¿½^ ==========
         PlayerAction action = new PlayerAction
         {
-            time = recordingTime,                    // Œ»İ‚Ì‹L˜^ŠÔ
-            position = transform.position,           // Œ»İ‚ÌˆÊ’u
-            velocity = rb.linearVelocity,            // Œ»İ‚Ì‘¬“xi•¨—‰‰Z‚Ì‘¬“xj
-            jumpInput = jumpPressed,                 // ƒWƒƒƒ“ƒvƒ{ƒ^ƒ“‚Ì“ü—Í
-            horizontalInput = horizontal             // ¶‰E‚Ì“ü—Í’l
+            time = recordingTime,                    // ï¿½ï¿½ï¿½İ‚Ì‹Lï¿½^ï¿½ï¿½ï¿½ï¿½
+            position = transform.position,           // ï¿½ï¿½ï¿½İ‚ÌˆÊ’u
+            velocity = rb.linearVelocity,            // ï¿½ï¿½ï¿½İ‚Ì‘ï¿½ï¿½xï¿½iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½Ì‘ï¿½ï¿½xï¿½j
+            jumpInput = jumpPressed,                 // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½{ï¿½^ï¿½ï¿½ï¿½Ì“ï¿½ï¿½ï¿½
+            horizontalInput = horizontal             // ï¿½ï¿½ï¿½Eï¿½Ì“ï¿½ï¿½Í’l
         };
-        recordedActions.Add(action);  // ‹L˜^ƒŠƒXƒg‚É’Ç‰Á
+        recordedActions.Add(action);  // ï¿½Lï¿½^ï¿½ï¿½ï¿½Xï¿½gï¿½É’Ç‰ï¿½
 
-        // ‹L˜^ŠÔ‚ği‚ß‚é
+        // ï¿½Lï¿½^ï¿½ï¿½ï¿½Ô‚ï¿½iï¿½ß‚ï¿½
         recordingTime += Time.deltaTime;
 
-        // ========== ÀÛ‚ÌˆÚ“®ˆ— ==========
-        // ¶‰E‚Ì“ü—Í‚ª‚ ‚éê‡A‰¡•ûŒü‚Ì‘¬“x‚ğİ’è
+        // ========== ï¿½ï¿½ï¿½Û‚ÌˆÚ“ï¿½ï¿½ï¿½ï¿½ï¿½ ==========
+        // ï¿½ï¿½ï¿½Eï¿½Ì“ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½xï¿½ï¿½İ’ï¿½
         if (Mathf.Abs(horizontal) >= 0.01f)
         {
+                       
             rb.linearVelocityX = horizontal * moveSpeed;
         }
         else
         {
-            // “ü—Í‚ª‚È‚¢ê‡‚Í‰¡•ûŒü‚Ì‘¬“x‚ğ0‚É‚·‚éiŠŠ‚è‘±‚¯‚È‚¢‚æ‚¤‚Éj
+            // ï¿½ï¿½ï¿½Í‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Í‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½xï¿½ï¿½0ï¿½É‚ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½è‘±ï¿½ï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½Éj
             rb.linearVelocityX = 0f;
         }
 
-        // ’n–Ê‚ÉÚ’n‚µ‚Ä‚¢‚ÄƒWƒƒƒ“ƒvƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡
+        // ï¿½nï¿½Ê‚ÉÚ’nï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ÄƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ê‡
         if (isGrounded && jumpPressed)
         {
-            // Y•ûŒü‚É—Í‚ğ‰Á‚¦‚ÄƒWƒƒƒ“ƒviX•ûŒü‚Ì‘¬“x‚ÍˆÛj
+            if (!isRecording)
+            {
+                isRecording = true;
+            }
+            // Yï¿½ï¿½ï¿½ï¿½ï¿½É—Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½iXï¿½ï¿½ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½xï¿½ÍˆÛï¿½ï¿½j
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
     }
 
     /// <summary>
-    /// ‹L˜^‚ğ’â~‚µ‚ÄƒNƒ[ƒ“‚ğ¶¬‚µAV‚µ‚¢‹L˜^‚ğŠJn‚·‚é
+    /// ï¿½Lï¿½^ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½ÄƒNï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ğ¶ï¿½ï¿½ï¿½ï¿½Aï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½^ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½
     /// </summary>
     void StopRecordingAndSpawnClone()
     {
-        // ‹L˜^ƒf[ƒ^‚ª‚È‚¢ê‡‚Í‰½‚à‚µ‚È‚¢
+        // ï¿½Lï¿½^ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Í‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (recordedActions.Count == 0)
         {
-            Debug.LogWarning("‹L˜^ƒf[ƒ^‚ª‚ ‚è‚Ü‚¹‚ñBƒNƒ[ƒ“‚ğ¶¬‚Å‚«‚Ü‚¹‚ñB");
+            Debug.LogWarning("ï¿½Lï¿½^ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ğ¶ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B");
             return;
         }
 
-        // ƒNƒ[ƒ“ƒvƒŒƒnƒu‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Í¶¬‚Å‚«‚È‚¢
+        // ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½nï¿½uï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Íï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½È‚ï¿½
         if (clonePrefab == null)
         {
-            Debug.LogError("ClonePrefab‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñI");
+            Debug.LogError("ClonePrefabï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½I");
             return;
         }
 
-        // ‹L˜^‚ğˆê’â~
+        // ï¿½Lï¿½^ï¿½ï¿½ï¿½êï¿½ï¿½~
         isRecording = false;
 
-        // ========== ƒNƒ[ƒ“‚Ì¶¬ ==========
-        // Å‰‚Ì‹L˜^ˆÊ’u‚ÉƒNƒ[ƒ“‚ğ¶¬
+        // ========== ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ ==========
+        // ï¿½Åï¿½ï¿½Ì‹Lï¿½^ï¿½Ê’uï¿½ÉƒNï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ğ¶ï¿½
         GameObject clone = Instantiate(clonePrefab, recordedActions[0].position, Quaternion.identity);
 
-        // ƒNƒ[ƒ“‚ÌƒRƒ“ƒgƒ[ƒ‰[‚ğæ“¾
+        // ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½æ“¾
         CloneController cloneController = clone.GetComponent<CloneController>();
 
         if (cloneController != null)
         {
-            // ƒNƒ[ƒ“‚É‹L˜^ƒf[ƒ^‚ğ“n‚·iV‚µ‚¢List‚ğì¬‚µ‚ÄƒRƒs[j
+            // ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½É‹Lï¿½^ï¿½fï¿½[ï¿½^ï¿½ï¿½nï¿½ï¿½ï¿½iï¿½Vï¿½ï¿½ï¿½ï¿½Listï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ÄƒRï¿½sï¿½[ï¿½j
             cloneController.SetRecordedActions(new List<PlayerAction>(recordedActions));
         }
         else
         {
-            Debug.LogError("ClonePrefab‚ÉCloneController‚ªƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñI");
+            Debug.LogError("ClonePrefabï¿½ï¿½CloneControllerï¿½ï¿½ï¿½Aï¿½^ï¿½bï¿½`ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½I");
         }
 
-        // ========== V‚µ‚¢‹L˜^‚ğŠJn ==========
-        recordedActions.Clear();  // ‹L˜^ƒf[ƒ^‚ğƒNƒŠƒA
-        recordingTime = 0f;       // ‹L˜^ŠÔ‚ğƒŠƒZƒbƒg
-        isRecording = true;       // ‹L˜^‚ğÄŠJ
+        // ========== ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½^ï¿½ï¿½ï¿½Jï¿½n ==========
+        recordedActions.Clear();  // ï¿½Lï¿½^ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
+        recordingTime = 0f;       // ï¿½Lï¿½^ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
+        isRecording = true;       // ï¿½Lï¿½^ï¿½ï¿½ï¿½ÄŠJ
 
-        Debug.Log("ƒNƒ[ƒ“‚ğ¶¬‚µ‚Ü‚µ‚½IV‚µ‚¢‹L˜^‚ğŠJn‚µ‚Ü‚·B");
+        Debug.Log("ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ğ¶ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Iï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½^ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B");
     }
 
     void Shot()
     {
-        // ’e‚ğ¶¬
+        // å¼¾ã‚’ç”Ÿæˆ
         GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
     }
 
-
     /// <summary>
-    /// ‘¼‚ÌƒRƒ‰ƒCƒ_[‚ÆÕ“Ë‚µ‚½uŠÔ‚ÉŒÄ‚Î‚ê‚é
-    /// ’n–Ê‚Æ‚ÌÚG‚ğŒŸ’m‚µ‚ÄÚ’nó‘Ô‚ğXV
+    /// ï¿½ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½Cï¿½_ï¿½[ï¿½ÆÕ“Ë‚ï¿½ï¿½ï¿½ï¿½uï¿½Ô‚ÉŒÄ‚Î‚ï¿½ï¿½
+    /// ï¿½nï¿½Ê‚Æ‚ÌÚGï¿½ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½ï¿½ÄÚ’nï¿½ï¿½Ô‚ï¿½ï¿½Xï¿½V
     /// </summary>
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Õ“Ë‚µ‚½ƒIƒuƒWƒFƒNƒg‚ª"Ground"ƒ^ƒO‚ğ‚Á‚Ä‚¢‚éê‡
+        // ï¿½Õ“Ë‚ï¿½ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½"Ground"ï¿½^ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡
         if (collision.collider.CompareTag("Ground"))
         {
-            isGrounded = true;  // Ú’nó‘Ô‚ğtrue‚É
+            isGrounded = true;  // ï¿½Ú’nï¿½ï¿½Ô‚ï¿½trueï¿½ï¿½
         }
+        
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        // ï¿½Õ“Ë‚ï¿½ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½"Ground"ï¿½^ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡
+        if (collision.collider.CompareTag("Ground"))
+        {
+            isGrounded = true;  // ï¿½Ú’nï¿½ï¿½Ô‚ï¿½trueï¿½ï¿½
+        }        
     }
 
     /// <summary>
-    /// ‘¼‚ÌƒRƒ‰ƒCƒ_[‚©‚ç—£‚ê‚½uŠÔ‚ÉŒÄ‚Î‚ê‚é
-    /// ’n–Ê‚©‚ç—£‚ê‚½‚±‚Æ‚ğŒŸ’m‚µ‚ÄÚ’nó‘Ô‚ğXV
+    /// ï¿½ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½Cï¿½_ï¿½[ï¿½ï¿½ï¿½ç—£ï¿½ê‚½ï¿½uï¿½Ô‚ÉŒÄ‚Î‚ï¿½ï¿½
+    /// ï¿½nï¿½Ê‚ï¿½ï¿½ç—£ï¿½ê‚½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½ï¿½ÄÚ’nï¿½ï¿½Ô‚ï¿½ï¿½Xï¿½V
     /// </summary>
     private void OnCollisionExit2D(Collision2D collision)
     {
-        // —£‚ê‚½ƒIƒuƒWƒFƒNƒg‚ª"Ground"ƒ^ƒO‚ğ‚Á‚Ä‚¢‚éê‡
+        // ï¿½ï¿½ï¿½ê‚½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½"Ground"ï¿½^ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡
         if (collision.collider.CompareTag("Ground"))
         {
-            isGrounded = false;  // Ú’nó‘Ô‚ğfalse‚É
+            isGrounded = false;  // ï¿½Ú’nï¿½ï¿½Ô‚ï¿½falseï¿½ï¿½
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Clone"))
+        {
+            isGrounded = true;  // ï¿½Ú’nï¿½ï¿½Ô‚ï¿½trueï¿½ï¿½
+        }
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Clone"))
+        {
+            isGrounded = true;  // ï¿½Ú’nï¿½ï¿½Ô‚ï¿½trueï¿½ï¿½
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Clone"))
+        {
+            isGrounded = false;  // ï¿½Ú’nï¿½ï¿½Ô‚ï¿½trueï¿½ï¿½
+        }
+    }
+
+   
 }

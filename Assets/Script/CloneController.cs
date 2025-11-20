@@ -87,6 +87,13 @@ public class CloneController : MonoBehaviour
     /// </summary>
     void Update()
     {
+        //GameObject Clone = GameObject.FindWithTag("clone");
+        //if (Clone != null)
+        //{
+        //    Collider2D clonecoll = Clone.GetComponent<Collider2D>();
+        //    Collider2D mycoll = GetComponent<Collider2D>();
+        //    Physics2D.IgnoreCollision(mycoll, clonecoll, true);
+        //}
         // 記録データがない、または空の場合は何もしない
         if (recordedActions == null || recordedActions.Count == 0)
         {
@@ -115,7 +122,7 @@ public class CloneController : MonoBehaviour
                 rb.linearVelocity = Vector2.zero;
             }
 
-            Debug.Log("クローンがループしました");
+            //Debug.Log("クローンがループしました");
         }
 
         // 現在の時刻に対応する行動を再生
