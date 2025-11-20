@@ -5,120 +5,146 @@ using UnityEngine.SceneManagement;
 using System.Threading;
 
 /// <summary>
-/// �v���C���[�̊e�t���[���̍s�����L�^����f�[�^�N���X
-/// �X�[�p�[�^�C���t�H�[�X�E���g���̂悤�ȃN���[���Đ��V�X�e���Ŏg�p
+/// プレイヤーの各フレームの行動を記録するデータクラス
+/// スーパータイムフォースウルトラのようなクローン再生システムで使用
 /// </summary>
 [System.Serializable]
 public class PlayerAction
 {
-    public float time;              // �L�^�J�n����̌o�ߎ���
-    public Vector2 position;        // ���̎��_�ł̃v���C���[�̈ʒu
-    public Vector2 velocity;        // ���̎��_�ł̃v���C���[�̑��x�i�������Z�p�j
-    public bool jumpInput;          // �W�����v�{�^���������ꂽ���ǂ���
-    public float horizontalInput;   // ���E�̓��͒l�i-1.0 �` 1.0�j
+    public float time;              // 記録開始からの経過時間
+    public Vector2 position;        // その時点でのプレイヤーの位置
+    public Vector2 velocity;        // その時点でのプレイヤーの速度（物理演算用）
+    public bool jumpInput;          // ジャンプボタンが押されたかどうか
+    public float horizontalInput;   // 左右の入力値（-1.0 ～ 1.0）
+    public bool shotInput;          // 弾を発射したかどうか（追加）
 }
 
 /// <summary>
-/// �v���C���[�L�����N�^�[�̈ړ��E�W�����v�E�s���L�^���Ǘ�����X�N���v�g
-/// �v���C���[�̑S�Ă̍s�����L�^���A�w��^�C�~���O�ŃN���[���𐶐�����
+/// プレイヤーキャラクターの移動・ジャンプ・行動記録を管理するスクリプト
+/// プレイヤーの全ての行動を記録し、指定タイミングでクローンを生成する
 /// </summary>
 public class PlayerScript : MonoBehaviour
 {
-    // ========== �ړ��֘A�̃p�����[�^ ==========
-    [Header("�ړ��ݒ�")]
-    [Tooltip("���E�̈ړ����x")]
+    // ========== 移動関連のパラメータ ==========
+    [Header("移動設定")]
+    [Tooltip("左右の移動速度")]
     public float moveSpeed = 5f;
 
-    [Tooltip("�W�����v�̋����i������̏����x�j")]
+    [Tooltip("ジャンプの強さ（上方向の初速度）")]
     public float jumpForce = 7f;
 
-    // ========== �R���|�[�l���g�Q�� ==========
-    private Rigidbody2D rb;          // �������Z�p��Rigidbody2D
-    public bool isGrounded;          // �n�ʂɐڒn���Ă��邩�ǂ���
+    // ========== コンポーネント参照 ==========
+    private Rigidbody2D rb;          // 物理演算用のRigidbody2D
+    public bool isGrounded;          // 地面に接地しているかどうか
 
-    // ========== �L�^�V�X�e���֘A ==========
-    [Header("�L�^�ݒ�")]
-    [Tooltip("�L�^���ꂽ�S�Ă̍s���f�[�^")]
+    // ========== 記録システム関連 ==========
+    [Header("記録設定")]
+    [Tooltip("記録された全ての行動データ")]
     private List<PlayerAction> recordedActions = new List<PlayerAction>();
 
-    [Tooltip("���݋L�^�����ǂ���")]
+    [Tooltip("現在記録中かどうか")]
     private bool isRecording = true;
 
-    [Tooltip("�L�^�J�n����̌o�ߎ���")]
+    [Tooltip("記録開始からの経過時間")]
     private float recordingTime = 0f;
 
-    // ========== �N���[�������p ==========
-    [Header("�N���[���ݒ�")]
-    [Tooltip("��������N���[���̃v���n�u�iInspector�Őݒ�K�{�j")]
+    // ========== クローン生成用 ==========
+    [Header("クローン設定")]
+    [Tooltip("生成するクローンのプレハブ（Inspectorで設定必須）")]
     public GameObject clonePrefab;
 
     // ========== 弾生成用 =============
     [Header("弾生成用のプレハブ")]
+    [Tooltip("発射する弾のプレハブ")]
     public GameObject Bullet;
-    [Header("���ˈʒu�iShotPoint�j")]
+
+    [Header("発射位置（ShotPoint）")]
+    [Tooltip("弾が発射される位置（Transform）")]
     public Transform shotPoint;
 
     /// <summary>
-    /// ����������
-    /// Rigidbody2D�R���|�[�l���g���擾
+    /// 初期化処理
+    /// Rigidbody2Dコンポーネントを取得
     /// </summary>
     void Start()
     {
-        // Rigidbody2D�R���|�[�l���g���擾�i�������Z�ɕK�v�j
+        // Rigidbody2Dコンポーネントを取得（物理演算に必要）
         rb = GetComponent<Rigidbody2D>();
 
-        // �N���[���v���n�u���ݒ肳��Ă��Ȃ��ꍇ�͌x�����o��
+        // クローンプレハブが設定されていない場合は警告を出す
         if (clonePrefab == null)
         {
-            Debug.LogWarning("ClonePrefab���ݒ肳��Ă��܂���IInspector�Őݒ肵�Ă��������B");
+            Debug.LogWarning("ClonePrefabが設定されていません！Inspectorで設定してください。");
         }
+
+        // 弾のプレハブが設定されていない場合は警告を出す
+        if (Bullet == null)
+        {
+            Debug.LogWarning("Bulletプレハブが設定されていません！Inspectorで設定してください。");
+        }
+
+        // ShotPointが設定されていない場合は警告を出す
+        if (shotPoint == null)
+        {
+            Debug.LogWarning("ShotPointが設定されていません！Inspectorで設定してください。");
+        }
+
+        // 最初は記録を停止状態で開始
         isRecording = false;
     }
 
     /// <summary>
-    /// ���t���[���Ă΂��X�V����
-    /// �L�^���͓��͂��L�^���AR�L�[�ŃN���[������
+    /// 毎フレーム呼ばれる更新処理
+    /// 記録中は入力を記録し、条件を満たしたらクローン生成
     /// </summary>
     void Update()
     {
-        // ���E�̓��͂��擾�i-1.0 �` 1.0 �͈̔́j
+        // 左右の入力を取得（-1.0 ～ 1.0 の範囲）
         float horizontal = Input.GetAxis("Horizontal");
-        // �W�����v�{�^���i�X�y�[�X�L�[�j�������ꂽ�����擾
+
+        // ジャンプボタン（スペースキー）が押されたかを取得
         bool jumpPressed = Input.GetKeyDown(KeyCode.Space);
-        // �L�^���J�n���邽�߂̏�����
+
+        // 記録を開始するための条件チェック
+        // 何か入力があれば記録開始
         if (Mathf.Abs(horizontal) >= 0.01f || jumpPressed)
         {
             isRecording = true;
         }
 
-        // �L�^���̏ꍇ�A�v���C���[�̓��͂Ə�Ԃ��L�^
+        // 記録中の場合、プレイヤーの入力と状態を記録
         if (isRecording)
         {
             RecordPlayerInput();
         }
 
-        // R�L�[�������ꂽ��N���[���𐶐�
-        // �������͍D���ȃ^�C�~���O�ɕύX�\�i���S���A�^�C���A�E�g���Ȃǁj
+        // プレイヤーが完全に停止したらクローンを生成
+        // 速度が0で、かつ入力もない状態
         if (rb.linearVelocity == Vector2.zero && Mathf.Abs(horizontal) == 0.0f)
         {
+            // 記録データがある場合のみクローンを生成
             if (recordedActions.Count != 0)
             {
-                Debug.Log("Counton");
+                Debug.Log("クローン生成条件を満たしました");
                 StopRecordingAndSpawnClone();
+
+                // 記録を停止
                 if (isRecording)
                 {
                     isRecording = false;
                 }
             }
-            
         }
-        //���݂̃V�[�����Z�b�g
+
+        // Rキーでシーンをリセット（やり直し機能）
         if (Input.GetKeyDown(KeyCode.R))
         {
             UnityEngine.SceneManagement.Scene currentScene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(currentScene.name);
         }
-        // 右クリックが押されたらクローンを生成
+
+        // 右クリックで弾を発射
+        // ※この処理はRecordPlayerInput内で記録されます
         if (Input.GetMouseButtonDown(1))
         {
             Shot();
@@ -126,165 +152,207 @@ public class PlayerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// �v���C���[�̓��͂Ə�Ԃ��L�^���A���ۂ̈ړ��������s��
+    /// プレイヤーの入力と状態を記録し、実際の移動処理も行う
     /// </summary>
     void RecordPlayerInput()
     {
-        // ���E�̓��͂��擾�i-1.0 �` 1.0 �͈̔́j
+        // 左右の入力を取得（-1.0 ～ 1.0 の範囲）
         float horizontal = Input.GetAxis("Horizontal");
 
-        // �W�����v�{�^���i�X�y�[�X�L�[�j�������ꂽ�����擾
+        // ジャンプボタン（スペースキー）が押されたかを取得
         bool jumpPressed = Input.GetKeyDown(KeyCode.Space);
 
-        // ========== ���݂̏�Ԃ��L�^ ==========
+        // 右クリック（弾の発射）が押されたかを取得
+        bool shotPressed = Input.GetMouseButtonDown(1);
+
+        // ========== 現在の状態を記録 ==========
         PlayerAction action = new PlayerAction
         {
-            time = recordingTime,                    // ���݂̋L�^����
-            position = transform.position,           // ���݂̈ʒu
-            velocity = rb.linearVelocity,            // ���݂̑��x�i�������Z�̑��x�j
-            jumpInput = jumpPressed,                 // �W�����v�{�^���̓���
-            horizontalInput = horizontal             // ���E�̓��͒l
+            time = recordingTime,                    // 現在の記録時間
+            position = transform.position,           // 現在の位置
+            velocity = rb.linearVelocity,            // 現在の速度（物理演算の速度）
+            jumpInput = jumpPressed,                 // ジャンプボタンの入力
+            horizontalInput = horizontal,            // 左右の入力値
+            shotInput = shotPressed                  // 弾の発射入力（追加）
         };
-        recordedActions.Add(action);  // �L�^���X�g�ɒǉ�
+        recordedActions.Add(action);  // 記録リストに追加
 
-        // �L�^���Ԃ�i�߂�
+        // 記録時間を進める
         recordingTime += Time.deltaTime;
 
-        // ========== ���ۂ̈ړ����� ==========
-        // ���E�̓��͂�����ꍇ�A�������̑��x��ݒ�
+        // ========== 実際の移動処理 ==========
+        // 左右の入力がある場合、横方向の速度を設定
         if (Mathf.Abs(horizontal) >= 0.01f)
         {
-                       
             rb.linearVelocityX = horizontal * moveSpeed;
         }
         else
         {
-            // ���͂��Ȃ��ꍇ�͉������̑��x��0�ɂ���i���葱���Ȃ��悤�Ɂj
+            // 入力がない場合は横方向の速度を0にする（滑り続けないように）
             rb.linearVelocityX = 0f;
         }
 
-        // �n�ʂɐڒn���Ă��ăW�����v�{�^���������ꂽ�ꍇ
+        // 地面に接地していてジャンプボタンが押された場合
         if (isGrounded && jumpPressed)
         {
+            // 記録が停止していた場合は再開
             if (!isRecording)
             {
                 isRecording = true;
             }
-            // Y�����ɗ͂������ăW�����v�iX�����̑��x�͈ێ��j
+
+            // Y方向に力を加えてジャンプ（X方向の速度は維持）
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
     }
 
     /// <summary>
-    /// �L�^���~���ăN���[���𐶐����A�V�����L�^���J�n����
+    /// 記録を停止してクローンを生成し、新しい記録を開始する
     /// </summary>
     void StopRecordingAndSpawnClone()
     {
-        // �L�^�f�[�^���Ȃ��ꍇ�͉������Ȃ�
+        // 記録データがない場合は何もしない
         if (recordedActions.Count == 0)
         {
-            Debug.LogWarning("�L�^�f�[�^������܂���B�N���[���𐶐��ł��܂���B");
+            Debug.LogWarning("記録データがありません。クローンを生成できません。");
             return;
         }
 
-        // �N���[���v���n�u���ݒ肳��Ă��Ȃ��ꍇ�͐����ł��Ȃ�
+        // クローンプレハブが設定されていない場合は生成できない
         if (clonePrefab == null)
         {
-            Debug.LogError("ClonePrefab���ݒ肳��Ă��܂���I");
+            Debug.LogError("ClonePrefabが設定されていません！");
             return;
         }
 
-        // �L�^���ꎞ��~
+        // 記録を一時停止
         isRecording = false;
 
-        // ========== �N���[���̐��� ==========
-        // �ŏ��̋L�^�ʒu�ɃN���[���𐶐�
+        // ========== クローンの生成 ==========
+        // 最初の記録位置にクローンを生成
         GameObject clone = Instantiate(clonePrefab, recordedActions[0].position, Quaternion.identity);
 
-        // �N���[���̃R���g���[���[���擾
+        // クローンのコントローラーを取得
         CloneController cloneController = clone.GetComponent<CloneController>();
 
         if (cloneController != null)
         {
-            // �N���[���ɋL�^�f�[�^��n���i�V����List���쐬���ăR�s�[�j
+            // クローンに記録データを渡す（新しいListを作成してコピー）
             cloneController.SetRecordedActions(new List<PlayerAction>(recordedActions));
         }
         else
         {
-            Debug.LogError("ClonePrefab��CloneController���A�^�b�`����Ă��܂���I");
+            Debug.LogError("ClonePrefabにCloneControllerがアタッチされていません！");
         }
 
-        // ========== �V�����L�^���J�n ==========
-        recordedActions.Clear();  // �L�^�f�[�^���N���A
-        recordingTime = 0f;       // �L�^���Ԃ����Z�b�g
-        isRecording = true;       // �L�^���ĊJ
+        // ========== 新しい記録を開始 ==========
+        recordedActions.Clear();  // 記録データをクリア
+        recordingTime = 0f;       // 記録時間をリセット
+        isRecording = true;       // 記録を再開
 
-        Debug.Log("�N���[���𐶐����܂����I�V�����L�^���J�n���܂��B");
-    }
-
-    void Shot()
-    {
-        // 弾を生成
-        GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
+        Debug.Log("クローンを生成しました！新しい記録を開始します。");
     }
 
     /// <summary>
-    /// ���̃R���C�_�[�ƏՓ˂����u�ԂɌĂ΂��
-    /// �n�ʂƂ̐ڐG�����m���Đڒn��Ԃ��X�V
+    /// 弾を発射する処理
+    /// 右クリック時に呼ばれる
+    /// </summary>
+    void Shot()
+    {
+        // 弾のプレハブとShotPointが設定されているか確認
+        if (Bullet == null)
+        {
+            Debug.LogWarning("Bulletプレハブが設定されていません！");
+            return;
+        }
+
+        if (shotPoint == null)
+        {
+            Debug.LogWarning("ShotPointが設定されていません！");
+            return;
+        }
+
+        // ShotPointの位置と回転で弾を生成
+        GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
+
+        Debug.Log("弾を発射しました");
+    }
+
+    /// <summary>
+    /// 他のコライダーと衝突した瞬間に呼ばれる
+    /// 地面との接触を検知して接地状態を更新
     /// </summary>
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // �Փ˂����I�u�W�F�N�g��"Ground"�^�O�������Ă���ꍇ
+        // 衝突したオブジェクトが"Ground"タグを持っている場合
         if (collision.collider.CompareTag("Ground"))
         {
-            isGrounded = true;  // �ڒn��Ԃ�true��
+            isGrounded = true;  // 接地状態をtrueに
         }
-        
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        // �Փ˂����I�u�W�F�N�g��"Ground"�^�O�������Ă���ꍇ
-        if (collision.collider.CompareTag("Ground"))
-        {
-            isGrounded = true;  // �ڒn��Ԃ�true��
-        }        
     }
 
     /// <summary>
-    /// ���̃R���C�_�[���痣�ꂽ�u�ԂɌĂ΂��
-    /// �n�ʂ��痣�ꂽ���Ƃ����m���Đڒn��Ԃ��X�V
+    /// 他のコライダーと接触し続けている間呼ばれる
+    /// 地面との接触を維持
+    /// </summary>
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        // 衝突したオブジェクトが"Ground"タグを持っている場合
+        if (collision.collider.CompareTag("Ground"))
+        {
+            isGrounded = true;  // 接地状態をtrueに
+        }
+    }
+
+    /// <summary>
+    /// 他のコライダーから離れた瞬間に呼ばれる
+    /// 地面から離れたことを検知して接地状態を更新
     /// </summary>
     private void OnCollisionExit2D(Collision2D collision)
     {
-        // ���ꂽ�I�u�W�F�N�g��"Ground"�^�O�������Ă���ꍇ
+        // 離れたオブジェクトが"Ground"タグを持っている場合
         if (collision.collider.CompareTag("Ground"))
         {
-            isGrounded = false;  // �ڒn��Ԃ�false��
+            isGrounded = false;  // 接地状態をfalseに
         }
     }
 
+    /// <summary>
+    /// トリガーコライダーに入った瞬間に呼ばれる
+    /// クローンの上に乗ることができるようにする
+    /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // クローンタグを持つオブジェクトの場合
         if (collision.CompareTag("Clone"))
         {
-            isGrounded = true;  // �ڒn��Ԃ�true��
-        }
-    }
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Clone"))
-        {
-            isGrounded = true;  // �ڒn��Ԃ�true��
-        }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Clone"))
-        {
-            isGrounded = false;  // �ڒn��Ԃ�true��
+            isGrounded = true;  // 接地状態をtrueに
         }
     }
 
-   
+    /// <summary>
+    /// トリガーコライダー内にいる間呼ばれる
+    /// クローンの上に乗り続けている状態
+    /// </summary>
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        // クローンタグを持つオブジェクトの場合
+        if (collision.CompareTag("Clone"))
+        {
+            isGrounded = true;  // 接地状態をtrueに
+        }
+    }
+
+    /// <summary>
+    /// トリガーコライダーから出た瞬間に呼ばれる
+    /// クローンから離れた状態
+    /// </summary>
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        // クローンタグを持つオブジェクトの場合
+        if (collision.CompareTag("Clone"))
+        {
+            isGrounded = false;  // 接地状態をfalseに
+        }
+    }
 }

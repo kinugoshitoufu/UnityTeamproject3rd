@@ -204,7 +204,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ab53babcd410304ea9f47023153e1b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recordedActions: []
+  rb: {fileID: 0}
+  isGrounded: 0
+  currentActionIndex: 0
+  playbackTime: 0
+  totalRecordingTime: 0
   useInterpolation: 1
+  Bullet: {fileID: 2812918182328086363, guid: d5d1368941c7879419bef57295967a4a, type: 3}
+  shotPoint: {fileID: 6790267385851230903}
 --- !u!1 &5400088035329075135
 GameObject:
   m_ObjectHideFlags: 0

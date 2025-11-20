@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6939940555323870407}
   - component: {fileID: 467520772202008009}
-  - component: {fileID: 4268208114508715173}
   - component: {fileID: 8011954722531080628}
   - component: {fileID: -7992313810441721441}
+  - component: {fileID: 2926538378439396293}
   m_Layer: 6
   m_Name: CloneBullet
   m_TagString: Bullet
@@ -90,20 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4268208114508715173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2812918182328086363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e34ae8904494c644a15b44bf087466a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 10
-  Destroytimer: 3
 --- !u!61 &8011954722531080628
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -177,3 +163,17 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &2926538378439396293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2812918182328086363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a136f74d1361e73468ef9ad763e47fd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 10
+  Destroytimer: 2

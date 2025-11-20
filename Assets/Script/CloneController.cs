@@ -31,6 +31,18 @@ public class CloneController : MonoBehaviour
     [Tooltip("位置補間を使用するかどうか（trueでスムーズな動き）")]
     public bool useInterpolation = true;
 
+    // ========== 弾発射用 ==========
+    [Header("弾生成用のプレハブ")]
+    [Tooltip("クローンが発射する弾のプレハブ（Inspectorで設定必須）")]
+    public GameObject Bullet;
+
+    [Header("発射位置（ShotPoint）")]
+    [Tooltip("弾が発射される位置（Transform）")]
+    public Transform shotPoint;
+
+    // 前フレームで弾を撃ったかどうかを記憶（連続発射防止用）
+    private bool previousShotInput = false;
+
     /// <summary>
     /// 初期化処理
     /// Rigidbody2Dコンポーネントを取得
@@ -45,6 +57,18 @@ public class CloneController : MonoBehaviour
         if (rb != null)
         {
             rb.gravityScale = 0f;  // 重力を無効化
+        }
+
+        // 弾のプレハブが設定されていない場合は警告を出す
+        if (Bullet == null)
+        {
+            Debug.LogWarning("CloneのBulletプレハブが設定されていません！Inspectorで設定してください。");
+        }
+
+        // ShotPointが設定されていない場合は警告を出す
+        if (shotPoint == null)
+        {
+            Debug.LogWarning("CloneのShotPointが設定されていません！Inspectorで設定してください。");
         }
     }
 
@@ -122,6 +146,9 @@ public class CloneController : MonoBehaviour
                 rb.linearVelocity = Vector2.zero;
             }
 
+            // 前フレームの発射状態もリセット
+            previousShotInput = false;
+
             //Debug.Log("クローンがループしました");
         }
 
@@ -147,6 +174,14 @@ public class CloneController : MonoBehaviour
         {
             // 現在のアクションを取得
             PlayerAction currentAction = recordedActions[currentActionIndex];
+
+            if (currentAction.shotInput && !previousShotInput)
+            {
+                Shot();  // 弾を発射
+            }
+
+            // 現在の発射状態を記憶（次のフレームで使用）
+            previousShotInput = currentAction.shotInput;
 
             // ========== 位置と速度の適用 ==========
             if (useInterpolation && currentActionIndex < recordedActions.Count - 1)
@@ -204,6 +239,27 @@ public class CloneController : MonoBehaviour
                 }
             }
         }
+    }
+
+    void Shot()
+    {
+        // 弾のプレハブとShotPointが設定されているか確認
+        if (Bullet == null)
+        {
+            Debug.LogWarning("クローンのBulletプレハブが設定されていません！");
+            return;
+        }
+
+        if (shotPoint == null)
+        {
+            Debug.LogWarning("クローンのShotPointが設定されていません！");
+            return;
+        }
+
+        // ShotPointの位置と回転で弾を生成
+        GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
+
+        Debug.Log("クローンが弾を発射しました");
     }
 
     /// <summary>
