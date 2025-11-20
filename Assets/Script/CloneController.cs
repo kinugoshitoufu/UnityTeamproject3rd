@@ -10,21 +10,21 @@ public class CloneController : MonoBehaviour
 {
     // ========== 記録データ関連 ==========
     [Tooltip("再生する行動データのリスト")]
-    private List<PlayerAction> recordedActions;
+    public List<PlayerAction> recordedActions;
 
     // ========== コンポーネント参照 ==========
-    private Rigidbody2D rb;          // 物理演算用のRigidbody2D
-    private bool isGrounded;         // 地面に接地しているかどうか
+    public Rigidbody2D rb;          // 物理演算用のRigidbody2D
+    public bool isGrounded;         // 地面に接地しているかどうか
 
     // ========== 再生状態管理 ==========
     [Tooltip("現在再生中の行動データのインデックス")]
-    private int currentActionIndex = 0;
+    public int currentActionIndex = 0;
 
     [Tooltip("再生開始からの経過時間")]
-    private float playbackTime = 0f;
+    public float playbackTime = 0f;
 
     [Tooltip("記録全体の長さ（秒）")]
-    private float totalRecordingTime = 0f;
+    public float totalRecordingTime = 0f;
 
     // ========== 再生モード設定 ==========
     [Header("再生設定")]
