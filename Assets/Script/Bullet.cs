@@ -6,6 +6,11 @@ public class Bullet : MonoBehaviour
     public float Destroytimer = 1.0f;
     private float timer = 0.0f;
     private bool isFrozen = false;
+    private Collider2D coll;
+    void Start()
+    {
+        coll = GetComponent<Collider2D>();
+    }
     void Update()
     {
         // 凍結されていない時だけ移動
@@ -30,6 +35,7 @@ public class Bullet : MonoBehaviour
         {
             isFrozen = true;
             moveSpeed = 0f;   // 停止
+            coll.isTrigger = true;
         }
     }
 }
