@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2926538378439396293}
   m_Layer: 6
   m_Name: CloneBullet
-  m_TagString: Bullet
+  m_TagString: CloneBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

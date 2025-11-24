@@ -8,6 +8,7 @@ TagManager:
   - Bullet
   - Enemy
   - Clone
+  - CloneBullet
   layers:
   - Default
   - TransparentFX

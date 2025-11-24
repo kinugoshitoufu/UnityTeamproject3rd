@@ -49,6 +49,7 @@ public class CloneController : MonoBehaviour
     /// </summary>
     void Start()
     {
+
         // Rigidbody2Dコンポーネントを取得（物理演算に必要）
         rb = GetComponent<Rigidbody2D>();
 
@@ -272,6 +273,10 @@ public class CloneController : MonoBehaviour
         if (collision.collider.CompareTag("Ground"))
         {
             isGrounded = true;  // 接地状態をtrueに
+        }
+        if (collision.collider.CompareTag("Bullet"))
+        {
+            Destroy(gameObject);
         }
     }
 

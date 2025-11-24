@@ -37,5 +37,10 @@ public class Bullet : MonoBehaviour
             moveSpeed = 0f;   // 停止
             coll.isTrigger = true;
         }
+
+        if (collision.gameObject.CompareTag("Clone"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
