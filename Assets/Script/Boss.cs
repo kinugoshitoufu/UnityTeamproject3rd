@@ -3,35 +3,35 @@ using UnityEngine;
 
 public class Boss : MonoBehaviour
 {
-    public float hp = 100;//HP
+    public float HP = 100;//HP
     public int waitFrameCount = 9;//待機するフレームのカウンター
     public Rigidbody2D rb;
 
-    private bool waitComplete = false;//最初の待機
+    protected bool waitComplete = false;//最初の待機
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected void Start()
     {
-
+        StartCoroutine(Wait());//待機処理を呼び出す
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
-        StartCoroutine(Wait());
         if (!waitComplete) return;
-        Debug.Log("待機処理は終了しました");
     }
 
     //最初に呼び出される待機処理
     IEnumerator Wait()
     {
+        Debug.Log(waitFrameCount + "フレームの待機を開始します。");
         //指定したフレーム分、待機
         for(int i = 0; i < waitFrameCount; i++)
         {
             yield return null;
         }
         waitComplete = true;
+        Debug.Log("待機処理が完了しました。");
     }
 
 }

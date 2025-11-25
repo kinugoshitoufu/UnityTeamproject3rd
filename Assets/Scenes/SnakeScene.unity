@@ -696,7 +696,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1492855920}
-  - component: {fileID: 1492855921}
+  - component: {fileID: 1492855922}
   m_Layer: 0
   m_Name: Snake
   m_TagString: Untagged
@@ -720,7 +720,7 @@ Transform:
   - {fileID: 775146385}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1492855921
+--- !u!114 &1492855922
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -729,12 +729,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1492855919}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2f5b49a58d44934f853ef4d2af74cda, type: 3}
+  m_Script: {fileID: 11500000, guid: 133467854b96f6741b51b40144e9faab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 100
-  waitFrameCount: 9
+  waitFrameCount: 90
   rb: {fileID: 0}
+  waitComplete: 0
 --- !u!1 &2121440281
 GameObject:
   m_ObjectHideFlags: 0

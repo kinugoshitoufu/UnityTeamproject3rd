@@ -1,20 +1,19 @@
 using UnityEngine;
 
-public class SnakeScript : MonoBehaviour
+public class SnakeScript : Boss
 {
     public static SnakeScript SnakeInstance;
-    public 
-
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        base.Start();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (!waitComplete) return;
+        //Debug.Log("ë“ã@èoóàÇƒ?");
     }
 }
