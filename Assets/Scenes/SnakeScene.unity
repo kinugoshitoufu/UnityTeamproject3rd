@@ -600,6 +600,8 @@ MonoBehaviour:
   clonePrefab: {fileID: 1825436195216519715, guid: 4ce1a9ab592d74042894ce7045ba86a1, type: 3}
   Bullet: {fileID: 2812918182328086363, guid: bd6318b06120bb14d9ef32bfc3cc434c, type: 3}
   shotPoint: {fileID: 4389359586323842830, guid: 4ce1a9ab592d74042894ce7045ba86a1, type: 3}
+  seClips: []
+  maxSeAudio: 10
 --- !u!1 &1473633677
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,10 +734,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133467854b96f6741b51b40144e9faab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
-  waitFrameCount: 90
+  seClips: []
+  maxSeAudio: 10
+  HP: 100
+  waitTime: 0.9
   rb: {fileID: 0}
-  waitComplete: 0
 --- !u!1 &2121440281
 GameObject:
   m_ObjectHideFlags: 0

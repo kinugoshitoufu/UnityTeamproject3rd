@@ -12,8 +12,9 @@ public class Boss : MonoBehaviour
     public int maxSeAudio = 10;
 
     // ========== ゲーム用 ==========
+    [Header("ゲーム関連")]
     public float HP = 100;//HP
-    public int waitFrameCount = 9;//待機するフレームのカウンター
+    public float waitTime = 0.9f;//待機時間
     public Rigidbody2D rb;
 
     private float startHP;
@@ -56,12 +57,9 @@ public class Boss : MonoBehaviour
     //最初に呼び出される待機処理
     IEnumerator Wait()
     {
-        Debug.Log(waitFrameCount + "フレームの待機を開始します。");
+        Debug.Log(waitTime + "秒間の待機を開始します。");
         //指定したフレーム分、待機
-        for(int i = 0; i < waitFrameCount; i++)
-        {
-            yield return null;
-        }
+        yield return new WaitForSeconds(waitTime);
         waitComplete = true;
         Debug.Log("待機処理が完了しました。");
     }

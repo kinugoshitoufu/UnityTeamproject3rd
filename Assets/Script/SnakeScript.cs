@@ -17,7 +17,15 @@ public class SnakeScript : Boss
         if (!waitComplete) return;
 
         //HP‚ÅðŒ•ªŠò
-        
-        
+        if (ratioHP >= 50)
+        {
+            //HP50%ˆÈã‚Ìˆ—
+        }
+        else
+        {
+            //HP50%ˆÈ‰º‚Ìˆ—
+        }
+
+
     }
 }
