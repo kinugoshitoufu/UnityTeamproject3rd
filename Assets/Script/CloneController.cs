@@ -278,6 +278,10 @@ public class CloneController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        if (collision.collider.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
