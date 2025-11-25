@@ -13,7 +13,11 @@ public class SnakeScript : Boss
     // Update is called once per frame
     void Update()
     {
+        //‘Ò‹@ˆ—Š®—¹‚ğ‘Ò‚Â
         if (!waitComplete) return;
-        //Debug.Log("‘Ò‹@o—ˆ‚Ä?");
+
+        //HP‚ÅğŒ•ªŠò
+        
+        
     }
 }
