@@ -62,6 +62,13 @@ public class PlayerScript : MonoBehaviour
     [Tooltip("弾が発射される位置（Transform）")]
     public Transform shotPoint;
 
+    // ========== SE用 =============
+    [Header("SE関連")]
+    [Tooltip("seClipsを追加してオーディオファイルを追加")]
+    public AudioClip[] seClips;
+    private AudioSource[] seAudios;
+    [Tooltip("seClipsの最大数指定")]
+    public int maxSeAudio = 10;
     /// <summary>
     /// 初期化処理
     /// Rigidbody2Dコンポーネントを取得
@@ -70,6 +77,14 @@ public class PlayerScript : MonoBehaviour
     {
         // Rigidbody2Dコンポーネントを取得（物理演算に必要）
         rb = GetComponent<Rigidbody2D>();
+        //audioSource = GetComponent<AudioSource>();
+        seAudios = new AudioSource[maxSeAudio];
+        for (int i = 0; i < maxSeAudio; i++)
+        {
+            seAudios[i] = gameObject.AddComponent<AudioSource>();
+            seAudios[i].loop = false; // ループ再生を無効化
+            seAudios[i].playOnAwake = false;// 自動再生無効化
+        }
 
         // クローンプレハブが設定されていない場合は警告を出す
         if (clonePrefab == null)
@@ -253,6 +268,18 @@ public class PlayerScript : MonoBehaviour
         Debug.Log("クローンを生成しました！新しい記録を開始します。");
     }
 
+    public void PlaySE(int index)
+    {
+        if (index < 0) return; // indexが0未満なら何もしない
+        if (index >= seClips.Length) return;// indexが範囲外なら何もしない
+        for (int i = 0; i < maxSeAudio; i++)
+        {  // 再生中ではないプレイヤーを探す
+            if (seAudios[i].isPlaying) continue;// 再生中なら次へ
+            seAudios[i].PlayOneShot(seClips[index]);// SEを再生
+            break;// SEを鳴らしたらfor文を抜ける
+        }
+    }
+
     /// <summary>
     /// 弾を発射する処理
     /// 右クリック時に呼ばれる
@@ -274,7 +301,7 @@ public class PlayerScript : MonoBehaviour
 
         // ShotPointの位置と回転で弾を生成
         GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
-
+        PlaySE(0);
         Debug.Log("弾を発射しました");
     }
 

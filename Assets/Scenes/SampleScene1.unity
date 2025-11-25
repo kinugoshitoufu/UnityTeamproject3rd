@@ -365,7 +365,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.47
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -483,7 +483,6 @@ MonoBehaviour:
   BossStartFlag: 0
   BossClearFlag: 0
   StartSeconds: 1
-  FadeOutSeconds: 0.4
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,6 +1032,7 @@ PrefabInstance:
     - {fileID: 8983785623553068900, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
     - {fileID: 3239919626640938534, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
     - {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects:
     - {fileID: 50351557057452719, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
     m_AddedGameObjects: []
@@ -1435,6 +1435,18 @@ PrefabInstance:
       propertyPath: jumpForce
       value: 5.8
       objectReference: {fileID: 0}
+    - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+      propertyPath: seClips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+      propertyPath: 'seClips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b75c7926fa4b9b546a1935d9228747f8, type: 3}
+    - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+      propertyPath: 'seClips.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: a966d3f26aff55e48b7aa8cfbed2631f, type: 3}
     - target: {fileID: 5404425984101643223, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.07
