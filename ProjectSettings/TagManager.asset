@@ -9,11 +9,12 @@ TagManager:
   - Enemy
   - Clone
   - CloneBullet
+  - Destroyer
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - Bullet

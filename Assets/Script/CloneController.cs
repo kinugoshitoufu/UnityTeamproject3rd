@@ -43,10 +43,6 @@ public class CloneController : MonoBehaviour
     // 前フレームで弾を撃ったかどうかを記憶（連続発射防止用）
     private bool previousShotInput = false;
 
-    /// <summary>
-    /// 初期化処理
-    /// Rigidbody2Dコンポーネントを取得
-    /// </summary>
     void Start()
     {
 

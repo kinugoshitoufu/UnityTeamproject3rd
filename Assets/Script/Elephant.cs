@@ -1,52 +1,138 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Elephant : MonoBehaviour
+public class Elephant : Boss
 {
     public Transform player;
-    public float peakHeight = 3f;       // 最高高度
+    public GameObject Ball;
+
+    //ヒップドロップ関連の関数達
+    [Header("Phase1: 急上昇")]
+    public float riseForce = 15f;
+    public float riseGravityScale = 0.8f;
+
+    [Header("Phase2: 滞空")]
+    public float floatTime = 0.6f;
+    public float floatGravityScale = 0.05f;
+    public float floatMoveSpeed = 2f;
+
+    [Header("Phase3: 急降下")]
+    public float fallGravityScale = 4f;
+    public float fallStartDistance = 0.5f;
+
     private Rigidbody2D rb;
+    private enum JumpState { None, Rising, Floating, Falling }
+    private JumpState state = JumpState.None;
+    private Vector2 targetPos;
+    private float floatTimer = 0f;
+
+    [Header("ボール生成時のジャンプ力")]
+    //ボール関連の関数達
+　　public float ballJumpForce = 5f;
     private bool hasJumped = false;
+    public bool balljump = false;
 
     void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        if (!hasJumped && player != null)
+        if (!waitComplete) return;
+        //BallJump();
+        //Jump();
+    }
+
+    void Jump()
+    {
+        switch (state)
         {
-            JumpToPlayer();
-            hasJumped = true;
+            case JumpState.None:
+                StartJump();
+                break;
+
+            case JumpState.Rising:
+                CheckRiseToFloat();
+                break;
+
+            case JumpState.Floating:
+                ExecuteFloating();
+                break;
+
+            case JumpState.Falling:
+                // 物理に任せて落下
+                break;
         }
     }
 
-    void JumpToPlayer()
+    // -----------------------------------------------------
+    // ジャンプ開始 (Player位置を一度だけ取得)
+    // -----------------------------------------------------
+    void StartJump()
     {
-        float g = Mathf.Abs(Physics2D.gravity.y * rb.gravityScale);
+        targetPos = player.position;
 
-        Vector2 startPos = transform.position;
-        Vector2 targetPos = player.position;
+        rb.gravityScale = riseGravityScale;
 
-        // --- 垂直方向の初速度計算 ---
-        float heightDiff = peakHeight - startPos.y;
-        if (heightDiff <= 0f)
+        // --- ここを変更（斜めジャンプ）------------------
+        float dirX = Mathf.Sign(targetPos.x - transform.position.x);
+        float riseHorizontalSpeed = 2f;     // 水平方向ジャンプ力（調整可）
+        rb.linearVelocity = new Vector2(dirX * riseHorizontalSpeed, riseForce);
+        // ----------------------------------------------------
+
+        state = JumpState.Rising;
+    }
+
+    // -----------------------------------------------------
+    // 上昇 → 最高点付近になったら Float へ
+    // -----------------------------------------------------
+    void CheckRiseToFloat()
+    {
+        if (rb.linearVelocity.y <= 0f)
         {
-            heightDiff = 0.1f; // 最高高度が低い場合の保険
+            // 滞空開始
+            rb.gravityScale = floatGravityScale;
+            rb.linearVelocity = Vector2.zero;
+
+            floatTimer = 0f;
+            state = JumpState.Floating;
         }
+    }
 
-        float Vy = Mathf.Sqrt(2 * g * heightDiff);
+    // -----------------------------------------------------
+    // 滞空中 ＋ ゆっくり横移動
+    // -----------------------------------------------------
+    void ExecuteFloating()
+    {
+        floatTimer += Time.deltaTime;
 
-        // --- Player までの水平距離 ---
-        float Dx = targetPos.x - startPos.x;
+        // 滞空しながら着地点に横移動
+        float dirX = Mathf.Sign(targetPos.x - transform.position.x);
+        rb.linearVelocity = new Vector2(dirX * floatMoveSpeed, 0f);
 
-        // --- 落下までにかかる合計時間 ---
-        float T_total = (Vy / g) * 2f;
+        // 指定時間滞空したら落下フェーズへ
+        if (floatTimer >= floatTime)
+        {
+            rb.gravityScale = fallGravityScale;
+            state = JumpState.Falling;
+        }
+    }
 
-        // --- 水平初速度 ---
-        float Vx = Dx / T_total;
+    void BallJump()
+    {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, ballJumpForce);
+            hasJumped=true;
+    }
 
-        // --- 初速を設定 ---
-        rb.linearVelocity = new Vector2(Vx, Vy);
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (hasJumped&&collision.gameObject.CompareTag("Ground"))
+        {
+                Debug.Log("balljumpがtrueになりました!!");
+                balljump = true;
+                hasJumped = false;
+        }
     }
 }
