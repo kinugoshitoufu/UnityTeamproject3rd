@@ -734,11 +734,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133467854b96f6741b51b40144e9faab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seClips: []
-  maxSeAudio: 10
   HP: 100
   waitTime: 0.9
   rb: {fileID: 0}
+  seClips: []
+  maxSeAudio: 10
+  attackParms:
+  - proTime:
+      preparationTime: 0
+      attackTime: 0
+      afterglowTime: 0
+    animeTime:
+      preparationTime_anime: 0
+      attackTime_anime: 0
+      afterglowTime_anime: 0
+    technique: 1
+  - proTime:
+      preparationTime: 0
+      attackTime: 0
+      afterglowTime: 0
+    animeTime:
+      preparationTime_anime: 0
+      attackTime_anime: 0
+      afterglowTime_anime: 0
+    technique: 2
 --- !u!1 &2121440281
 GameObject:
   m_ObjectHideFlags: 0

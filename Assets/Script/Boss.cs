@@ -1,33 +1,44 @@
-using System.Collections;
+ï»¿using System.Collections;
+using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
+using UnityEditor;
+
 
 public class Boss : MonoBehaviour
 {
-    // ========== SE—p =============
-    [Header("SEŠÖ˜A")]
-    [Tooltip("seClips‚ğ’Ç‰Á‚µ‚ÄƒI[ƒfƒBƒIƒtƒ@ƒCƒ‹‚ğ’Ç‰Á")]
-    public AudioClip[] seClips;
-    private AudioSource[] seAudios;
-    [Tooltip("seClips‚ÌÅ‘å”w’è")]
-    public int maxSeAudio = 10;
-
-    // ========== ƒQ[ƒ€—p ==========
-    [Header("ƒQ[ƒ€ŠÖ˜A")]
+    
+    // ========== ã‚²ãƒ¼ãƒ ç”¨ ==========
+    [Header("ã‚²ãƒ¼ãƒ é–¢é€£")]
     public float HP = 100;//HP
-    public float waitTime = 0.9f;//‘Ò‹@ŠÔ
+    public float waitTime = 0.9f;//å¾…æ©Ÿæ™‚é–“
+
+    //[Header("æ”»æ’ƒãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿(å¾…æ©Ÿã€ä½™éŸ»ãªã©)")]
+    //public List<attackParameters> attackParm = new List<attackParameters>();
+
+    // ========== ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ ==========
     public Rigidbody2D rb;
 
+    // ========== å‚ç…§ç”¨ ==========
     private float startHP;
 
-    protected float ratioHP=100;//HP‚ÌŠ„‡
-    protected bool waitComplete = false;//Å‰‚Ì‘Ò‹@
+    protected float ratioHP=100;//HPã®å‰²åˆ
+    protected bool waitComplete = false;//æœ€åˆã®å¾…æ©Ÿ
+
+    // ========== SEç”¨ =============
+    [Header("SEé–¢é€£")]
+    [Tooltip("seClipsã‚’è¿½åŠ ã—ã¦ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¿½åŠ ")]
+    public AudioClip[] seClips;
+    private AudioSource[] seAudios;
+    [Tooltip("seClipsã®æœ€å¤§æ•°æŒ‡å®š")]
+    public int maxSeAudio = 10;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected void Start()
     {
-        StartCoroutine(Wait());//‘Ò‹@ˆ—‚ğŒÄ‚Ño‚·
-        StartInit();//•Ï”‰Šú‰»
+        StartCoroutine(Wait());//å¾…æ©Ÿå‡¦ç†ã‚’å‘¼ã³å‡ºã™
+        StartInit();//å¤‰æ•°åˆæœŸåŒ–
     }
 
     // Update is called once per frame
@@ -37,46 +48,80 @@ public class Boss : MonoBehaviour
         ratioHP = HP / startHP;
     }
 
-    //‰Šú‰»ˆ—
+    //åˆæœŸåŒ–å‡¦ç†
     void StartInit()
     {
-        //ƒQ[ƒ€•Ï”ŠÖ˜A‚Ì‰Šú‰»
+        //ã‚²ãƒ¼ãƒ å¤‰æ•°é–¢é€£ã®åˆæœŸåŒ–
         startHP = HP;
         ratioHP = 100;
 
-        //SEŠÖ˜A‚Ì‰Šú‰»
+        //SEé–¢é€£ã®åˆæœŸåŒ–
         seAudios = new AudioSource[maxSeAudio];
         for (int i = 0; i < maxSeAudio; i++)
         {
             seAudios[i] = gameObject.AddComponent<AudioSource>();
-            seAudios[i].loop = false; // ƒ‹[ƒvÄ¶‚ğ–³Œø‰»
-            seAudios[i].playOnAwake = false;// ©“®Ä¶–³Œø‰»
+            seAudios[i].loop = false; // ãƒ«ãƒ¼ãƒ—å†ç”Ÿã‚’ç„¡åŠ¹åŒ–
+            seAudios[i].playOnAwake = false;// è‡ªå‹•å†ç”Ÿç„¡åŠ¹åŒ–
         }
     }
 
-    //Å‰‚ÉŒÄ‚Ño‚³‚ê‚é‘Ò‹@ˆ—
+    //æœ€åˆã«å‘¼ã³å‡ºã•ã‚Œã‚‹å¾…æ©Ÿå‡¦ç†
     IEnumerator Wait()
     {
-        Debug.Log(waitTime + "•bŠÔ‚Ì‘Ò‹@‚ğŠJn‚µ‚Ü‚·B");
-        //w’è‚µ‚½ƒtƒŒ[ƒ€•ªA‘Ò‹@
+        Debug.Log(waitTime + "ç§’é–“ã®å¾…æ©Ÿã‚’é–‹å§‹ã—ã¾ã™ã€‚");
+        //æŒ‡å®šã—ãŸãƒ•ãƒ¬ãƒ¼ãƒ åˆ†ã€å¾…æ©Ÿ
         yield return new WaitForSeconds(waitTime);
         waitComplete = true;
-        Debug.Log("‘Ò‹@ˆ—‚ªŠ®—¹‚µ‚Ü‚µ‚½B");
+        Debug.Log("å¾…æ©Ÿå‡¦ç†ãŒå®Œäº†ã—ã¾ã—ãŸã€‚");
     }
 
-    //SE‚ğÄ¶
+    //SEã‚’å†ç”Ÿ
     public void PlaySE(int index)
     {
-        if (index < 0) return; // index‚ª0–¢–‚È‚ç‰½‚à‚µ‚È‚¢
-        if (index >= seClips.Length) return;// index‚ª”ÍˆÍŠO‚È‚ç‰½‚à‚µ‚È‚¢
+        if (index < 0) return; // indexãŒ0æœªæº€ãªã‚‰ä½•ã‚‚ã—ãªã„
+        if (index >= seClips.Length) return;// indexãŒç¯„å›²å¤–ãªã‚‰ä½•ã‚‚ã—ãªã„
         for (int i = 0; i < maxSeAudio; i++)
-        {  // Ä¶’†‚Å‚Í‚È‚¢ƒvƒŒƒCƒ„[‚ğ’T‚·
-            if (seAudios[i].isPlaying) continue;// Ä¶’†‚È‚çŸ‚Ö
-            seAudios[i].PlayOneShot(seClips[index]);// SE‚ğÄ¶
-            break;// SE‚ğ–Â‚ç‚µ‚½‚çfor•¶‚ğ”²‚¯‚é
+        {  // å†ç”Ÿä¸­ã§ã¯ãªã„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™
+            if (seAudios[i].isPlaying) continue;// å†ç”Ÿä¸­ãªã‚‰æ¬¡ã¸
+            seAudios[i].PlayOneShot(seClips[index]);// SEã‚’å†ç”Ÿ
+            break;// SEã‚’é³´ã‚‰ã—ãŸã‚‰foræ–‡ã‚’æŠœã‘ã‚‹
         }
     }
 
 
 }
 
+[System.Serializable]
+//æ”»æ’ƒã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+public class attackParameters
+{
+    [Header("å‡¦ç†æ™‚é–“")]
+    public processTime proTime;
+    [Header("ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æ™‚é–“")]
+    public animationTime animeTime;
+}
+
+[System.Serializable]
+//å‡¦ç†æ™‚é–“
+public class processTime
+{
+    [Header("æº–å‚™æ™‚é–“")]
+    public float preparationTime = 0;
+    [Header("æ”»æ’ƒæ™‚é–“")]
+    public float attackTime = 0;
+    [Header("æ”»æ’ƒä½™éŸ»")]
+    public float afterglowTime = 0;
+
+}
+[System.Serializable]
+//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿæ™‚é–“
+public class animationTime
+{
+    [Header("æº–å‚™æ™‚é–“")]
+    public float preparationTime_anime = 0;
+    [Header("æ”»æ’ƒæ™‚é–“")]
+    public float attackTime_anime = 0;
+    [Header("æ”»æ’ƒä½™éŸ»")]
+    public float afterglowTime_anime = 0;
+
+}
