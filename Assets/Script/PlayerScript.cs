@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
 using System.Threading;
+using System.ComponentModel;
 
 /// <summary>
 /// プレイヤーの各フレームの行動を記録するデータクラス
@@ -25,6 +26,11 @@ public class PlayerAction
 /// </summary>
 public class PlayerScript : MonoBehaviour
 {
+    // ========== 様々な機能に必要な変数 ==========
+    private bool flicflag = false;
+    public static PlayerScript instance;
+    private Animator animator;
+
     // ========== 移動関連のパラメータ ==========
     [Header("移動設定")]
     [Tooltip("左右の移動速度")]
@@ -77,7 +83,9 @@ public class PlayerScript : MonoBehaviour
     {
         // Rigidbody2Dコンポーネントを取得（物理演算に必要）
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         //audioSource = GetComponent<AudioSource>();
+        instance = this;
         seAudios = new AudioSource[maxSeAudio];
         for (int i = 0; i < maxSeAudio; i++)
         {
@@ -196,14 +204,28 @@ public class PlayerScript : MonoBehaviour
         recordingTime += Time.deltaTime;
 
         // ========== 実際の移動処理 ==========
+
+        if (horizontal <= -0.01f && !flicflag)
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            flicflag = true;
+        }
+        if (horizontal >= 0.01f && flicflag)
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            flicflag = false;
+        }
+
         // 左右の入力がある場合、横方向の速度を設定
         if (Mathf.Abs(horizontal) >= 0.01f)
         {
+            animator.SetBool("MoveBool",true);
             rb.linearVelocityX = horizontal * moveSpeed;
         }
         else
         {
             // 入力がない場合は横方向の速度を0にする（滑り続けないように）
+            animator.SetBool("MoveBool", false);
             rb.linearVelocityX = 0f;
         }
 
@@ -305,6 +327,11 @@ public class PlayerScript : MonoBehaviour
         Debug.Log("弾を発射しました");
     }
 
+    public bool Getflicflag()
+    {
+        return flicflag;
+    }
+
     /// <summary>
     /// 他のコライダーと衝突した瞬間に呼ばれる
     /// 地面との接触を検知して接地状態を更新
@@ -327,6 +354,7 @@ public class PlayerScript : MonoBehaviour
         // 衝突したオブジェクトが"Ground"タグを持っている場合
         if (collision.collider.CompareTag("Ground"))
         {
+            animator.SetBool("JumpBool", false);
             isGrounded = true;  // 接地状態をtrueに
         }
     }
@@ -340,6 +368,7 @@ public class PlayerScript : MonoBehaviour
         // 離れたオブジェクトが"Ground"タグを持っている場合
         if (collision.collider.CompareTag("Ground"))
         {
+            animator.SetBool("JumpBool", true);
             isGrounded = false;  // 接地状態をfalseに
         }
     }

@@ -8,6 +8,12 @@ using System.Collections.Generic;
 /// </summary>
 public class CloneController : MonoBehaviour
 {
+    // ========== 様々な機能に必要な変数 ==========
+    private bool flicflag = false;
+    private float DefCloneScale;
+    private float CloneScale;
+    public static CloneController instance;
+
     // ========== 記録データ関連 ==========
     [Tooltip("再生する行動データのリスト")]
     public List<PlayerAction> recordedActions;
@@ -43,12 +49,17 @@ public class CloneController : MonoBehaviour
     // 前フレームで弾を撃ったかどうかを記憶（連続発射防止用）
     private bool previousShotInput = false;
 
+    /// <summary>
+    /// 初期化処理
+    /// Rigidbody2Dコンポーネントを取得
+    /// </summary>
     void Start()
     {
 
         // Rigidbody2Dコンポーネントを取得（物理演算に必要）
         rb = GetComponent<Rigidbody2D>();
-
+        DefCloneScale = transform.localScale.x;
+        instance = this;
         // クローンは重力の影響を受けないようにする（記録通りに動かすため）
         // ※物理演算と記録再生を併用する場合はコメントアウト
         if (rb != null)
@@ -108,6 +119,7 @@ public class CloneController : MonoBehaviour
     /// </summary>
     void Update()
     {
+        CloneScale = transform.localScale.x;
         //GameObject Clone = GameObject.FindWithTag("clone");
         //if (Clone != null)
         //{
@@ -151,6 +163,17 @@ public class CloneController : MonoBehaviour
 
         // 現在の時刻に対応する行動を再生
         ReplayActions();
+
+        if (rb.linearVelocityX <= -0.01f && !flicflag)
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            flicflag = true;
+        }
+        if (rb.linearVelocityX >= 0.01f && flicflag)
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            flicflag = false;
+        }
     }
 
     /// <summary>
@@ -259,6 +282,14 @@ public class CloneController : MonoBehaviour
         Debug.Log("クローンが弾を発射しました");
     }
 
+    public float GetDefCloneScaleX()
+    {
+        return DefCloneScale;
+    }
+    public float GetCloneScaleX()
+    {
+        return CloneScale;
+    }
     /// <summary>
     /// 他のコライダーと衝突した瞬間に呼ばれる
     /// 地面との接触を検知（将来的な拡張用）

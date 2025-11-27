@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UnityEngine.ParticleSystem;
 
 public class StageSelectScript : MonoBehaviour
 {
@@ -13,10 +12,12 @@ public class StageSelectScript : MonoBehaviour
     public float firstWaitTime = 0.6f;//長押し時、最初の一回カーソルが止まる時間
     public float waitTime = 0.1f;//カーソルが待機する時間
     public float deadZone = 0.2f;//コントローラーでどこから入力と見なすか
+    public float menuTime = 0.016f;
 
     private int nowPoint = 0;//カーソルが現在示している場所
     private int beforePoint = 0;//カーソルが以前示していた場所
     private float inputNum;
+    private float menutimer = 0;
     private float inputTime = 0;//入力時間(長押しか単発押しかの計測で使用)
     private bool inputMode = true;//入力を受け付けるかどうか
     private bool longPress = false;//長押しかどうか？
@@ -27,14 +28,15 @@ public class StageSelectScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire1"))
+        if (menuScript.instance.menuopen)
         {
-            if (scenes[nowPoint].sceneName == "")
-            {
-                Debug.Log("シーンの設定がされていません");
-                return;
-            }
-            SceneManager.LoadScene(scenes[nowPoint].sceneName);
+            Debug.Log("aaaaaa");
+            menutimer = 0.0f;
+            return;     
+        }
+        else
+        {
+            menutimer += Time.deltaTime;
         }
 
         // 入力を取る
@@ -87,7 +89,15 @@ public class StageSelectScript : MonoBehaviour
         }
 
 
-
+        if ((Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("Fire1")) && menutimer >= menuTime)
+        {
+            if (scenes[nowPoint].sceneName == "")
+            {
+                Debug.Log("シーンの設定がされていません");
+                return;
+            }
+            SceneManager.LoadScene(scenes[nowPoint].sceneName);
+        }
     }
 
     IEnumerator SetInputMode()
