@@ -176,8 +176,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d12e8962f39b7440a39d2fe711611a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  peakHeight: 3
+  seClips: []
+  maxSeAudio: 10
+  HP: 100
+  waitTime: 0.9
+  rb: {fileID: -8703804874046314677}
+  player: {fileID: 5404425984101643223, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+  Ball: {fileID: 2098925609513074384, guid: 182863ff5ef8384448ab6d3432820364, type: 3}
+  riseForce: 15
+  riseGravityScale: 0.8
+  floatTime: 0.6
+  floatGravityScale: 0.05
+  floatMoveSpeed: 2
+  fallGravityScale: 4
+  fallStartDistance: 0.5
+  ballJumpForce: 5
+  balljump: 0
 --- !u!95 &1758612433575852806
 Animator:
   serializedVersion: 7

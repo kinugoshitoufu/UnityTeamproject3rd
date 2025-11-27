@@ -4,7 +4,7 @@ using UnityEngine;
 public class Elephant : Boss
 {
     public Transform player;
-    public GameObject Ball;
+    //public GameObject Ball;
 
     //ヒップドロップ関連の関数達
     [Header("Phase1: 急上昇")]
@@ -28,21 +28,33 @@ public class Elephant : Boss
 
     [Header("ボール生成時のジャンプ力")]
     //ボール関連の関数達
-　　public float ballJumpForce = 5f;
+    public float ballJumpForce = 5f;
     private bool hasJumped = false;
+    private bool hasBallJumped = false;
     public bool balljump = false;
+    public float BallJumpFall = 0.0f;//落下速度
+    public float JumpHigh = 3.0f;//落下速度を早める高さの座標
+    public float normalGravity = 1f;   // 通常の重力
+
+    [Header("攻撃判定")]
+    public Collider2D AttackCollider;
 
     void Start()
     {
         base.Start();
         rb = GetComponent<Rigidbody2D>();
+        AttackCollider.enabled = false;
     }
 
     void Update()
     {
         if (!waitComplete) return;
-        //BallJump();
+        //if (!hasBallJumped)
+        //{
+        //    BallJump();
+        //}
         //Jump();
+        Attack();
     }
 
     void Jump()
@@ -122,17 +134,25 @@ public class Elephant : Boss
 
     void BallJump()
     {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, ballJumpForce);
-            hasJumped=true;
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, ballJumpForce);
+        hasJumped = true;
+        hasBallJumped = true;
+    }
+
+    void Attack()
+    {
+        Debug.Log("判定オン!!!");
+        AttackCollider.enabled = true;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (hasJumped&&collision.gameObject.CompareTag("Ground"))
+        if (hasJumped && collision.gameObject.CompareTag("Ground"))
         {
-                Debug.Log("balljumpがtrueになりました!!");
-                balljump = true;
-                hasJumped = false;
+            Debug.Log("balljumpがtrueになりました!!");
+            balljump = true;
+            hasJumped = false;
         }
+        
     }
 }

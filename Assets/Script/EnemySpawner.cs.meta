@@ -1,2 +1,15 @@
 fileFormatVersion: 2
 guid: 141cb187485f68a428b556e696e40e8e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - enemyBulletPrefab: {fileID: 2098925609513074384, guid: 182863ff5ef8384448ab6d3432820364, type: 3}
+  - spawnPointLeft: {fileID: 8161578044839956212, guid: 4a5530c8608370043a88287a1c6d4f8d, type: 3}
+  - spawnPointRight: {fileID: 8555848966090208969, guid: f40e174a46b549440922016a556c32c6, type: 3}
+  - otherObject: {fileID: 3086582474876247233, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

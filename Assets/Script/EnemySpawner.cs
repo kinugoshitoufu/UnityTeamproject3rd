@@ -7,18 +7,20 @@ public class EnemySpawner : MonoBehaviour
     public Transform spawnPointRight;
 
     private Elephant elephant;
-    public GameObject otherObject; // Inspectorからセット
+    public GameObject otherObject; // elephantスクリプトをアタッチしているオブジェクト
 
     public float timer=1.0f;
 
     private void Start()
     {
+        Debug.Log("EnemySpawnerは正常です!!!");
         elephant = otherObject.GetComponent<Elephant>();
     }
     private void Update()
     {
-        if(elephant.balljump)
+        if (elephant.balljump)
         {
+            Debug.Log("balljumpがtrueになったのを感知");
             timer += Time.deltaTime;
             if (timer > 1) 
             { 
