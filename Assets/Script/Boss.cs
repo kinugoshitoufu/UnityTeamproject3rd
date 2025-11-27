@@ -18,6 +18,7 @@ public class Boss : MonoBehaviour
 
     // ========== コンポーネント ==========
     public Rigidbody2D rb;
+    public Transform playerPos;
 
     // ========== 参照用 ==========
     private float startHP;
