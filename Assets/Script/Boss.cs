@@ -7,7 +7,7 @@ using UnityEditor;
 
 public class Boss : MonoBehaviour
 {
-    
+
     // ========== ゲーム用 ==========
     [Header("ゲーム関連")]
     public float HP = 100;//HP
@@ -18,13 +18,22 @@ public class Boss : MonoBehaviour
 
     // ========== コンポーネント ==========
     public Rigidbody2D rb;
-    public Transform playerPos;
+    public Transform PlayerPos;
 
     // ========== 参照用 ==========
+    private int direction = -1;//(右が1,左が-1)
     private float startHP;
+    private float distanceX;
 
-    protected float ratioHP=100;//HPの割合
+    private Vector2 rightEdge;//画面右端
+    private Vector2 leftEdge; //画面左端
+
+
+    protected float ratioHP = 100;//HPの割合
+    protected float Direction { get { return direction; } }//向きの取得
     protected bool waitComplete = false;//最初の待機
+    protected Vector2 RightEdge { get { return rightEdge; }}
+    protected Vector2 LeftEdge { get {return leftEdge; }}
 
     // ========== SE用 =============
     [Header("SE関連")]
@@ -47,16 +56,29 @@ public class Boss : MonoBehaviour
     {
         if (!waitComplete) return;
         ratioHP = HP / startHP;
+
+        //距離から向きを計算
+        distanceX=PlayerPos.position.x-transform.position.x;
+        //ゼロ除算対策
+        if((int)distanceX!=0)direction = (int)(distanceX / Mathf.Abs(distanceX));
+        
     }
 
     //初期化処理
     void StartInit()
     {
-        //ゲーム変数関連の初期化
+        //ゲーム変数関連の初期化-------------
         startHP = HP;
         ratioHP = 100;
 
-        //SE関連の初期化
+        //画面端の座標を取得(ボスが画面外に出ないように大きさの半分引いておく)
+        rightEdge = Camera.main.ViewportToWorldPoint(Vector2.one);
+        leftEdge = Camera.main.ViewportToWorldPoint(Vector2.zero);
+
+        rightEdge.x -= transform.localScale.x/2;
+        leftEdge.x += transform.localScale.x/2;
+
+        //SE関連の初期化----------------------
         seAudios = new AudioSource[maxSeAudio];
         for (int i = 0; i < maxSeAudio; i++)
         {
@@ -69,6 +91,7 @@ public class Boss : MonoBehaviour
     //最初に呼び出される待機処理
     IEnumerator Wait()
     {
+        waitComplete = false;
         Debug.Log(waitTime + "秒間の待機を開始します。");
         //指定したフレーム分、待機
         yield return new WaitForSeconds(waitTime);

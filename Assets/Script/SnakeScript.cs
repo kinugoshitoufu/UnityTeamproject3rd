@@ -8,11 +8,10 @@ public class SnakeScript : Boss
     [Header("攻撃パラメータ(待機、余韻など)")]
     public List<SnakeAttackParameters> attackParms = new List<SnakeAttackParameters>();
 
-    [SerializeField] private Vector2 rightEdge;//画面右端
-    [SerializeField] private Vector2 leftEdge; //画面左端
-
     private float moveSpeed;//移動速度
+    private bool eventFlag = false;//処理を行っているかどうか?
     private bool moveFlag = false;
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -28,17 +27,22 @@ public class SnakeScript : Boss
         //待機処理完了を待つ
         if (!waitComplete) return;
 
+
+        base.Update();
+
         //HPで条件分岐
-        if (ratioHP >= 50)
+        if (ratioHP >= 0.5f)
         {
             //HP50%以上の処理
-            StartCoroutine(MoveAttack1());
+            if(!eventFlag)StartCoroutine(MoveAttack1());
             
         }
         else
         {
             //HP50%以下の処理
         }
+
+       
 
     }
 
@@ -58,6 +62,9 @@ public class SnakeScript : Boss
             break;
         }
 
+        //処理を開始
+        eventFlag = true;
+
         //移動攻撃1の設定がされていない場合は終了
         if (moveParm == null) yield break;
 
@@ -69,6 +76,9 @@ public class SnakeScript : Boss
 
         //攻撃後の待機余韻
         yield return StartCoroutine(Afterglow(moveParm.proTime.afterglowTime));
+
+        //処理を終了
+        eventFlag = false;
 
     }
 
@@ -96,13 +106,15 @@ public class SnakeScript : Boss
         //移動開始
         moveFlag = true;
         //画面端までの距離を取得
-        var distance = leftEdge.x - transform.position.x;
+        var Edge = (Direction > 0) ? RightEdge : LeftEdge;
+        var distance = Edge.x - transform.position.x;
         //速度を計算
-        moveSpeed = distance / moveSeconds;
+        moveSpeed = (distance / moveSeconds);
         //攻撃時間分待機
         yield return new WaitForSeconds(moveSeconds);
         //移動フラグを降ろす
         moveFlag = false;
+        rb.linearVelocityX = 0;
         //完了
         Debug.Log("移動攻撃が完了");
     }
