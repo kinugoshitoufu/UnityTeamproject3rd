@@ -30,7 +30,7 @@ public class Boss : MonoBehaviour
 
 
     protected float ratioHP = 100;//HPの割合
-    protected float Direction { get { return direction; } }//向きの取得
+    protected int Direction { get { return direction; } }//向きの取得
     protected bool waitComplete = false;//最初の待機
     protected Vector2 RightEdge { get { return rightEdge; }}
     protected Vector2 LeftEdge { get {return leftEdge; }}
@@ -57,11 +57,10 @@ public class Boss : MonoBehaviour
         if (!waitComplete) return;
         ratioHP = HP / startHP;
 
-        //距離から向きを計算
+        //プレイヤーとの距離から向きを計算
         distanceX=PlayerPos.position.x-transform.position.x;
-        //ゼロ除算対策
-        if((int)distanceX!=0)direction = (int)(distanceX / Mathf.Abs(distanceX));
-        
+        if(distanceX!=0)direction = (int)(distanceX / Mathf.Abs(distanceX));//ゼロ除算対策
+
     }
 
     //初期化処理
@@ -69,14 +68,14 @@ public class Boss : MonoBehaviour
     {
         //ゲーム変数関連の初期化-------------
         startHP = HP;
-        ratioHP = 100;
+        ratioHP = 1;
 
         //画面端の座標を取得(ボスが画面外に出ないように大きさの半分引いておく)
         rightEdge = Camera.main.ViewportToWorldPoint(Vector2.one);
         leftEdge = Camera.main.ViewportToWorldPoint(Vector2.zero);
 
-        rightEdge.x -= transform.localScale.x/2;
-        leftEdge.x += transform.localScale.x/2;
+        rightEdge.x -= transform.lossyScale.x/2;
+        leftEdge.x += transform.lossyScale.x/2;
 
         //SE関連の初期化----------------------
         seAudios = new AudioSource[maxSeAudio];
@@ -113,6 +112,9 @@ public class Boss : MonoBehaviour
     }
 
 
+    
+
+
 }
 
 [System.Serializable]
@@ -142,10 +144,12 @@ public class processTime
 public class animationTime
 {
     [Header("準備時間")]
-    public float preparationTime_anime = 0;
+    public float preparationTime = 0;
     [Header("攻撃時間")]
-    public float attackTime_anime = 0;
+    public float attackTime = 0;
     [Header("攻撃余韻")]
-    public float afterglowTime_anime = 0;
+    public float afterglowTime = 0;
 
 }
+
+
