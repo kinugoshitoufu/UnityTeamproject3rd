@@ -30,6 +30,7 @@ public class PlayerScript : MonoBehaviour
     private bool flicflag = false;
     public static PlayerScript instance;
     private Animator animator;
+    private bool EvilStareStop = false;
 
     // ========== 移動関連のパラメータ ==========
     [Header("移動設定")]
@@ -240,6 +241,7 @@ public class PlayerScript : MonoBehaviour
 
             // Y方向に力を加えてジャンプ（X方向の速度は維持）
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            animator.SetBool("JumpBool", true);
         }
     }
 
@@ -322,14 +324,23 @@ public class PlayerScript : MonoBehaviour
         }
 
         // ShotPointの位置と回転で弾を生成
+        animator.SetBool("AttackBool", true);
         GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
         PlaySE(0);
         Debug.Log("弾を発射しました");
     }
-
+    public void EndAnimAttackBool()
+    {
+        animator.SetBool("AttackBool", false);
+    }
     public bool Getflicflag()
     {
         return flicflag;
+    }
+
+    public void SetEvilStareStop(bool var)
+    {
+        EvilStareStop = var;
     }
 
     /// <summary>
@@ -341,6 +352,7 @@ public class PlayerScript : MonoBehaviour
         // 衝突したオブジェクトが"Ground"タグを持っている場合
         if (collision.collider.CompareTag("Ground"))
         {
+            animator.SetBool("JumpBool", false);
             isGrounded = true;  // 接地状態をtrueに
         }
     }
@@ -354,7 +366,7 @@ public class PlayerScript : MonoBehaviour
         // 衝突したオブジェクトが"Ground"タグを持っている場合
         if (collision.collider.CompareTag("Ground"))
         {
-            animator.SetBool("JumpBool", false);
+            //animator.SetBool("JumpBool", false);
             isGrounded = true;  // 接地状態をtrueに
         }
     }
@@ -368,7 +380,7 @@ public class PlayerScript : MonoBehaviour
         // 離れたオブジェクトが"Ground"タグを持っている場合
         if (collision.collider.CompareTag("Ground"))
         {
-            animator.SetBool("JumpBool", true);
+            
             isGrounded = false;  // 接地状態をfalseに
         }
     }
