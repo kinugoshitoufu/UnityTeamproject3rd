@@ -61,6 +61,9 @@ public class PlayerScript : MonoBehaviour
     [Header("クローン設定")]
     [Tooltip("生成するクローンのプレハブ（Inspectorで設定必須）")]
     public GameObject clonePrefab;
+    [Tooltip("止まってから何秒経ったら出てくる")]
+    public float CloneTime = 0.8f;
+    private float CloneTimer = 0.0f;
 
     // ========== 弾生成用 =============
     [Header("弾生成用のプレハブ")]
@@ -159,6 +162,14 @@ public class PlayerScript : MonoBehaviour
         // 速度が0で、かつ入力もない状態
         if (rb.linearVelocity == Vector2.zero && Mathf.Abs(horizontal) == 0.0f)
         {
+            CloneTimer += Time.deltaTime;
+        }
+        else
+        {
+            CloneTimer = 0.0f;
+        }
+        if (CloneTime <= CloneTimer)
+        {
             // 記録データがある場合のみクローンを生成
             if (recordedActions.Count != 0)
             {
@@ -172,7 +183,6 @@ public class PlayerScript : MonoBehaviour
                 }
             }
         }
-
         // 右クリックで弾を発射
         // ※この処理はRecordPlayerInput内で記録されます
         if (Input.GetMouseButtonDown(1))

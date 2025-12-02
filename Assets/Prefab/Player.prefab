@@ -348,6 +348,8 @@ MonoBehaviour:
   jumpForce: 7
   isGrounded: 0
   clonePrefab: {fileID: 1825436195216519715, guid: 4ce1a9ab592d74042894ce7045ba86a1, type: 3}
+  CloneTime: 0.8
+  CloneTimer: 0
   Bullet: {fileID: 2812918182328086363, guid: bd6318b06120bb14d9ef32bfc3cc434c, type: 3}
   shotPoint: {fileID: 8539316250187020039}
   seClips:
