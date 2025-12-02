@@ -146,19 +146,21 @@ public class SnakeScript : Boss
 
         //攻撃が終わるまで待機
         spr.color = Color.black;
-        TakedaPlayerScript.instance.SetEvilStareStop(true);
+        PlayerScript.instance.SetEvilStareStop(true);
         yield return StartCoroutine(Attack(evilParm.animeTime.attackTime));
         //yield return CoroutineRunner.WaitAll(Attack(evilParm.animeTime.attackTime));
 
         //攻撃余韻が終わるまで待機
         spr.color = Color.red;
-        TakedaPlayerScript.instance.SetEvilStareStop(false);
+        PlayerScript.instance.SetEvilStareStop(false);
         yield return StartCoroutine(Afterglow(evilParm.animeTime.afterglowTime));
 
         //処理を終了
         eventFlag = false;
 
     }
+
+   
 
 
 

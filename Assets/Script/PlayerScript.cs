@@ -30,7 +30,9 @@ public class PlayerScript : MonoBehaviour
     private bool flicflag = false;
     public static PlayerScript instance;
     private Animator animator;
-    private bool EvilStareStop = false;
+    private bool _evilStareStop = false;
+    public bool EvilStareStop { get { return _evilStareStop; } }//蛇睨み用のパラメータ
+    //private bool EvilStareStop = false;
 
     // ========== 移動関連のパラメータ ==========
     [Header("移動設定")]
@@ -123,6 +125,17 @@ public class PlayerScript : MonoBehaviour
     /// </summary>
     void Update()
     {
+
+        // Rキーでシーンをリセット（やり直し機能）
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            UnityEngine.SceneManagement.Scene currentScene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(currentScene.name);
+        }
+
+        //蛇睨み中の場合は、処理を終了
+        if (EvilStareStop) return;
+        
         // 左右の入力を取得（-1.0 ～ 1.0 の範囲）
         float horizontal = Input.GetAxis("Horizontal");
 
@@ -158,13 +171,6 @@ public class PlayerScript : MonoBehaviour
                     isRecording = false;
                 }
             }
-        }
-
-        // Rキーでシーンをリセット（やり直し機能）
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            UnityEngine.SceneManagement.Scene currentScene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(currentScene.name);
         }
 
         // 右クリックで弾を発射
@@ -338,10 +344,18 @@ public class PlayerScript : MonoBehaviour
         return flicflag;
     }
 
-    public void SetEvilStareStop(bool var)
+    //蛇睨みを受けた時用の関数
+    public void SetEvilStareStop(bool flag)
     {
-        EvilStareStop = var;
+        _evilStareStop = flag;
+        if (flag)
+        {
+            rb.linearVelocityX = 0;
+            Debug.Log("蛇睨みで動くことが出来ません");
+        }
+        else Debug.Log("蛇睨みが解除されて動けるようになりました");
     }
+
 
     /// <summary>
     /// 他のコライダーと衝突した瞬間に呼ばれる
