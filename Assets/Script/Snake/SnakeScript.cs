@@ -18,12 +18,14 @@ public class SnakeScript : Boss
     private bool moveFlag = false;
 
     private Vector2 targetPos;
+    private SpriteRenderer spr;
 
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        spr=GetComponent<SpriteRenderer>();
         base.Start();
     }
 
@@ -43,7 +45,7 @@ public class SnakeScript : Boss
             //HP50%以上の処理
             if(!eventFlag)StartCoroutine(MoveAttack1());
             if (!eventFlag) StartCoroutine(Tornado1());
-            
+            if(!eventFlag) StartCoroutine(EvilStare());
         }
         else
         {
@@ -111,13 +113,56 @@ public class SnakeScript : Boss
 
         //攻撃後の待機余韻が終わるまで待機
         yield return StartCoroutine(Afterglow(tornado1Parm.animeTime.afterglowTime));
-        
+
+        //処理を終了
+        //eventFlag = false;
+
+        //テスト
+        StartCoroutine(EvilStare());
+
+
+    }
+
+    //蛇睨み
+    IEnumerator EvilStare()
+    {
+        Debug.Log("蛇睨みを開始します");
+
+        //蛇睨み用のパラメータを取得
+        SnakeAttackParameters evilParm = getParam(SnakeTechnique.EvilStare);
+
+        //竜巻1の設定がされていない場合は終了
+        if (evilParm == null)
+        {
+            Debug.Log("蛇睨みを終了します");
+            yield break;
+        }
+
+        //処理を開始
+        eventFlag = true;
+
+        //攻撃準備が終わるまで待機
+        yield return StartCoroutine(PreparaAttack(evilParm.proTime.preparationTime));
+
+        //攻撃が終わるまで待機
+        spr.color = Color.black;
+        TakedaPlayerScript.instance.SetEvilStareStop(true);
+        yield return StartCoroutine(Attack(evilParm.animeTime.attackTime));
+        //yield return CoroutineRunner.WaitAll(Attack(evilParm.animeTime.attackTime));
+
+        //攻撃余韻が終わるまで待機
+        spr.color = Color.red;
+        TakedaPlayerScript.instance.SetEvilStareStop(false);
+        yield return StartCoroutine(Afterglow(evilParm.animeTime.afterglowTime));
+
         //処理を終了
         eventFlag = false;
 
-        
-
     }
+
+
+
+
 
     //攻撃準備
     IEnumerator PreparaAttack(float waitSeconds)
@@ -198,9 +243,7 @@ public class SnakeScript : Boss
             transform.position = new Vector3(targetPos.x,transform.position.y);
             rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
 
-            
         }
-
 
     }
 
@@ -212,15 +255,14 @@ public class SnakeScript : Boss
         SnakeAttackParameters returnParam=null;
         foreach (var param in attackParms)
         {
-            if (param.technique == tecName) returnParam=param;
-            break;
+            if (param.technique == tecName)
+            {
+                returnParam = param;
+                break;
+            }
         }
         return returnParam;
     }
-
-    
-
-
 
 }
 
