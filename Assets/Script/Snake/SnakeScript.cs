@@ -18,6 +18,7 @@ public class SnakeScript : Boss
     private bool moveFlag = false;
 
     private Vector2 targetPos;
+    private BoxCollider2D box;
     private SpriteRenderer spr;
 
 
@@ -26,6 +27,7 @@ public class SnakeScript : Boss
     void Start()
     {
         spr=GetComponent<SpriteRenderer>();
+        box = GetComponent<BoxCollider2D>();
         base.Start();
     }
 
@@ -94,7 +96,7 @@ public class SnakeScript : Boss
     IEnumerator Tornado1()
     {
         //竜巻1用のパラメータを取得
-        SnakeAttackParameters tornado1Parm = getParam(SnakeTechnique.MoveAttack1);
+        SnakeAttackParameters tornado1Parm = getParam(SnakeTechnique.Tornado1);
 
         //竜巻1の設定がされていない場合は終了
         if (tornado1Parm == null) yield break;
@@ -213,6 +215,9 @@ public class SnakeScript : Boss
     {
         //初期設定
         Debug.Log("移動攻撃を開始");
+        //プレイヤーを貫通するように
+        box.isTrigger = true;
+        rb.gravityScale = 0;
         //移動開始
         moveFlag = true;
         //画面端までの距離を取得
@@ -241,10 +246,11 @@ public class SnakeScript : Boss
             if (Mathf.Sign(transform.position.x) != Mathf.Sign(targetPos.x)) return;
             //停止させる
             moveFlag = false;
+            box.isTrigger = false;
+            rb.gravityScale = 1;
             rb.linearVelocityX = 0;
             transform.position = new Vector3(targetPos.x,transform.position.y);
             rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
-
         }
 
     }
@@ -265,6 +271,9 @@ public class SnakeScript : Boss
         }
         return returnParam;
     }
+
+
+
 
 }
 

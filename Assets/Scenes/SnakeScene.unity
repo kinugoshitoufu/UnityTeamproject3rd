@@ -552,7 +552,7 @@ MonoBehaviour:
       attackTime: 0
       afterglowTime: 0
     animeTime:
-      preparationTime: 2.3
+      preparationTime: 0
       attackTime: 0
       afterglowTime: 0
     technique: 6
@@ -1017,6 +1017,7 @@ MonoBehaviour:
   jumpForce: 7
   isGrounded: 0
   clonePrefab: {fileID: 1825436195216519715, guid: 4ce1a9ab592d74042894ce7045ba86a1, type: 3}
+  CloneTime: 0.8
   Bullet: {fileID: 2812918182328086363, guid: bd6318b06120bb14d9ef32bfc3cc434c, type: 3}
   shotPoint: {fileID: 4389359586323842830, guid: 4ce1a9ab592d74042894ce7045ba86a1, type: 3}
   seClips: []
