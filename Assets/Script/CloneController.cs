@@ -2,120 +2,120 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// ƒNƒ[ƒ“‚Ìs“®‚ğ§Œä‚·‚éƒXƒNƒŠƒvƒg
-/// ‹L˜^‚³‚ê‚½s“®ƒf[ƒ^‚ğÄ¶‚µAƒ‹[ƒv‚³‚¹‚é
-/// ƒX[ƒp[ƒ^ƒCƒ€ƒtƒH[ƒXƒEƒ‹ƒgƒ‰‚ÌƒNƒ[ƒ“ƒVƒXƒeƒ€‚ğÀŒ»
+/// ã‚¯ãƒ­ãƒ¼ãƒ³ã®è¡Œå‹•ã‚’åˆ¶å¾¡ã™ã‚‹ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
+/// è¨˜éŒ²ã•ã‚ŒãŸè¡Œå‹•ãƒ‡ãƒ¼ã‚¿ã‚’å†ç”Ÿã—ã€ãƒ«ãƒ¼ãƒ—ã•ã›ã‚‹
+/// ã‚¹ãƒ¼ãƒ‘ãƒ¼ã‚¿ã‚¤ãƒ ãƒ•ã‚©ãƒ¼ã‚¹ã‚¦ãƒ«ãƒˆãƒ©ã®ã‚¯ãƒ­ãƒ¼ãƒ³ã‚·ã‚¹ãƒ†ãƒ ã‚’å®Ÿç¾
 /// </summary>
 public class CloneController : MonoBehaviour
 {
-    // ========== —lX‚È‹@”\‚É•K—v‚È•Ï” ==========
+    // ========== æ§˜ã€…ãªæ©Ÿèƒ½ã«å¿…è¦ãªå¤‰æ•° ==========
     private bool flicflag = false;
     private float DefCloneScale;
     private float CloneScale;
     public static CloneController instance;
 
-    // ========== ‹L˜^ƒf[ƒ^ŠÖ˜A ==========
-    [Tooltip("Ä¶‚·‚és“®ƒf[ƒ^‚ÌƒŠƒXƒg")]
+    // ========== è¨˜éŒ²ãƒ‡ãƒ¼ã‚¿é–¢é€£ ==========
+    [Tooltip("å†ç”Ÿã™ã‚‹è¡Œå‹•ãƒ‡ãƒ¼ã‚¿ã®ãƒªã‚¹ãƒˆ")]
     public List<PlayerAction> recordedActions;
 
-    // ========== ƒRƒ“ƒ|[ƒlƒ“ƒgQÆ ==========
-    public Rigidbody2D rb;          // •¨—‰‰Z—p‚ÌRigidbody2D
-    public bool isGrounded;         // ’n–Ê‚ÉÚ’n‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+    // ========== ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆå‚ç…§ ==========
+    public Rigidbody2D rb;          // ç‰©ç†æ¼”ç®—ç”¨ã®Rigidbody2D
+    public bool isGrounded;         // åœ°é¢ã«æ¥åœ°ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
 
-    // ========== Ä¶ó‘ÔŠÇ— ==========
-    [Tooltip("Œ»İÄ¶’†‚Ìs“®ƒf[ƒ^‚ÌƒCƒ“ƒfƒbƒNƒX")]
+    // ========== å†ç”ŸçŠ¶æ…‹ç®¡ç† ==========
+    [Tooltip("ç¾åœ¨å†ç”Ÿä¸­ã®è¡Œå‹•ãƒ‡ãƒ¼ã‚¿ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹")]
     public int currentActionIndex = 0;
 
-    [Tooltip("Ä¶ŠJn‚©‚ç‚ÌŒo‰ßŠÔ")]
+    [Tooltip("å†ç”Ÿé–‹å§‹ã‹ã‚‰ã®çµŒéæ™‚é–“")]
     public float playbackTime = 0f;
 
-    [Tooltip("‹L˜^‘S‘Ì‚Ì’·‚³i•bj")]
+    [Tooltip("è¨˜éŒ²å…¨ä½“ã®é•·ã•ï¼ˆç§’ï¼‰")]
     public float totalRecordingTime = 0f;
 
-    // ========== Ä¶ƒ‚[ƒhİ’è ==========
-    [Header("Ä¶İ’è")]
-    [Tooltip("ˆÊ’u•âŠÔ‚ğg—p‚·‚é‚©‚Ç‚¤‚©itrue‚ÅƒXƒ€[ƒY‚È“®‚«j")]
+    // ========== å†ç”Ÿãƒ¢ãƒ¼ãƒ‰è¨­å®š ==========
+    [Header("å†ç”Ÿè¨­å®š")]
+    [Tooltip("ä½ç½®è£œé–“ã‚’ä½¿ç”¨ã™ã‚‹ã‹ã©ã†ã‹ï¼ˆtrueã§ã‚¹ãƒ ãƒ¼ã‚ºãªå‹•ãï¼‰")]
     public bool useInterpolation = true;
 
-    // ========== ’e”­Ë—p ==========
-    [Header("’e¶¬—p‚ÌƒvƒŒƒnƒu")]
-    [Tooltip("ƒNƒ[ƒ“‚ª”­Ë‚·‚é’e‚ÌƒvƒŒƒnƒuiInspector‚Åİ’è•K{j")]
+    // ========== å¼¾ç™ºå°„ç”¨ ==========
+    [Header("å¼¾ç”Ÿæˆç”¨ã®ãƒ—ãƒ¬ãƒãƒ–")]
+    [Tooltip("ã‚¯ãƒ­ãƒ¼ãƒ³ãŒç™ºå°„ã™ã‚‹å¼¾ã®ãƒ—ãƒ¬ãƒãƒ–ï¼ˆInspectorã§è¨­å®šå¿…é ˆï¼‰")]
     public GameObject Bullet;
 
-    [Header("”­ËˆÊ’uiShotPointj")]
-    [Tooltip("’e‚ª”­Ë‚³‚ê‚éˆÊ’uiTransformj")]
+    [Header("ç™ºå°„ä½ç½®ï¼ˆShotPointï¼‰")]
+    [Tooltip("å¼¾ãŒç™ºå°„ã•ã‚Œã‚‹ä½ç½®ï¼ˆTransformï¼‰")]
     public Transform shotPoint;
 
-    // ‘OƒtƒŒ[ƒ€‚Å’e‚ğŒ‚‚Á‚½‚©‚Ç‚¤‚©‚ğ‹L‰¯i˜A‘±”­Ë–h~—pj
+    // å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã§å¼¾ã‚’æ’ƒã£ãŸã‹ã©ã†ã‹ã‚’è¨˜æ†¶ï¼ˆé€£ç¶šç™ºå°„é˜²æ­¢ç”¨ï¼‰
     private bool previousShotInput = false;
 
     /// <summary>
-    /// ‰Šú‰»ˆ—
-    /// Rigidbody2DƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾
+    /// åˆæœŸåŒ–å‡¦ç†
+    /// Rigidbody2Dã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—
     /// </summary>
     void Start()
     {
 
-        // Rigidbody2DƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾i•¨—‰‰Z‚É•K—vj
+        // Rigidbody2Dã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—ï¼ˆç‰©ç†æ¼”ç®—ã«å¿…è¦ï¼‰
         rb = GetComponent<Rigidbody2D>();
         DefCloneScale = transform.localScale.x;
         instance = this;
-        // ƒNƒ[ƒ“‚Íd—Í‚Ì‰e‹¿‚ğó‚¯‚È‚¢‚æ‚¤‚É‚·‚éi‹L˜^’Ê‚è‚É“®‚©‚·‚½‚ßj
-        // ¦•¨—‰‰Z‚Æ‹L˜^Ä¶‚ğ•¹—p‚·‚éê‡‚ÍƒRƒƒ“ƒgƒAƒEƒg
+        // ã‚¯ãƒ­ãƒ¼ãƒ³ã¯é‡åŠ›ã®å½±éŸ¿ã‚’å—ã‘ãªã„ã‚ˆã†ã«ã™ã‚‹ï¼ˆè¨˜éŒ²é€šã‚Šã«å‹•ã‹ã™ãŸã‚ï¼‰
+        // â€»ç‰©ç†æ¼”ç®—ã¨è¨˜éŒ²å†ç”Ÿã‚’ä½µç”¨ã™ã‚‹å ´åˆã¯ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆ
         if (rb != null)
         {
-            rb.gravityScale = 0f;  // d—Í‚ğ–³Œø‰»
+            rb.gravityScale = 0f;  // é‡åŠ›ã‚’ç„¡åŠ¹åŒ–
         }
 
-        // ’e‚ÌƒvƒŒƒnƒu‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍŒx‚ğo‚·
+        // å¼¾ã®ãƒ—ãƒ¬ãƒãƒ–ãŒè¨­å®šã•ã‚Œã¦ã„ãªã„å ´åˆã¯è­¦å‘Šã‚’å‡ºã™
         if (Bullet == null)
         {
-            Debug.LogWarning("Clone‚ÌBulletƒvƒŒƒnƒu‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñIInspector‚Åİ’è‚µ‚Ä‚­‚¾‚³‚¢B");
+            Debug.LogWarning("Cloneã®Bulletãƒ—ãƒ¬ãƒãƒ–ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ï¼Inspectorã§è¨­å®šã—ã¦ãã ã•ã„ã€‚");
         }
 
-        // ShotPoint‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍŒx‚ğo‚·
+        // ShotPointãŒè¨­å®šã•ã‚Œã¦ã„ãªã„å ´åˆã¯è­¦å‘Šã‚’å‡ºã™
         if (shotPoint == null)
         {
-            Debug.LogWarning("Clone‚ÌShotPoint‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñIInspector‚Åİ’è‚µ‚Ä‚­‚¾‚³‚¢B");
+            Debug.LogWarning("Cloneã®ShotPointãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ï¼Inspectorã§è¨­å®šã—ã¦ãã ã•ã„ã€‚");
         }
     }
 
     /// <summary>
-    /// ŠO•”‚©‚ç‹L˜^ƒf[ƒ^‚ğİ’è‚·‚é
-    /// PlayerScript‚©‚çƒNƒ[ƒ“¶¬‚ÉŒÄ‚Î‚ê‚é
+    /// å¤–éƒ¨ã‹ã‚‰è¨˜éŒ²ãƒ‡ãƒ¼ã‚¿ã‚’è¨­å®šã™ã‚‹
+    /// PlayerScriptã‹ã‚‰ã‚¯ãƒ­ãƒ¼ãƒ³ç”Ÿæˆæ™‚ã«å‘¼ã°ã‚Œã‚‹
     /// </summary>
-    /// <param name="actions">Ä¶‚·‚és“®ƒf[ƒ^‚ÌƒŠƒXƒg</param>
+    /// <param name="actions">å†ç”Ÿã™ã‚‹è¡Œå‹•ãƒ‡ãƒ¼ã‚¿ã®ãƒªã‚¹ãƒˆ</param>
     public void SetRecordedActions(List<PlayerAction> actions)
     {
-        // ‹L˜^ƒf[ƒ^‚ğó‚¯æ‚é
+        // è¨˜éŒ²ãƒ‡ãƒ¼ã‚¿ã‚’å—ã‘å–ã‚‹
         recordedActions = actions;
 
-        // ‹L˜^ƒf[ƒ^‚ª‘¶İ‚·‚éê‡A‰Šúİ’è‚ğs‚¤
+        // è¨˜éŒ²ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹å ´åˆã€åˆæœŸè¨­å®šã‚’è¡Œã†
         if (recordedActions != null && recordedActions.Count > 0)
         {
-            // ‹L˜^‘S‘Ì‚Ì’·‚³‚ğŒvZiÅŒã‚Ì‹L˜^‚ÌŠÔj
+            // è¨˜éŒ²å…¨ä½“ã®é•·ã•ã‚’è¨ˆç®—ï¼ˆæœ€å¾Œã®è¨˜éŒ²ã®æ™‚é–“ï¼‰
             totalRecordingTime = recordedActions[recordedActions.Count - 1].time;
 
-            // ƒNƒ[ƒ“‚ğÅ‰‚Ì‹L˜^ˆÊ’u‚É”z’u
+            // ã‚¯ãƒ­ãƒ¼ãƒ³ã‚’æœ€åˆã®è¨˜éŒ²ä½ç½®ã«é…ç½®
             transform.position = recordedActions[0].position;
 
-            // ‘¬“x‚ğ‰Šú‰»
+            // é€Ÿåº¦ã‚’åˆæœŸåŒ–
             if (rb != null)
             {
                 rb.linearVelocity = Vector2.zero;
             }
 
-            Debug.Log($"ƒNƒ[ƒ“‚ª{recordedActions.Count}ŒÂ‚Ìs“®ƒf[ƒ^‚ğó‚¯æ‚è‚Ü‚µ‚½i’·‚³: {totalRecordingTime:F2}•bj");
+            Debug.Log($"ã‚¯ãƒ­ãƒ¼ãƒ³ãŒ{recordedActions.Count}å€‹ã®è¡Œå‹•ãƒ‡ãƒ¼ã‚¿ã‚’å—ã‘å–ã‚Šã¾ã—ãŸï¼ˆé•·ã•: {totalRecordingTime:F2}ç§’ï¼‰");
         }
         else
         {
-            Debug.LogWarning("‹L˜^ƒf[ƒ^‚ª‹ó‚Å‚·I");
+            Debug.LogWarning("è¨˜éŒ²ãƒ‡ãƒ¼ã‚¿ãŒç©ºã§ã™ï¼");
         }
     }
 
     /// <summary>
-    /// –ˆƒtƒŒ[ƒ€ŒÄ‚Î‚ê‚éXVˆ—
-    /// ‹L˜^‚³‚ê‚½s“®‚ğÄ¶‚µAƒ‹[ƒv‚³‚¹‚é
+    /// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‘¼ã°ã‚Œã‚‹æ›´æ–°å‡¦ç†
+    /// è¨˜éŒ²ã•ã‚ŒãŸè¡Œå‹•ã‚’å†ç”Ÿã—ã€ãƒ«ãƒ¼ãƒ—ã•ã›ã‚‹
     /// </summary>
     void Update()
     {
@@ -127,41 +127,41 @@ public class CloneController : MonoBehaviour
         //    Collider2D mycoll = GetComponent<Collider2D>();
         //    Physics2D.IgnoreCollision(mycoll, clonecoll, true);
         //}
-        // ‹L˜^ƒf[ƒ^‚ª‚È‚¢A‚Ü‚½‚Í‹ó‚Ìê‡‚Í‰½‚à‚µ‚È‚¢
+        // è¨˜éŒ²ãƒ‡ãƒ¼ã‚¿ãŒãªã„ã€ã¾ãŸã¯ç©ºã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
         if (recordedActions == null || recordedActions.Count == 0)
         {
             return;
         }
 
-        // Ä¶ŠÔ‚ği‚ß‚é
+        // å†ç”Ÿæ™‚é–“ã‚’é€²ã‚ã‚‹
         playbackTime += Time.deltaTime;
 
-        // ========== ƒ‹[ƒvˆ— ==========
-        // ‹L˜^ŠÔ‚ğ’´‚¦‚½‚çÅ‰‚É–ß‚é
+        // ========== ãƒ«ãƒ¼ãƒ—å‡¦ç† ==========
+        // è¨˜éŒ²æ™‚é–“ã‚’è¶…ãˆãŸã‚‰æœ€åˆã«æˆ»ã‚‹
         if (playbackTime > totalRecordingTime)
         {
-            // Ä¶ŠÔ‚ğƒŠƒZƒbƒgi­‚µƒI[ƒo[‚µ‚½•ª‚Íl—¶j
+            // å†ç”Ÿæ™‚é–“ã‚’ãƒªã‚»ãƒƒãƒˆï¼ˆå°‘ã—ã‚ªãƒ¼ãƒãƒ¼ã—ãŸåˆ†ã¯è€ƒæ…®ï¼‰
             playbackTime = playbackTime - totalRecordingTime;
 
-            // ƒCƒ“ƒfƒbƒNƒX‚ğƒŠƒZƒbƒg
+            // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ãƒªã‚»ãƒƒãƒˆ
             currentActionIndex = 0;
 
-            // Å‰‚ÌˆÊ’u‚Éu‚É–ß‚é
+            // æœ€åˆã®ä½ç½®ã«ç¬æ™‚ã«æˆ»ã‚‹
             transform.position = recordedActions[0].position;
 
-            // ‘¬“x‚ğƒŠƒZƒbƒg
+            // é€Ÿåº¦ã‚’ãƒªã‚»ãƒƒãƒˆ
             if (rb != null)
             {
                 rb.linearVelocity = Vector2.zero;
             }
 
-            // ‘OƒtƒŒ[ƒ€‚Ì”­Ëó‘Ô‚àƒŠƒZƒbƒg
+            // å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®ç™ºå°„çŠ¶æ…‹ã‚‚ãƒªã‚»ãƒƒãƒˆ
             previousShotInput = false;
 
-            //Debug.Log("ƒNƒ[ƒ“‚ªƒ‹[ƒv‚µ‚Ü‚µ‚½");
+            //Debug.Log("ã‚¯ãƒ­ãƒ¼ãƒ³ãŒãƒ«ãƒ¼ãƒ—ã—ã¾ã—ãŸ");
         }
 
-        // Œ»İ‚Ì‚É‘Î‰‚·‚és“®‚ğÄ¶
+        // ç¾åœ¨ã®æ™‚åˆ»ã«å¯¾å¿œã™ã‚‹è¡Œå‹•ã‚’å†ç”Ÿ
         ReplayActions();
 
         if (rb.linearVelocityX <= -0.01f && !flicflag)
@@ -177,49 +177,49 @@ public class CloneController : MonoBehaviour
     }
 
     /// <summary>
-    /// Œ»İ‚ÌÄ¶‚É‘Î‰‚·‚és“®ƒf[ƒ^‚ğŒ©‚Â‚¯‚ÄÄ¶‚·‚é
+    /// ç¾åœ¨ã®å†ç”Ÿæ™‚åˆ»ã«å¯¾å¿œã™ã‚‹è¡Œå‹•ãƒ‡ãƒ¼ã‚¿ã‚’è¦‹ã¤ã‘ã¦å†ç”Ÿã™ã‚‹
     /// </summary>
     void ReplayActions()
     {
-        // ========== Œ»İ‚Ì‚É‘Î‰‚·‚éƒAƒNƒVƒ‡ƒ“‚ğ’T‚· ==========
-        // Ÿ‚ÌƒAƒNƒVƒ‡ƒ“‚Ì‚ªŒ»İ‚ÌÄ¶‚ğ’´‚¦‚é‚Ü‚ÅƒCƒ“ƒfƒbƒNƒX‚ği‚ß‚é
+        // ========== ç¾åœ¨ã®æ™‚åˆ»ã«å¯¾å¿œã™ã‚‹ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’æ¢ã™ ==========
+        // æ¬¡ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®æ™‚åˆ»ãŒç¾åœ¨ã®å†ç”Ÿæ™‚åˆ»ã‚’è¶…ãˆã‚‹ã¾ã§ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’é€²ã‚ã‚‹
         while (currentActionIndex < recordedActions.Count - 1 &&
                recordedActions[currentActionIndex + 1].time <= playbackTime)
         {
             currentActionIndex++;
         }
 
-        // ƒCƒ“ƒfƒbƒNƒX‚ª”ÍˆÍ“à‚Å‚ ‚é‚±‚Æ‚ğŠm”F
+        // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãŒç¯„å›²å†…ã§ã‚ã‚‹ã“ã¨ã‚’ç¢ºèª
         if (currentActionIndex < recordedActions.Count)
         {
-            // Œ»İ‚ÌƒAƒNƒVƒ‡ƒ“‚ğæ“¾
+            // ç¾åœ¨ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—
             PlayerAction currentAction = recordedActions[currentActionIndex];
 
             if (currentAction.shotInput && !previousShotInput)
             {
-                Shot();  // ’e‚ğ”­Ë
+                Shot();  // å¼¾ã‚’ç™ºå°„
             }
 
-            // Œ»İ‚Ì”­Ëó‘Ô‚ğ‹L‰¯iŸ‚ÌƒtƒŒ[ƒ€‚Åg—pj
+            // ç¾åœ¨ã®ç™ºå°„çŠ¶æ…‹ã‚’è¨˜æ†¶ï¼ˆæ¬¡ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã§ä½¿ç”¨ï¼‰
             previousShotInput = currentAction.shotInput;
 
-            // ========== ˆÊ’u‚Æ‘¬“x‚Ì“K—p ==========
+            // ========== ä½ç½®ã¨é€Ÿåº¦ã®é©ç”¨ ==========
             if (useInterpolation && currentActionIndex < recordedActions.Count - 1)
             {
-                // y•âŠÔƒ‚[ƒhzŸ‚ÌƒAƒNƒVƒ‡ƒ“‚Æ‚ÌŠÔ‚ğŠŠ‚ç‚©‚É•âŠÔ
+                // ã€è£œé–“ãƒ¢ãƒ¼ãƒ‰ã€‘æ¬¡ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¨ã®é–“ã‚’æ»‘ã‚‰ã‹ã«è£œé–“
                 PlayerAction nextAction = recordedActions[currentActionIndex + 1];
 
-                // Œ»İ‚ÌƒAƒNƒVƒ‡ƒ“‚ÆŸ‚ÌƒAƒNƒVƒ‡ƒ“‚ÌŠÔ‚Å‚Ìis“x‚ğŒvZi0.0 ` 1.0j
+                // ç¾åœ¨ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¨æ¬¡ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®é–“ã§ã®é€²è¡Œåº¦ã‚’è¨ˆç®—ï¼ˆ0.0 ï½ 1.0ï¼‰
                 float timeDiff = nextAction.time - currentAction.time;
 
-                // 0œZ‚ğ–h‚®
+                // 0é™¤ç®—ã‚’é˜²ã
                 if (timeDiff > 0.0001f)
                 {
                     float t = (playbackTime - currentAction.time) / timeDiff;
-                    // t‚ğ0`1‚Ì”ÍˆÍ‚ÉƒNƒ‰ƒ“ƒv
+                    // tã‚’0ï½1ã®ç¯„å›²ã«ã‚¯ãƒ©ãƒ³ãƒ—
                     t = Mathf.Clamp01(t);
 
-                    // ˆÊ’u‚ğüŒ`•âŠÔiƒXƒ€[ƒY‚È“®‚«j
+                    // ä½ç½®ã‚’ç·šå½¢è£œé–“ï¼ˆã‚¹ãƒ ãƒ¼ã‚ºãªå‹•ãï¼‰
                     Vector2 interpolatedPosition = Vector2.Lerp(
                         currentAction.position,
                         nextAction.position,
@@ -227,7 +227,7 @@ public class CloneController : MonoBehaviour
                     );
                     transform.position = interpolatedPosition;
 
-                    // ‘¬“x‚à•âŠÔ‚µ‚Ä“K—p
+                    // é€Ÿåº¦ã‚‚è£œé–“ã—ã¦é©ç”¨
                     if (rb != null)
                     {
                         Vector2 interpolatedVelocity = Vector2.Lerp(
@@ -240,7 +240,7 @@ public class CloneController : MonoBehaviour
                 }
                 else
                 {
-                    // ŠÔ·‚ª‚Ù‚Ú‚È‚¢ê‡‚ÍŒ»İ‚ÌƒAƒNƒVƒ‡ƒ“‚ğ‚»‚Ì‚Ü‚Üg—p
+                    // æ™‚é–“å·®ãŒã»ã¼ãªã„å ´åˆã¯ç¾åœ¨ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’ãã®ã¾ã¾ä½¿ç”¨
                     transform.position = currentAction.position;
                     if (rb != null)
                     {
@@ -250,7 +250,7 @@ public class CloneController : MonoBehaviour
             }
             else
             {
-                // y”ñ•âŠÔƒ‚[ƒhz‹L˜^‚³‚ê‚½ˆÊ’u‚Æ‘¬“x‚ğ‚»‚Ì‚Ü‚Ü“K—p
+                // ã€éè£œé–“ãƒ¢ãƒ¼ãƒ‰ã€‘è¨˜éŒ²ã•ã‚ŒãŸä½ç½®ã¨é€Ÿåº¦ã‚’ãã®ã¾ã¾é©ç”¨
                 transform.position = currentAction.position;
 
                 if (rb != null)
@@ -263,23 +263,23 @@ public class CloneController : MonoBehaviour
 
     void Shot()
     {
-        // ’e‚ÌƒvƒŒƒnƒu‚ÆShotPoint‚ªİ’è‚³‚ê‚Ä‚¢‚é‚©Šm”F
+        // å¼¾ã®ãƒ—ãƒ¬ãƒãƒ–ã¨ShotPointãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹ã‹ç¢ºèª
         if (Bullet == null)
         {
-            Debug.LogWarning("ƒNƒ[ƒ“‚ÌBulletƒvƒŒƒnƒu‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñI");
+            Debug.LogWarning("ã‚¯ãƒ­ãƒ¼ãƒ³ã®Bulletãƒ—ãƒ¬ãƒãƒ–ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ï¼");
             return;
         }
 
         if (shotPoint == null)
         {
-            Debug.LogWarning("ƒNƒ[ƒ“‚ÌShotPoint‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñI");
+            Debug.LogWarning("ã‚¯ãƒ­ãƒ¼ãƒ³ã®ShotPointãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ï¼");
             return;
         }
 
-        // ShotPoint‚ÌˆÊ’u‚Æ‰ñ“]‚Å’e‚ğ¶¬
+        // ShotPointã®ä½ç½®ã¨å›è»¢ã§å¼¾ã‚’ç”Ÿæˆ
         GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
 
-        Debug.Log("ƒNƒ[ƒ“‚ª’e‚ğ”­Ë‚µ‚Ü‚µ‚½");
+        Debug.Log("ã‚¯ãƒ­ãƒ¼ãƒ³ãŒå¼¾ã‚’ç™ºå°„ã—ã¾ã—ãŸ");
     }
 
     public float GetDefCloneScaleX()
@@ -291,15 +291,15 @@ public class CloneController : MonoBehaviour
         return CloneScale;
     }
     /// <summary>
-    /// ‘¼‚ÌƒRƒ‰ƒCƒ_[‚ÆÕ“Ë‚µ‚½uŠÔ‚ÉŒÄ‚Î‚ê‚é
-    /// ’n–Ê‚Æ‚ÌÚG‚ğŒŸ’mi«—ˆ“I‚ÈŠg’£—pj
+    /// ä»–ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã¨è¡çªã—ãŸç¬é–“ã«å‘¼ã°ã‚Œã‚‹
+    /// åœ°é¢ã¨ã®æ¥è§¦ã‚’æ¤œçŸ¥ï¼ˆå°†æ¥çš„ãªæ‹¡å¼µç”¨ï¼‰
     /// </summary>
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Õ“Ë‚µ‚½ƒIƒuƒWƒFƒNƒg‚ª"Ground"ƒ^ƒO‚ğ‚Á‚Ä‚¢‚éê‡
+        // è¡çªã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒ"Ground"ã‚¿ã‚°ã‚’æŒã£ã¦ã„ã‚‹å ´åˆ
         if (collision.collider.CompareTag("Ground"))
         {
-            isGrounded = true;  // Ú’nó‘Ô‚ğtrue‚É
+            isGrounded = true;  // æ¥åœ°çŠ¶æ…‹ã‚’trueã«
         }
         if (collision.collider.CompareTag("Bullet"))
         {
@@ -312,15 +312,23 @@ public class CloneController : MonoBehaviour
     }
 
     /// <summary>
-    /// ‘¼‚ÌƒRƒ‰ƒCƒ_[‚©‚ç—£‚ê‚½uŠÔ‚ÉŒÄ‚Î‚ê‚é
-    /// ’n–Ê‚©‚ç—£‚ê‚½‚±‚Æ‚ğŒŸ’mi«—ˆ“I‚ÈŠg’£—pj
+    /// ä»–ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‹ã‚‰é›¢ã‚ŒãŸç¬é–“ã«å‘¼ã°ã‚Œã‚‹
+    /// åœ°é¢ã‹ã‚‰é›¢ã‚ŒãŸã“ã¨ã‚’æ¤œçŸ¥ï¼ˆå°†æ¥çš„ãªæ‹¡å¼µç”¨ï¼‰
     /// </summary>
     private void OnCollisionExit2D(Collision2D collision)
     {
-        // —£‚ê‚½ƒIƒuƒWƒFƒNƒg‚ª"Ground"ƒ^ƒO‚ğ‚Á‚Ä‚¢‚éê‡
+        // é›¢ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒ"Ground"ã‚¿ã‚°ã‚’æŒã£ã¦ã„ã‚‹å ´åˆ
         if (collision.collider.CompareTag("Ground"))
         {
-            isGrounded = false;  // Ú’nó‘Ô‚ğfalse‚É
+            isGrounded = false;  // æ¥åœ°çŠ¶æ…‹ã‚’falseã«
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
         }
     }
 }
