@@ -352,6 +352,10 @@ public class PlayerScript : MonoBehaviour
         // 衝突したオブジェクトが"Ground"タグを持っている場合
         if (collision.collider.CompareTag("Ground"))
         {
+            if (!animator.GetBool("JumpBool"))
+            {
+                animator.SetBool("FallBool", false);
+            }
             animator.SetBool("JumpBool", false);
             isGrounded = true;  // 接地状態をtrueに
         }
@@ -380,7 +384,10 @@ public class PlayerScript : MonoBehaviour
         // 離れたオブジェクトが"Ground"タグを持っている場合
         if (collision.collider.CompareTag("Ground"))
         {
-            
+            if (!animator.GetBool("JumpBool"))
+            {
+                animator.SetBool("FallBool",true);
+            }
             isGrounded = false;  // 接地状態をfalseに
         }
     }
