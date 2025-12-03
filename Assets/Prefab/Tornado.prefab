@@ -148,3 +148,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
+  toranadoHeight: 0
+  cloneHeight: {fileID: 4389359586323842830, guid: 4ce1a9ab592d74042894ce7045ba86a1, type: 3}

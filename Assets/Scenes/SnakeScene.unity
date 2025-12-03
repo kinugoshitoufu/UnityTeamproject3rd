@@ -526,7 +526,7 @@ MonoBehaviour:
       afterglowTime: 1.5
     animeTime:
       preparationTime: 2.7
-      attackTime: 5
+      attackTime: 1
       afterglowTime: 1.5
     technique: 3
   - proTime:
@@ -556,7 +556,19 @@ MonoBehaviour:
       attackTime: 0
       afterglowTime: 0
     technique: 6
+  - proTime:
+      preparationTime: 2.3
+      attackTime: 0
+      afterglowTime: 0
+    animeTime:
+      preparationTime: 0
+      attackTime: 0
+      afterglowTime: 0
+    technique: 7
   tornadoPrefab: {fileID: 745680254243933325, guid: e3fce92ac79f04f72991362e504a49b2, type: 3}
+  torandoSpeed: 0
+  torandoHeight: 0
+  tornado1: 0
 --- !u!212 &550570756
 SpriteRenderer:
   m_ObjectHideFlags: 0

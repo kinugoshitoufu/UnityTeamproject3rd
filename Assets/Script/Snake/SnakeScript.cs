@@ -8,8 +8,12 @@ public class SnakeScript : Boss
     [Header("攻撃パラメータ(待機、余韻など)")]
     public List<SnakeAttackParameters> attackParms = new List<SnakeAttackParameters>();
 
-    [Header("竜巻のプレファブ")]
+    [Header("竜巻関連(0ならプレファブの値を参照)")]
     [SerializeField] private TornadoScript tornadoPrefab;
+    [SerializeField] private float torandoSpeed=0;
+    [SerializeField] private float torandoHeight=0;
+    [Header("竜巻1か2か(確認テスト用,true=1,false=2)")]
+    public bool tornado1 = true;
 
     // ========== 参照用 ==========
     private float moveSpeed;//移動速度
@@ -20,7 +24,6 @@ public class SnakeScript : Boss
     private Vector2 targetPos;
     private BoxCollider2D box;
     private SpriteRenderer spr;
-
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -88,7 +91,8 @@ public class SnakeScript : Boss
         //eventFlag = false;
 
         //テスト
-        StartCoroutine(Tornado1());
+        if(tornado1)StartCoroutine(Tornado1());
+        else StartCoroutine(Tornado2());
 
     }
 
@@ -108,13 +112,13 @@ public class SnakeScript : Boss
         TornadoScript tornado = Instantiate(tornadoPrefab, this.transform.position + new Vector3(-Direction * (transform.lossyScale.x / 2), 0),Quaternion.identity);
 
         //攻撃準備が終わるまで待機
-        yield return CoroutineRunner.WaitAll(PreparaAttack(tornado1Parm.proTime.preparationTime), tornado.Init(tornado1Parm.proTime.preparationTime, Direction));
+        yield return CoroutineRunner.WaitAll(PreparaAttack(tornado1Parm.proTime.preparationTime), tornado.Init(tornado1Parm.proTime.preparationTime, Direction,torandoSpeed,torandoHeight));
 
         //攻撃が終わるまで待機
-        yield return CoroutineRunner.WaitAll(Attack(tornado1Parm.animeTime.attackTime), tornado.FiringTornado1());
+        yield return CoroutineRunner.WaitAll(Attack(tornado1Parm.proTime.attackTime), tornado.FiringTornado1());
 
         //攻撃後の待機余韻が終わるまで待機
-        yield return StartCoroutine(Afterglow(tornado1Parm.animeTime.afterglowTime));
+        yield return StartCoroutine(Afterglow(tornado1Parm.proTime.afterglowTime));
 
         //処理を終了
         //eventFlag = false;
@@ -122,24 +126,49 @@ public class SnakeScript : Boss
         //テスト
         StartCoroutine(EvilStare());
 
+    }
 
+    //竜巻2
+    IEnumerator Tornado2()
+    {
+        //竜巻2用のパラメータを取得
+        SnakeAttackParameters tornado2Parm = getParam(SnakeTechnique.Tornado2);
+
+        //竜巻2の設定がされていない場合は終了
+        if (tornado2Parm == null) yield break;
+
+        //処理を開始
+        eventFlag = true;
+
+        //竜巻の生成
+        TornadoScript tornado = Instantiate(tornadoPrefab, this.transform.position + new Vector3(-Direction * (transform.lossyScale.x / 2), 0), Quaternion.identity);
+
+        //攻撃準備が終わるまで待機
+        yield return CoroutineRunner.WaitAll(PreparaAttack(tornado2Parm.proTime.preparationTime), tornado.Init(tornado2Parm.proTime.preparationTime, Direction,torandoSpeed,torandoHeight));
+
+        //攻撃が終わるまで待機
+        yield return CoroutineRunner.WaitAll(Attack(tornado2Parm.proTime.attackTime), tornado.FiringTornado2());
+
+        //攻撃後の待機余韻が終わるまで待機
+        yield return StartCoroutine(Afterglow(tornado2Parm.proTime.afterglowTime));
+
+        //処理を終了
+        //eventFlag = false;
+
+        //テスト
+        StartCoroutine(EvilStare());
     }
 
     //蛇睨み
     IEnumerator EvilStare()
     {
-        Debug.Log("蛇睨みを開始します");
-
+        
         //蛇睨み用のパラメータを取得
         SnakeAttackParameters evilParm = getParam(SnakeTechnique.EvilStare);
 
         //竜巻1の設定がされていない場合は終了
-        if (evilParm == null)
-        {
-            Debug.Log("蛇睨みを終了します");
-            yield break;
-        }
-
+        if (evilParm == null) yield break;
+        
         //処理を開始
         eventFlag = true;
 
@@ -149,13 +178,12 @@ public class SnakeScript : Boss
         //攻撃が終わるまで待機
         spr.color = Color.black;
         PlayerScript.instance.SetEvilStareStop(true);
-        yield return StartCoroutine(Attack(evilParm.animeTime.attackTime));
-        //yield return CoroutineRunner.WaitAll(Attack(evilParm.animeTime.attackTime));
+        yield return StartCoroutine(Attack(evilParm.proTime.attackTime));
 
         //攻撃余韻が終わるまで待機
         spr.color = Color.red;
         PlayerScript.instance.SetEvilStareStop(false);
-        yield return StartCoroutine(Afterglow(evilParm.animeTime.afterglowTime));
+        yield return StartCoroutine(Afterglow(evilParm.proTime.afterglowTime));
 
         //処理を終了
         eventFlag = false;
@@ -163,10 +191,6 @@ public class SnakeScript : Boss
     }
 
    
-
-
-
-
 
     //攻撃準備
     IEnumerator PreparaAttack(float waitSeconds)
