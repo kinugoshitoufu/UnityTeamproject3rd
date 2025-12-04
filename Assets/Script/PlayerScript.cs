@@ -42,6 +42,14 @@ public class PlayerScript : MonoBehaviour
     [Tooltip("ジャンプの強さ（上方向の初速度）")]
     public float jumpForce = 7f;
 
+    [Tooltip("ノックバックの強さ")]
+    public Vector2 knockpower = Vector2.one;
+        
+    [Tooltip("ダメージを受けたときに何秒で動けるか")]
+    public float MoveStopTime = 0.5f;
+    public float MoveStopTimer = 0.0f;
+    private bool MoveStopFlag = false;
+
     // ========== コンポーネント参照 ==========
     private Rigidbody2D rb;          // 物理演算用のRigidbody2D
     public bool isGrounded;          // 地面に接地しているかどうか
@@ -136,6 +144,18 @@ public class PlayerScript : MonoBehaviour
             SceneManager.LoadScene(currentScene.name);
         }
 
+        if (MoveStopFlag)
+        {
+            MoveStopTimer += Time.deltaTime;
+            if (MoveStopTime <= MoveStopTimer)
+            {
+                animator.SetBool("DamageBool", false);
+                rb.linearVelocity = Vector2.zero;
+                MoveStopTimer = 0.0f;
+                MoveStopFlag = false;
+            }
+        }
+
         //蛇睨み中の場合は、処理を終了
         if (EvilStareStop) return;
         
@@ -160,7 +180,7 @@ public class PlayerScript : MonoBehaviour
 
         // プレイヤーが完全に停止したらクローンを生成
         // 速度が0で、かつ入力もない状態
-        if (rb.linearVelocity == Vector2.zero && Mathf.Abs(horizontal) == 0.0f)
+        if (rb.linearVelocity == Vector2.zero && Mathf.Abs(horizontal) == 0.0f && MoveStopFlag == false)
         {
             CloneTimer += Time.deltaTime;
         }
@@ -185,9 +205,12 @@ public class PlayerScript : MonoBehaviour
         }
         // 右クリックで弾を発射
         // ※この処理はRecordPlayerInput内で記録されます
-        if (Input.GetMouseButtonDown(1))
+        if (!MoveStopFlag)
         {
-            Shot();
+            if (Input.GetMouseButtonDown(1))
+            {
+                Shot();
+            }
         }
     }
 
@@ -234,20 +257,24 @@ public class PlayerScript : MonoBehaviour
         }
 
         // 左右の入力がある場合、横方向の速度を設定
-        if (Mathf.Abs(horizontal) >= 0.01f)
+        if (!MoveStopFlag)
         {
-            animator.SetBool("MoveBool",true);
-            rb.linearVelocityX = horizontal * moveSpeed;
+            if (Mathf.Abs(horizontal) >= 0.01f)
+            {
+                animator.SetBool("MoveBool", true);
+                rb.linearVelocityX = horizontal * moveSpeed;
+            }
+            else
+            {
+                // 入力がない場合は横方向の速度を0にする（滑り続けないように）
+                animator.SetBool("MoveBool", false);
+                rb.linearVelocityX = 0f;
+            }
         }
-        else
-        {
-            // 入力がない場合は横方向の速度を0にする（滑り続けないように）
-            animator.SetBool("MoveBool", false);
-            rb.linearVelocityX = 0f;
-        }
+        
 
         // 地面に接地していてジャンプボタンが押された場合
-        if (isGrounded && jumpPressed)
+        if (isGrounded && jumpPressed && !MoveStopFlag)
         {
             // 記録が停止していた場合は再開
             if (!isRecording)
@@ -378,10 +405,28 @@ public class PlayerScript : MonoBehaviour
         {
             if (!animator.GetBool("JumpBool"))
             {
-                animator.SetBool("FallBool", false);
+                //animator.SetBool("FallBool", false);
             }
             animator.SetBool("JumpBool", false);
             isGrounded = true;  // 接地状態をtrueに
+        }
+        if (collision.collider.CompareTag("Enemy"))
+        {
+            if (flicflag)
+            {
+                MoveStopFlag = true;
+                rb.linearVelocity = Vector2.zero;
+                rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+                rb.AddForce(Vector2.right * knockpower.x, ForceMode2D.Impulse);
+            }
+            else
+            {
+                MoveStopFlag = true;
+                rb.linearVelocity = Vector2.zero;
+                rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+                rb.AddForce(Vector2.left * knockpower.x, ForceMode2D.Impulse);
+            }
+                animator.SetBool("DamageBool", true);
         }
     }
 
@@ -410,7 +455,7 @@ public class PlayerScript : MonoBehaviour
         {
             if (!animator.GetBool("JumpBool"))
             {
-                animator.SetBool("FallBool",true);
+                //animator.SetBool("FallBool",true);
             }
             isGrounded = false;  // 接地状態をfalseに
         }

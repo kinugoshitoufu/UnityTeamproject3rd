@@ -13,6 +13,7 @@ public class CloneController : MonoBehaviour
     private float DefCloneScale;
     private float CloneScale;
     public static CloneController instance;
+    private Animator animator;
 
     // ========== 記録データ関連 ==========
     [Tooltip("再生する行動データのリスト")]
@@ -58,6 +59,7 @@ public class CloneController : MonoBehaviour
 
         // Rigidbody2Dコンポーネントを取得（物理演算に必要）
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         DefCloneScale = transform.localScale.x;
         instance = this;
         // クローンは重力の影響を受けないようにする（記録通りに動かすため）
@@ -164,6 +166,24 @@ public class CloneController : MonoBehaviour
         // 現在の時刻に対応する行動を再生
         ReplayActions();
 
+        if (Mathf.Abs(rb.linearVelocityX) >= 0.01f)
+        {
+            animator.SetBool("MoveBool", true);
+        }
+        else
+        {
+            animator.SetBool("MoveBool", false);
+        }
+
+        if (rb.linearVelocityY >= 0.01f)
+        {
+            animator.SetBool("JumpBool", true);
+        }
+        else
+        {
+            
+        }
+
         if (rb.linearVelocityX <= -0.01f && !flicflag)
         {
             transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
@@ -261,8 +281,14 @@ public class CloneController : MonoBehaviour
         }
     }
 
+    void EndAnimAttackClone()
+    {
+        animator.SetBool("AttackBool", false);
+    }
+
     void Shot()
     {
+        animator.SetBool("AttackBool", true);
         // 弾のプレハブとShotPointが設定されているか確認
         if (Bullet == null)
         {
@@ -300,6 +326,10 @@ public class CloneController : MonoBehaviour
         if (collision.collider.CompareTag("Ground"))
         {
             isGrounded = true;  // 接地状態をtrueに
+            if (animator.GetBool("JumpBool") == true)
+            {
+                animator.SetBool("JumpBool", false);
+            }
         }
         if (collision.collider.CompareTag("Bullet"))
         {
