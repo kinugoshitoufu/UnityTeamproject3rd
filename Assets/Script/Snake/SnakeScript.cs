@@ -12,15 +12,14 @@ public class SnakeScript : Boss
     [SerializeField] private TornadoScript tornadoPrefab;
     [SerializeField] private float torandoSpeed=0;
     [SerializeField] private float torandoHeight=0;
-    [SerializeField] private GameObject tongue;//舌のオブジェクト
-    [SerializeField] private GameObject ground;//地面オブジェクト
+    [SerializeField] public TongueScript tongue;//舌のオブジェクト
+    
 
     [Header("竜巻1か2か(確認テスト用,true=1,false=2)")]
     public bool tornado1 = true;
 
     // ========== 参照用 ==========
     private float moveSpeed;//移動速度
-    private float strechSpeed;//舌が伸びる速度
     private bool eventFlag = false;//処理を行っているかどうか?
     private bool eventWaitComplete = false;//外部の処理の待機が完了したかどうか？(竜巻などに使う)
     private bool moveFlag = false;
@@ -35,6 +34,7 @@ public class SnakeScript : Boss
     {
         spr=GetComponent<SpriteRenderer>();
         box = GetComponent<BoxCollider2D>();
+        tongue.gameObject.SetActive(false);
         base.Start();
     }
 
@@ -183,7 +183,8 @@ public class SnakeScript : Boss
         //攻撃が終わるまで待機
         spr.color = Color.black;
         PlayerScript.instance.SetEvilStareStop(true);
-        yield return StartCoroutine(Attack(evilParm.proTime.attackTime));
+        //yield return StartCoroutine(Attack(evilParm.proTime.attackTime));
+        yield return CoroutineRunner.WaitAll(Attack(evilParm.proTime.attackTime), TongueStab());
 
         //攻撃余韻が終わるまで待機
         spr.color = Color.red;
@@ -211,13 +212,17 @@ public class SnakeScript : Boss
         yield return StartCoroutine(PreparaAttack(tongueParm.proTime.preparationTime));
 
         //攻撃が終わるまで待機
-        yield return CoroutineRunner.WaitAll(Attack(tongueParm.proTime.attackTime), StretchTongue(tongueParm.proTime.attackTime));
-        
+        tongue.transform.position = transform.position + new Vector3(Direction * (transform.lossyScale.x / 2),0);
+        tongue.gameObject.SetActive(true);
+        yield return CoroutineRunner.WaitAll(Attack(tongueParm.proTime.attackTime), tongue.StretchTongue(tongueParm.proTime.attackTime));
+
         //攻撃余韻が終わるまで待機
         yield return StartCoroutine(Afterglow(tongueParm.proTime.afterglowTime));
+        tongue.transform.localScale = new Vector3(1, 1, 1);
+        tongue.gameObject.SetActive(false);
 
         //処理を終了
-        eventFlag = false;
+        //eventFlag = false;
     }
 
 
@@ -286,36 +291,7 @@ public class SnakeScript : Boss
         Debug.Log("移動攻撃が完了");
     }
 
-    //舌を伸ばす
-    IEnumerator StretchTongue(float stretchTime)
-    {
-        //プレイヤーまでのベクトルを取得
-        var playerPos = PlayerScript.instance.transform.position;
-        Vector2 dir = (playerPos - transform.position).normalized;
-        //プレイヤー方向に舌を回転
-        transform.rotation = Quaternion.FromToRotation(Vector3.up, dir);
-        //プレイヤー方向に伸ばした地面までの距離を求める
-        float distance = Vector2.Distance(transform.position,new Vector2(playerPos.x+playerPos.x-transform.position.x,ground.transform.position.y));
-
-        //舌を伸ばすスピードを計算する
-        strechSpeed = distance / stretchTime;
-
-        //舌が床に突き刺さるまで舌を伸ばす
-        while (transform.position.y > ground.transform.position.y)
-        {
-            tongue.transform.localScale += new Vector3(0, strechSpeed);
-            yield return null;
-        }
-
-
-        //<聞きたい事>
-
-        //舌の画像単体を伸ばす認識であっている？→合ってる
-        //舌で突き刺しは使えば確定で動けなくなる技であってる？→合ってる
-        //地面に舌がささって、動けるようになる条件は何か? ⇒秒数
-
-        yield return null;
-    }
+    
 
 
     //移動
