@@ -10,6 +10,7 @@ TagManager:
   - Clone
   - CloneBullet
   - Destroyer
+  - Wall
   layers:
   - Default
   - TransparentFX

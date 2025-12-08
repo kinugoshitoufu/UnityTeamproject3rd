@@ -12,12 +12,15 @@ public class SnakeScript : Boss
     [SerializeField] private TornadoScript tornadoPrefab;
     [SerializeField] private float torandoSpeed=0;
     [SerializeField] private float torandoHeight=0;
-    [SerializeField] public TongueScript tongue;//舌のオブジェクト
-    
-
+    [Header("舌突き刺し関連")]
+    [SerializeField] private TongueScript tongue;//舌のオブジェクト
+    [Header("舌が当たらなかった場合の刺さる時間の増減分")]
+    [SerializeField] private float missStunDelta= 0.2f;
     [Header("竜巻1か2か(確認テスト用,true=1,false=2)")]
     public bool tornado1 = true;
 
+
+   
     // ========== 参照用 ==========
     private float moveSpeed;//移動速度
     private bool eventFlag = false;//処理を行っているかどうか?
@@ -187,8 +190,7 @@ public class SnakeScript : Boss
         yield return CoroutineRunner.WaitAll(Attack(evilParm.proTime.attackTime), TongueStab());
 
         //攻撃余韻が終わるまで待機
-        spr.color = Color.red;
-        PlayerScript.instance.SetEvilStareStop(false);
+        //PlayerScript.instance.SetEvilStareStop(false);
         yield return StartCoroutine(Afterglow(evilParm.proTime.afterglowTime));
 
         //処理を終了
@@ -209,15 +211,17 @@ public class SnakeScript : Boss
         eventFlag = true;
 
         //攻撃準備が終わるまで待機
-        yield return StartCoroutine(PreparaAttack(tongueParm.proTime.preparationTime));
+        yield return StartCoroutine(PreparaAttack(tongueParm.proTime.preparationTime,false));
 
         //攻撃が終わるまで待機
         tongue.transform.position = transform.position + new Vector3(Direction * (transform.lossyScale.x / 2),0);
         tongue.gameObject.SetActive(true);
         yield return CoroutineRunner.WaitAll(Attack(tongueParm.proTime.attackTime), tongue.StretchTongue(tongueParm.proTime.attackTime));
 
+        //攻撃が当たってない場合、余韻時間を延長する
+        int extension = (tongue.Hit == false) ? 1 : 0;
         //攻撃余韻が終わるまで待機
-        yield return StartCoroutine(Afterglow(tongueParm.proTime.afterglowTime));
+        yield return StartCoroutine(Afterglow(tongueParm.proTime.afterglowTime+missStunDelta*extension));
         tongue.transform.localScale = new Vector3(1, 1, 1);
         tongue.gameObject.SetActive(false);
 
@@ -228,9 +232,11 @@ public class SnakeScript : Boss
 
 
     //攻撃準備
-    IEnumerator PreparaAttack(float waitSeconds)
+    IEnumerator PreparaAttack(float waitSeconds,bool colorChange=true)
     {
         //初期設定
+        if(colorChange)spr.color = Color.yellow;//攻撃準備中を示す
+        rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
         Debug.Log("攻撃準備を開始");
         //待機アニメーションの再生
         Debug.Log("攻撃待機のアニメーションを再生");
@@ -238,6 +244,8 @@ public class SnakeScript : Boss
         yield return new WaitForSeconds(waitSeconds);
         //完了
         Debug.Log("攻撃準備が完了");
+        spr.color = Color.red;
+        rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
 
     }
 
@@ -252,12 +260,16 @@ public class SnakeScript : Boss
         yield return new WaitForSeconds(waitSeconds);
         //完了
         Debug.Log("攻撃が完了");
+        PlayerScript.instance.SetEvilStareStop(false);
+        spr.color = Color.red;
     }
 
     //攻撃余韻
     IEnumerator Afterglow(float afterGlowSeconds)
     {
         //初期設定
+        spr.color = Color.green;//攻撃準備中を示す
+        rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
         Debug.Log("攻撃余韻で待機を開始");
         //余韻アニメーションの再生
         Debug.Log("攻撃余韻のアニメーションを再生");
@@ -266,6 +278,7 @@ public class SnakeScript : Boss
         //完了
         Debug.Log("攻撃余韻が完了");
         rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        
 
     }
 
@@ -275,6 +288,7 @@ public class SnakeScript : Boss
         //初期設定
         Debug.Log("移動攻撃を開始");
         //プレイヤーを貫通するように
+        rb.mass = 0;
         box.isTrigger = true;
         rb.gravityScale = 0;
         //移動開始
@@ -308,6 +322,7 @@ public class SnakeScript : Boss
             //停止させる
             moveFlag = false;
             box.isTrigger = false;
+            rb.mass = 1;
             rb.gravityScale = 1;
             rb.linearVelocityX = 0;
             transform.position = new Vector3(targetPos.x,transform.position.y);
@@ -315,7 +330,6 @@ public class SnakeScript : Boss
         }
 
     }
-
     
 
     //技のパラメータ取得用関数
@@ -332,6 +346,8 @@ public class SnakeScript : Boss
         }
         return returnParam;
     }
+
+    
 
 }
 
