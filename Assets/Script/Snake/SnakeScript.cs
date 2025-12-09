@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using System;
+using System.Linq;
+using Unity.VisualScripting;
 
 public class SnakeScript : Boss
 {
-    //public static SnakeScript SnakeInstance;
+    
+    public static SnakeScript SnakeInstance;
     [Header("攻撃パラメータ(待機、余韻など)")]
-    public List<SnakeAttackParameters> attackParms = new List<SnakeAttackParameters>();
+    public List<SnakeAttackParameters> attackParms = new List<SnakeAttackParameters>(Enum.GetValues(typeof(SnakeTechnique)).Length);
 
     [Header("竜巻関連(0ならプレファブの値を参照)")]
     [SerializeField] private TornadoScript tornadoPrefab;
@@ -19,9 +23,13 @@ public class SnakeScript : Boss
     [Header("竜巻1か2か(確認テスト用,true=1,false=2)")]
     public bool tornado1 = true;
 
+    CapsuleCollider2D capsule;
 
-   
     // ========== 参照用 ==========
+    private int attackCount = 0;//攻撃回数
+    //private List<int> continuousAttackCounts= new List<int>(Enum.GetValues(typeof(SnakeTechnique)).Length);//連続で攻撃された回数
+    private List<int> continuousAttackCounts = new List<int>(Enumerable.Repeat(0, Enum.GetValues(typeof(SnakeTechnique)).Length) );
+
     private float moveSpeed;//移動速度
     private bool eventFlag = false;//処理を行っているかどうか?
     private bool eventWaitComplete = false;//外部の処理の待機が完了したかどうか？(竜巻などに使う)
@@ -35,27 +43,27 @@ public class SnakeScript : Boss
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        SnakeInstance = this;
         spr=GetComponent<SpriteRenderer>();
         box = GetComponent<BoxCollider2D>();
         tongue.gameObject.SetActive(false);
+        Physics2D.IgnoreCollision(box, PlayerScript.instance.gameObject.GetComponent<CapsuleCollider2D>(), true);
         base.Start();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        //待機処理完了を待つ
-        if (!waitComplete) return;
-
 
         base.Update();
+        //待機処理完了を待つ
+        if (!waitComplete) return;
 
         //HPで条件分岐
         if (ratioHP >= 0.5f)
         {
             //HP50%以上の処理
-            if(!eventFlag)StartCoroutine(MoveAttack1());
+            //if(!eventFlag)StartCoroutine(MoveAttack1());
             //if (!eventFlag) StartCoroutine(Tornado1());
             //if(!eventFlag) StartCoroutine(EvilStare());
             //if (!eventFlag) StartCoroutine(TongueStab());
@@ -75,13 +83,13 @@ public class SnakeScript : Boss
     }
 
     //移動攻撃1(低い突進)
-    IEnumerator MoveAttack1()
+    public IEnumerator MoveAttack1()
     {
         //移動攻撃用のパラメータを取得
         SnakeAttackParameters moveParm = getParam(SnakeTechnique.MoveAttack1);
 
         //移動攻撃1の設定がされていない場合は終了
-        if (moveParm == null) yield break;
+        if (moveParm == null||eventFlag==true) yield break;
 
         //処理を開始
         eventFlag = true;
@@ -96,22 +104,24 @@ public class SnakeScript : Boss
         yield return StartCoroutine(Afterglow(moveParm.proTime.afterglowTime));
 
         //処理を終了
-        //eventFlag = false;
+        CountAttack(SnakeTechnique.MoveAttack1);
+        eventFlag = false;
+        Debug.Log("移動攻撃が完了しました");
 
         //テスト
-        if(tornado1)StartCoroutine(Tornado1());
-        else StartCoroutine(Tornado2());
+        //if(tornado1)StartCoroutine(Tornado1());
+        //else StartCoroutine(Tornado2());
 
     }
 
     //竜巻1
-    IEnumerator Tornado1()
+    public IEnumerator Tornado1()
     {
         //竜巻1用のパラメータを取得
         SnakeAttackParameters tornado1Parm = getParam(SnakeTechnique.Tornado1);
 
         //竜巻1の設定がされていない場合は終了
-        if (tornado1Parm == null) yield break;
+        if (tornado1Parm == null || eventFlag == true) yield break;
 
         //処理を開始
         eventFlag = true;
@@ -129,21 +139,22 @@ public class SnakeScript : Boss
         yield return StartCoroutine(Afterglow(tornado1Parm.proTime.afterglowTime));
 
         //処理を終了
-        //eventFlag = false;
+        CountAttack(SnakeTechnique.Tornado1);
+        eventFlag = false;
 
         //テスト
-        StartCoroutine(EvilStare());
+        //StartCoroutine(EvilStare());
 
     }
 
     //竜巻2
-    IEnumerator Tornado2()
+    public IEnumerator Tornado2()
     {
         //竜巻2用のパラメータを取得
         SnakeAttackParameters tornado2Parm = getParam(SnakeTechnique.Tornado2);
 
         //竜巻2の設定がされていない場合は終了
-        if (tornado2Parm == null) yield break;
+        if (tornado2Parm == null || eventFlag == true) yield break;
 
         //処理を開始
         eventFlag = true;
@@ -161,21 +172,22 @@ public class SnakeScript : Boss
         yield return StartCoroutine(Afterglow(tornado2Parm.proTime.afterglowTime));
 
         //処理を終了
-        //eventFlag = false;
+        CountAttack(SnakeTechnique.Tornado2);
+        eventFlag = false;
 
         //テスト
-        StartCoroutine(EvilStare());
+        //StartCoroutine(EvilStare());
     }
 
     //蛇睨み
-    IEnumerator EvilStare()
+    public IEnumerator EvilStare()
     {
         
         //蛇睨み用のパラメータを取得
         SnakeAttackParameters evilParm = getParam(SnakeTechnique.EvilStare);
 
         //竜巻1の設定がされていない場合は終了
-        if (evilParm == null) yield break;
+        if (evilParm == null || eventFlag == true) yield break;
         
         //処理を開始
         eventFlag = true;
@@ -194,12 +206,14 @@ public class SnakeScript : Boss
         yield return StartCoroutine(Afterglow(evilParm.proTime.afterglowTime));
 
         //処理を終了
+        CountAttack(SnakeTechnique.EvilStare);
         eventFlag = false;
+        //StartCoroutine(Roar());
 
     }
 
     //舌で突き刺し
-    IEnumerator TongueStab()
+    public IEnumerator TongueStab()
     {
         //舌突き刺し用のパラメータを取得
         SnakeAttackParameters tongueParm = getParam(SnakeTechnique.TongueStab);
@@ -226,7 +240,43 @@ public class SnakeScript : Boss
         tongue.gameObject.SetActive(false);
 
         //処理を終了
+        CountAttack(SnakeTechnique.TongueStab);
         //eventFlag = false;
+    }
+
+    //咆哮
+    public IEnumerator Roar()
+    {
+
+        //咆哮用のパラメータを取得
+        SnakeAttackParameters roarParm = getParam(SnakeTechnique.Roar);
+
+        //咆哮用の設定がされていない場合は終了
+        if (roarParm == null || eventFlag == true) yield break;
+
+        Debug.Log("無敵状態開始");
+
+        //処理を開始
+        eventFlag = true;
+
+        //攻撃準備が終わるまで待機
+        yield return StartCoroutine(PreparaAttack(roarParm.proTime.preparationTime, false));
+
+        //攻撃が終わるまで待機
+        OnInvincible(true);
+        yield return StartCoroutine(Attack(roarParm.proTime.attackTime));
+        //yield return CoroutineRunner.WaitAll(Attack(roarParm.proTime.attackTime));
+
+        //無敵状態中に攻撃をする場合、ここに記述
+
+        //攻撃余韻が終わるまで待機
+        OnInvincible(false);
+        yield return StartCoroutine(Afterglow(roarParm.proTime.afterglowTime));
+
+        //処理を終了
+        Debug.Log("無敵状態終了");
+        CountAttack(SnakeTechnique.Roar);
+        eventFlag = false;
     }
 
 
@@ -235,7 +285,7 @@ public class SnakeScript : Boss
     IEnumerator PreparaAttack(float waitSeconds,bool colorChange=true)
     {
         //初期設定
-        if(colorChange)spr.color = Color.yellow;//攻撃準備中を示す
+        if(colorChange&&waitSeconds!=0)spr.color = Color.yellow;//攻撃準備中を示す
         rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
         Debug.Log("攻撃準備を開始");
         //待機アニメーションの再生
@@ -268,7 +318,7 @@ public class SnakeScript : Boss
     IEnumerator Afterglow(float afterGlowSeconds)
     {
         //初期設定
-        spr.color = Color.green;//攻撃準備中を示す
+        if(afterGlowSeconds!= 0) spr.color = Color.green;//攻撃準備中を示す
         rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
         Debug.Log("攻撃余韻で待機を開始");
         //余韻アニメーションの再生
@@ -288,9 +338,10 @@ public class SnakeScript : Boss
         //初期設定
         Debug.Log("移動攻撃を開始");
         //プレイヤーを貫通するように
-        rb.mass = 0;
-        box.isTrigger = true;
-        rb.gravityScale = 0;
+        
+        //rb.mass = 0;
+        //box.isTrigger = true;
+        //rb.gravityScale = 0;
         //移動開始
         moveFlag = true;
         //画面端までの距離を取得
@@ -321,14 +372,48 @@ public class SnakeScript : Boss
             if (Mathf.Sign(transform.position.x) != Mathf.Sign(targetPos.x)) return;
             //停止させる
             moveFlag = false;
-            box.isTrigger = false;
-            rb.mass = 1;
-            rb.gravityScale = 1;
+            //box.isTrigger = false;
+            //rb.mass = 1;
+            //rb.gravityScale = 1;
+            
             rb.linearVelocityX = 0;
             transform.position = new Vector3(targetPos.x,transform.position.y);
             rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
         }
 
+    }
+
+    //攻撃回数のカウント
+    void CountAttack(SnakeTechnique tecName)
+    {
+        foreach (var param in attackParms)
+        {
+            //呼び出された攻撃の場合
+            if (param.technique == tecName)
+            {
+                //攻撃回数を増やす
+                continuousAttackCounts[(int)param.technique]++;
+                attackCount++;
+            }
+            else//呼び出された攻撃以外
+            {
+                //連続攻撃回数をリセット
+                continuousAttackCounts[(int)param.technique]=0;
+            }
+        }
+
+    }
+
+    //連続攻撃回数の取得
+    public int GetcontinuousAttackCount(SnakeTechnique tecName)
+    {
+        return continuousAttackCounts[(int)tecName];
+    }
+
+    //攻撃回数の取得
+    public int GetAttackCount()
+    {
+        return attackCount;
     }
     
 

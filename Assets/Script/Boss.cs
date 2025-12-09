@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEditor;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 
 public class Boss : MonoBehaviour
@@ -19,11 +20,13 @@ public class Boss : MonoBehaviour
     // ========== コンポーネント ==========
     public Rigidbody2D rb;
     public Transform PlayerPos;
+    public bool Invincible { get { return invincible; }}//無敵状態かどうか
 
     // ========== 参照用 ==========
     private int direction = -1;//(右が1,左が-1)
     private float startHP;
     private float distanceX;
+    private bool invincible = false;//無敵状態かどうか?
 
     private Vector2 rightEdge;//画面右端
     private Vector2 leftEdge; //画面左端
@@ -31,6 +34,7 @@ public class Boss : MonoBehaviour
 
     protected float ratioHP = 100;//HPの割合
     protected int Direction { get { return direction; } }//向きの取得
+    
     protected bool waitComplete = false;//最初の待機
     protected Vector2 RightEdge { get { return rightEdge; }}
     protected Vector2 LeftEdge { get {return leftEdge; }}
@@ -54,12 +58,15 @@ public class Boss : MonoBehaviour
     // Update is called once per frame
     protected void Update()
     {
+
+        //プレイヤーとの距離から向きを計算
+        distanceX = PlayerPos.position.x - transform.position.x;
+        if (distanceX != 0) direction = (int)(distanceX / Mathf.Abs(distanceX));//ゼロ除算対策
+
         if (!waitComplete) return;
         ratioHP = HP / startHP;
 
-        //プレイヤーとの距離から向きを計算
-        distanceX=PlayerPos.position.x-transform.position.x;
-        if(distanceX!=0)direction = (int)(distanceX / Mathf.Abs(distanceX));//ゼロ除算対策
+        
 
     }
 
@@ -87,8 +94,21 @@ public class Boss : MonoBehaviour
         }
     }
 
+    //無敵状態にする
+    public void OnInvincible(bool flag)
+    {
+        invincible = flag;
+    }
+
+    //ボスの体力が50%以上かどうか
+    public bool CheckHP()
+    {
+        return (ratioHP >= 0.5f) ? true : false;
+    }
+
+
     //最初に呼び出される待機処理
-    IEnumerator Wait()
+    public IEnumerator Wait()
     {
         waitComplete = false;
         Debug.Log(waitTime + "秒間の待機を開始します。");

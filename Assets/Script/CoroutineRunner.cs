@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class CoroutineRunner : MonoBehaviour
 {
@@ -36,6 +37,12 @@ public class CoroutineRunner : MonoBehaviour
 
         // 全部完了するまで待機
         yield return new WaitUntil(() => finishedCount >= coroutines.Length);
+    }
+
+    public static IEnumerator Wait(IEnumerator coroutine, System.Action onFinish)
+    {
+        yield return CoroutineRunner.Instance.StartCoroutine(coroutine);
+        onFinish?.Invoke();
     }
 
 

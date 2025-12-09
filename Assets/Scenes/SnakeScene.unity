@@ -482,6 +482,7 @@ GameObject:
   - component: {fileID: 550570755}
   - component: {fileID: 550570754}
   - component: {fileID: 550570753}
+  - component: {fileID: 550570758}
   m_Layer: 0
   m_Name: Snake
   m_TagString: Enemy
@@ -618,9 +619,9 @@ MonoBehaviour:
       afterglowTime: 0
     technique: 4
   - proTime:
-      preparationTime: 0
-      attackTime: 0
-      afterglowTime: 0
+      preparationTime: 0.3
+      attackTime: 1
+      afterglowTime: 0.5
     animeTime:
       preparationTime: 0
       attackTime: 0
@@ -714,12 +715,50 @@ Transform:
   m_GameObject: {fileID: 550570752}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.7, y: 2.8, z: 0}
+  m_LocalPosition: {x: -4.39, y: 2.8, z: 0}
   m_LocalScale: {x: 5, y: 3.378375, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &550570758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550570752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Graph: {fileID: 8895822408794041492, guid: f16c76d1fede7ad499e5be68b6b5fb37, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 8415058570646913441
+  - rid: 8415058570646914045
+  m_OriginalGraph: {fileID: 0}
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 8415058570646913441
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 550570752}
+    - rid: 8415058570646914045
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Transform, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 9622932903496144777
+          m_Value1: 9233607315880138871
+        Name: PlayerTransform
+        m_Value: {fileID: 1446103452}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -979,6 +1018,7 @@ MonoBehaviour:
   MoveStopTimer: 0
   isGrounded: 0
   clonePrefab: {fileID: 1825436195216519715, guid: 4ce1a9ab592d74042894ce7045ba86a1, type: 3}
+  tempclonePrefab: {fileID: 0}
   CloneTime: 0.8
   Bullet: {fileID: 2812918182328086363, guid: bd6318b06120bb14d9ef32bfc3cc434c, type: 3}
   shotPoint: {fileID: 4389359586323842830, guid: 4ce1a9ab592d74042894ce7045ba86a1, type: 3}
@@ -1033,6 +1073,11 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &1446103452 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5404425984101643223, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+  m_PrefabInstance: {fileID: 1467105171}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1467105171
 PrefabInstance:
   m_ObjectHideFlags: 0
