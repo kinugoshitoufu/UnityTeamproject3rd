@@ -28,9 +28,11 @@ public class PlayerScript : MonoBehaviour
 {
     // ========== 様々な機能に必要な変数 ==========
     private bool flicflag = false;
+    private bool TempCloneFlag = false;
     public static PlayerScript instance;
     private Animator animator;
     private bool _evilStareStop = false;
+    private GameObject _clone;
     public bool EvilStareStop { get { return _evilStareStop; } }//蛇睨み用のパラメータ
     //private bool EvilStareStop = false;
 
@@ -69,6 +71,8 @@ public class PlayerScript : MonoBehaviour
     [Header("クローン設定")]
     [Tooltip("生成するクローンのプレハブ（Inspectorで設定必須）")]
     public GameObject clonePrefab;
+    [Tooltip("生成されるクローンの位置に出てくる仮クローン（Inspectorで設定必須）")]
+    public GameObject tempclonePrefab;
     [Tooltip("止まってから何秒経ったら出てくる")]
     public float CloneTime = 0.8f;
     private float CloneTimer = 0.0f;
@@ -188,6 +192,14 @@ public class PlayerScript : MonoBehaviour
         {
             CloneTimer = 0.0f;
         }
+        if (CloneTimer > 0.0f && CloneTimer < CloneTime)
+        {
+            if (recordedActions.Count != 0 && !TempCloneFlag)
+            {
+                _clone = Instantiate(tempclonePrefab, recordedActions[0].position, Quaternion.identity);
+                TempCloneFlag = true;
+            }
+        }
         if (CloneTime <= CloneTimer)
         {
             // 記録データがある場合のみクローンを生成
@@ -306,7 +318,11 @@ public class PlayerScript : MonoBehaviour
             Debug.LogError("ClonePrefabが設定されていません！");
             return;
         }
-
+        if (_clone != null)
+        {
+            Destroy(_clone);
+            TempCloneFlag = false;
+        }
         // 記録を一時停止
         isRecording = false;
 

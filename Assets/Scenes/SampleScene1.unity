@@ -2286,6 +2286,10 @@ PrefabInstance:
       value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+      propertyPath: MoveStopTime
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: knockpower.x
       value: 3
       objectReference: {fileID: 0}
@@ -2293,6 +2297,10 @@ PrefabInstance:
       propertyPath: knockpower.y
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+      propertyPath: tempclonePrefab
+      value: 
+      objectReference: {fileID: 1825436195216519715, guid: c35a01c18dd989a44960ebd4cc4b7a1e, type: 3}
     - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: seClips.Array.size
       value: 0
