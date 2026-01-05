@@ -1,11 +1,13 @@
 using NUnit;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 using static UnityEngine.GraphicsBuffer;
 [RequireComponent(typeof(Rigidbody2D))]
 
 public class Elephant : Boss
 {
+    public static Elephant elephant;
     public Transform player;
 
     //ヒップドロップ関連の関数達
@@ -21,11 +23,12 @@ public class Elephant : Boss
     [Header("Phase3: 急降下")]
     public float fallGravityScale = 4f;
     public float fallStartDistance = 0.5f;
-
     private enum JumpState { None, Rising, Floating, Falling }
-    private JumpState state = JumpState.None;
+    private  JumpState state = JumpState.None;
     private Vector2 targetPos;
     private float floatTimer = 0f;
+    public bool JumpFinished=false;
+
 
     [Header("ボール生成時関連の設定")]
     //ボール関連の関数達
@@ -36,9 +39,12 @@ public class Elephant : Boss
     private bool hasJumped = false;
     private bool hasBallJumped = false;
     private bool hasIncreasedGravity = false;
+    public bool RightJumpFinished = false;
 
     [Header("攻撃判定")]
     public Collider2D AttackCollider;
+    private int AttackCount=0;
+    public bool AttackFinished = false;
 
     [Header("ジャンプ関連の設定")]
     public float targetX = 8f;
@@ -46,9 +52,20 @@ public class Elephant : Boss
     public float gravityScale = 1f;
 
     [Header("歩き関連の設定")]
-    public float WalkSpeed = 1f;
+    public float interval = 1f;  // 1秒ごと
+    private float timer = 0f;
+    private float Walktimer = 0f;   //何秒歩いたかの関数
 
+    public float GetWalktimer()
+    {
+        return Walktimer;
+    }
+    //int rand= Random.Range(0, 2); // 0 または 1 が返る
 
+    public int GetAttackCount()
+    {
+        return AttackCount;
+    }
     void Start()
     {
         base.Start();
@@ -60,117 +77,133 @@ public class Elephant : Boss
     void Update()
     {
         if (!waitComplete) return;
-        //BallJump();
-        //Jump();
-        //Attack();
+
         //RightJump();
+        //BallJump();
+        //Attack();
         //Walk();
+        //StartJumpAction();
+
         // 自分自身のx座標とPlayerのx座標の差の絶対値を取る
         float distanceX = Mathf.Abs(transform.position.x - player.position.x);
 
-        if (distanceX >= 4f&& distanceX <= 10f)
+        // Playerからx座標で4～10以内で離れている時
+        if (distanceX >= 4f && distanceX <= 10f)
         {
-            // Playerからx座標でちょうど5離れている時の処理
-            Debug.Log("Playerからx座標で4～10離れている！");
+            //かつ5秒間歩いていた場合
+            if (Walktimer == 5f)
+            {
+                //Debug.Log("5秒間歩いた!!");
+                Walktimer = 0f;
+            }
+            //Debug.Log("Playerからx座標で4～10離れている！");
+        }
+
+        //10以上離れている場合
+        if (distanceX >= 10f)
+        {
+            //Jump();
+            //Debug.Log("Playerからx座標で10離れている！");
+        }
+
+        //4以上近づいている場合
+        if (distanceX <= 4)
+        {
+            //Debug.Log("Playerからx座標で4以下で近い！！");
         }
     }
 
-    void Walk()
+    private void Awake()
     {
-        transform.position += new Vector3(WalkSpeed * Time.deltaTime, 0f, 0f);
+        elephant = this;
     }
 
-    void Jump()
+    //移動
+    public void Walk()
     {
-        switch (state)
+        timer += Time.deltaTime;
+        Walktimer += Time.deltaTime;
+        //Debug.Log(Walktimer);
+        if (timer >= interval)
         {
-            case JumpState.None:
-                StartJump();
-                break;
-
-            case JumpState.Rising:
-                CheckRiseToFloat();
-                break;
-
-            case JumpState.Floating:
-                ExecuteFloating();
-                break;
-
-            case JumpState.Falling:
-                // 物理に任せて落下
-                break;
+            timer = 0f;
+            Vector3 pos = transform.position;
+            // Player の方向 (右なら +1、左なら -1)
+            float direction = Mathf.Sign(player.position.x - pos.x);
+            // X に 1 ずつ近づく
+            pos.x += direction * 1f;
+            transform.position = pos;
         }
     }
 
-    // -----------------------------------------------------
-    // ジャンプ開始 (Player位置を一度だけ取得)
-    // -----------------------------------------------------
-    void StartJump()
+    //ヒップドロップ
+    public void StartJumpAction()
     {
-        targetPos = player.position;
+        if (!isJumping)
+            StartCoroutine(JumpCoroutine());
+    }
+
+    private bool isJumping = false;
+
+    IEnumerator JumpCoroutine()
+    {
+        isJumping = true;
+        JumpFinished = false;
+
+        // =============================
+        // 1. 上昇フェーズ
+        // =============================
+        Vector2 targetPos = player.position;
 
         rb.gravityScale = riseGravityScale;
-
-        // 斜めジャンプ
         float dirX = Mathf.Sign(targetPos.x - transform.position.x);
-        float riseHorizontalSpeed = 2f;     // 水平方向ジャンプ力（調整可）
+        float riseHorizontalSpeed = 2f;
+
         rb.linearVelocity = new Vector2(dirX * riseHorizontalSpeed, riseForce);
 
-        state = JumpState.Rising;
-    }
+        // 上昇が終わるまで待つ
+        while (rb.linearVelocity.y > 0f)
+            yield return null;
 
-    // -----------------------------------------------------
-    // 上昇 → 最高点付近になったら Float へ
-    // -----------------------------------------------------
-    void CheckRiseToFloat()
-    {
-        if (rb.linearVelocity.y <= 0f)
+        // =============================
+        // 2. 滞空フェーズ
+        // =============================
+        rb.gravityScale = floatGravityScale;
+        rb.linearVelocity = Vector2.zero;
+
+        float floatTimer = 0f;
+        while (floatTimer < floatTime)
         {
-            // 滞空開始
-            rb.gravityScale = floatGravityScale;
-            rb.linearVelocity = Vector2.zero;
-
-            floatTimer = 0f;
-            state = JumpState.Floating;
+            floatTimer += Time.deltaTime;
+            float dirX2 = Mathf.Sign(targetPos.x - transform.position.x);
+            rb.linearVelocity = new Vector2(dirX2 * floatMoveSpeed, 0f);
+            yield return null;
         }
+
+        // =============================
+        // 3. 落下フェーズ
+        // =============================
+        rb.gravityScale = fallGravityScale;
+
+        float startY = transform.position.y;
+        float endY = targetPos.y;
+        float g = Physics2D.gravity.y * fallGravityScale;
+
+        float fallTime = Mathf.Sqrt((2f * (startY - endY)) / -g);
+        float needVx = (targetPos.x - transform.position.x) / fallTime;
+
+        rb.linearVelocity = new Vector2(needVx, 0f);
+
+        // 地面に着くまで待つ
+        while (rb.linearVelocity.y <= 0)
+            yield return null;
+
+        JumpFinished = true;
+        isJumping = false;
     }
 
-    // -----------------------------------------------------
-    // 滞空中 ＋ ゆっくり横移動
-    // -----------------------------------------------------
-    void ExecuteFloating()
-    {
-        floatTimer += Time.deltaTime;
-
-        // 滞空中はゆっくり横移動
-        float dirX = Mathf.Sign(targetPos.x - transform.position.x);
-        rb.linearVelocity = new Vector2(dirX * floatMoveSpeed, 0f);
-
-        if (floatTimer >= floatTime)
-        {
-            rb.gravityScale = fallGravityScale;
-
-            // 落下にかかる時間を計算して着地位置を保証
-            float startY = transform.position.y;
-            float endY = targetPos.y;  // 着地したい Player の Y
-
-            float g = Physics2D.gravity.y * fallGravityScale; // 重力加速度（負）
-
-            // h = v0 * t + 1/2 * g * t^2  （v0=0）
-            // t = sqrt( 2 * (startY - endY) / -g )
-            float fallTime = Mathf.Sqrt((2f * (startY - endY)) / -g);
-
-            //この時間でちょうど x に到達する横速度をセット
-            float needVx = (targetPos.x - transform.position.x) / fallTime;
-
-            rb.linearVelocity = new Vector2(needVx, 0f);
-
-            state = JumpState.Falling;
-        }
-    }
-
-
-    void RightJump()
+    //右端ジャンプ
+    public void RightJump()
     {
         if (!hasBallJumped)
         {
@@ -199,8 +232,11 @@ public class Elephant : Boss
                 rb.linearVelocity = new Vector2(vx, vy);
             }
             hasBallJumped = true;
+            RightJumpFinished= true;
         }
     }
+
+    //ボールの生成ジャンプ
     void BallJump()
     {
         if (!hasBallJumped)
@@ -222,27 +258,19 @@ public class Elephant : Boss
         }
     }
 
-    void Attack()
+    //攻撃判定
+    public void Attack()
     {
-        //Debug.Log("判定オン!!!");
         AttackCollider.enabled = true;
+        AttackCount++;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (hasJumped && collision.gameObject.CompareTag("Ground"))
         {
-            Debug.Log("balljumpがtrueになりました!!");
             balljump = true;
             hasJumped = false;
         }
     }
-
-    //private void OnTriggerEnter2D(Collider2D other)
-    //{
-    //    if(other.CompareTag("Player"))
-    //    {
-    //        Debug.Log("プレイヤーにダメージ!!!!");
-    //    }
-    //}
 }

@@ -13,14 +13,14 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("EnemySpawner‚Í³í‚Å‚·!!!");
+        //Debug.Log("EnemySpawner‚Í³í‚Å‚·!!!");
         elephant = otherObject.GetComponent<Elephant>();
     }
     private void Update()
     {
         if (elephant.balljump)
         {
-            Debug.Log("balljump‚ªtrue‚É‚È‚Á‚½‚Ì‚ğŠ´’m");
+            //Debug.Log("balljump‚ªtrue‚É‚È‚Á‚½‚Ì‚ğŠ´’m");
             timer += Time.deltaTime;
             if (timer > 1) 
             { 
