@@ -13,7 +13,16 @@ public partial class Tornado2Action : Action
     {
         //CoroutineRunner.Instance.StartCoroutine(SnakeScript.SnakeInstance.Tornado2());
         return Status.Running;
+
+        /*float timer = Elephant.elephant.GetWalkTimer();
+        if (timer > 5) return true;
+        else return false;*/
     }
+
+    //public bool GetWalkTimer()
+    //{
+    //    if(GetWalkTimer>=5)
+    //}
 
     protected override Status OnUpdate()
     {

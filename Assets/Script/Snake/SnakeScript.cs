@@ -51,6 +51,11 @@ public class SnakeScript : Boss
         base.Start();
     }
 
+    private void Awake()
+    {
+        SnakeInstance = this;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -415,7 +420,6 @@ public class SnakeScript : Boss
     {
         return attackCount;
     }
-    
 
     //技のパラメータ取得用関数
     SnakeAttackParameters getParam(SnakeTechnique tecName)

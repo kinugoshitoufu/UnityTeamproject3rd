@@ -3,14 +3,13 @@ using Unity.Behavior;
 using UnityEngine;
 
 [Serializable, Unity.Properties.GeneratePropertyBag]
-[Condition(name: "CheckBossHP", story: "CheckBossHP", category: "Conditions", id: "7dded3518613f5641e873374f359329c")]
-public partial class CheckBossHpCondition : Condition
+[Condition(name: "CheckMoveAttackCountCondition", story: "CheckMoveAttackCountCondition", category: "Conditions", id: "ec702599eb5c89a0a3d1556f66832374")]
+public partial class CheckMoveAttackCountCondition : Condition
 {
 
     public override bool IsTrue()
     {
-        return SnakeScript.SnakeInstance.CheckHP();
-
+        return true;
     }
 
     public override void OnStart()
