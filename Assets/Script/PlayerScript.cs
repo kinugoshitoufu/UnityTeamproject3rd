@@ -1,9 +1,9 @@
-using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
-using UnityEngine.SceneManagement;
-using System.Threading;
 using System.ComponentModel;
+using System.Security.Cryptography;
+using System.Threading;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// プレイヤーの各フレームの行動を記録するデータクラス
@@ -86,6 +86,12 @@ public class PlayerScript : MonoBehaviour
     [Tooltip("弾が発射される位置（Transform）")]
     public Transform shotPoint;
 
+    // ========== 移動関連のパラメータ ==========
+    [Header("HP関連")]
+    [Tooltip("Hp設定")]
+    public int Hp = 5;
+    private int HpMax;
+
     // ========== SE用 =============
     [Header("SE関連")]
     [Tooltip("seClipsを追加してオーディオファイルを追加")]
@@ -100,6 +106,7 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         // Rigidbody2Dコンポーネントを取得（物理演算に必要）
+        HpMax = Hp;
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         //audioSource = GetComponent<AudioSource>();
@@ -140,7 +147,10 @@ public class PlayerScript : MonoBehaviour
     /// </summary>
     void Update()
     {
-
+        if (Hp == 0)
+        {
+            Destroy(gameObject);
+        }
         // Rキーでシーンをリセット（やり直し機能）
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -190,6 +200,11 @@ public class PlayerScript : MonoBehaviour
         }
         else
         {
+            if (_clone != null)
+            {
+                Destroy(_clone);
+                TempCloneFlag = false;
+            }
             CloneTimer = 0.0f;
         }
         if (CloneTimer > 0.0f && CloneTimer < CloneTime)
@@ -219,7 +234,7 @@ public class PlayerScript : MonoBehaviour
         // ※この処理はRecordPlayerInput内で記録されます
         if (!MoveStopFlag)
         {
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1) || Input.GetKeyDown("joystick button 2"))
             {
                 Shot();
             }
@@ -235,10 +250,10 @@ public class PlayerScript : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
 
         // ジャンプボタン（スペースキー）が押されたかを取得
-        bool jumpPressed = Input.GetKeyDown(KeyCode.Space);
+        bool jumpPressed = (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 0")) ? true : false;
 
         // 右クリック（弾の発射）が押されたかを取得
-        bool shotPressed = Input.GetMouseButtonDown(1);
+        bool shotPressed = (Input.GetMouseButtonDown(1) || Input.GetKeyDown("joystick button 2")) ? true : false;
 
         // ========== 現在の状態を記録 ==========
         PlayerAction action = new PlayerAction
@@ -426,7 +441,7 @@ public class PlayerScript : MonoBehaviour
             animator.SetBool("JumpBool", false);
             isGrounded = true;  // 接地状態をtrueに
         }
-        if (collision.collider.CompareTag("Enemy"))
+        if (collision.collider.CompareTag("Enemy") && !MoveStopFlag)
         {
             if (flicflag)
             {
@@ -442,7 +457,8 @@ public class PlayerScript : MonoBehaviour
                 rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
                 rb.AddForce(Vector2.left * knockpower.x, ForceMode2D.Impulse);
             }
-                animator.SetBool("DamageBool", true);
+            Hp--;
+            animator.SetBool("DamageBool", true);
         }
     }
 
