@@ -17,12 +17,13 @@ public partial class JumpAction : Action
         {
             return Status.Failure;
         }
+        Elephant.elephant.StartJumpAction();
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
-        Elephant.elephant.StartJumpAction();
+        
         return Elephant.elephant.JumpFinished ? Status.Success:Status.Running;
     }
 

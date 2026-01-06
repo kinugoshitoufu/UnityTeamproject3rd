@@ -15,13 +15,13 @@ public partial class RightJumpAction : Action
         {
             return Status.Failure;
         }
-        return Status.Running;
+        Elephant.elephant.RightJump();
+        return Elephant.elephant.RightJumpFinished ? Status.Success : Status.Running;
     }
 
     protected override Status OnUpdate()
     {
-        Elephant.elephant.RightJump();
-        return Elephant.elephant.RightJumpFinished ? Status.Success : Status.Running;
+        return  Status.Running;
     }
 
     protected override void OnEnd()

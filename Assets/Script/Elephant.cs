@@ -3,12 +3,17 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System.Collections;
 using static UnityEngine.GraphicsBuffer;
+using System.Collections.Generic;
+using System;
 [RequireComponent(typeof(Rigidbody2D))]
 
 public class Elephant : Boss
 {
     public static Elephant elephant;
     public Transform player;
+
+    [Header("攻撃パラメータ(待機、余韻など)")]
+    public List<ElephantAttackParameters> attackParms = new List<ElephantAttackParameters>(Enum.GetValues(typeof(ElephantTechnique)).Length);
 
     //ヒップドロップ関連の関数達
     [Header("Phase1: 急上昇")]
@@ -45,6 +50,7 @@ public class Elephant : Boss
     public Collider2D AttackCollider;
     private int AttackCount=0;
     public bool AttackFinished = false;
+    public bool AttackEnd = false;
 
     [Header("ジャンプ関連の設定")]
     public float targetX = 8f;
@@ -76,6 +82,7 @@ public class Elephant : Boss
 
     void Update()
     {
+        base.Update();
         if (!waitComplete) return;
 
         //RightJump();
@@ -86,31 +93,6 @@ public class Elephant : Boss
 
         // 自分自身のx座標とPlayerのx座標の差の絶対値を取る
         float distanceX = Mathf.Abs(transform.position.x - player.position.x);
-
-        // Playerからx座標で4～10以内で離れている時
-        if (distanceX >= 4f && distanceX <= 10f)
-        {
-            //かつ5秒間歩いていた場合
-            if (Walktimer == 5f)
-            {
-                //Debug.Log("5秒間歩いた!!");
-                Walktimer = 0f;
-            }
-            //Debug.Log("Playerからx座標で4～10離れている！");
-        }
-
-        //10以上離れている場合
-        if (distanceX >= 10f)
-        {
-            //Jump();
-            //Debug.Log("Playerからx座標で10離れている！");
-        }
-
-        //4以上近づいている場合
-        if (distanceX <= 4)
-        {
-            //Debug.Log("Playerからx座標で4以下で近い！！");
-        }
     }
 
     private void Awake()
@@ -200,6 +182,8 @@ public class Elephant : Boss
 
         JumpFinished = true;
         isJumping = false;
+
+        Debug.Log("JumpFinishedがtrueになりました");
     }
 
     //右端ジャンプ
@@ -259,10 +243,64 @@ public class Elephant : Boss
     }
 
     //攻撃判定
-    public void Attack()
+    public IEnumerator Attack()
     {
+        ElephantAttackParameters NoseAttack=getParam(ElephantTechnique.NoseAttack);
+        //待機時間分、待機
+        yield return StartCoroutine(PreparaAttack(NoseAttack.proTime.preparationTime));
         AttackCollider.enabled = true;
         AttackCount++;
+        yield return StartCoroutine(AttackCoroutine(NoseAttack.proTime.attackTime));
+        AttackCollider.enabled = false;
+        yield return StartCoroutine(Afterglow(NoseAttack.proTime.afterglowTime));
+        AttackEnd = true;
+    }
+
+    //攻撃準備
+    IEnumerator PreparaAttack(float waitSeconds, bool colorChange = true)
+    {
+        //初期設定
+        Debug.Log("攻撃準備を開始");
+        //待機アニメーションの再生
+        Debug.Log("攻撃待機のアニメーションを再生");
+        //攻撃準備時間分、待機
+        yield return new WaitForSeconds(waitSeconds);
+        //完了
+        Debug.Log("攻撃準備が完了");
+
+    }
+
+    //攻撃
+    IEnumerator AttackCoroutine(float waitSeconds)
+    {
+        //初期設定
+        Debug.Log("攻撃を開始");
+        //移動攻撃のアニメーションの再生
+        Debug.Log("攻撃のアニメーションを再生");
+        //攻撃準備時間分、待機
+        yield return new WaitForSeconds(waitSeconds);
+        //完了
+        Debug.Log("攻撃が完了");
+        PlayerScript.instance.SetEvilStareStop(false);
+        //spr.color = Color.red;
+    }
+
+    //攻撃余韻
+    IEnumerator Afterglow(float afterGlowSeconds)
+    {
+        //初期設定
+        //if(afterGlowSeconds!= 0) spr.color = Color.green;//攻撃準備中を示す
+        //rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
+        Debug.Log("攻撃余韻で待機を開始");
+        //余韻アニメーションの再生
+        Debug.Log("攻撃余韻のアニメーションを再生");
+        //攻撃余韻時間分、待機
+        yield return new WaitForSeconds(afterGlowSeconds);
+        //完了
+        Debug.Log("攻撃余韻が完了");
+        //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -273,4 +311,55 @@ public class Elephant : Boss
             hasJumped = false;
         }
     }
+
+    ////連続攻撃回数の取得
+    //public int GetcontinuousAttackCount(SnakeTechnique tecName)
+    //{
+    //    return continuousAttackCounts[(int)tecName];
+    //}
+
+    ////攻撃回数の取得
+    //public int GetAttackCount()
+    //{
+    //    return attackCount;
+    //}
+
+    //技のパラメータ取得用関数
+    ElephantAttackParameters getParam(ElephantTechnique tecName)
+    {
+        ElephantAttackParameters returnParam = null;
+        foreach (var param in attackParms)
+        {
+            if (param.technique == tecName)
+            {
+                returnParam = param;
+                break;
+            }
+        }
+        return returnParam;
+    }
+
+
+
+}
+
+// 象ボス専用enum
+[System.Serializable]
+public enum ElephantTechnique
+{
+    None,
+    [InspectorName("鼻で近接攻撃")]
+    NoseAttack,
+    [InspectorName("ヒップドロップ攻撃1")]
+    hipdrop,
+    [InspectorName("ヒップドロップ攻撃2")]
+    hipdrop2,
+}
+
+// 蛇ボス用の攻撃パラメータ
+[System.Serializable]
+public class ElephantAttackParameters : attackParameters
+{
+    [Header("技名")]
+    public ElephantTechnique technique = ElephantTechnique.None;
 }
