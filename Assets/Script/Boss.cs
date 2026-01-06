@@ -70,7 +70,7 @@ public class Boss : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H))
         {
             Debug.Log("HPを半分にします");
-            HP = startHP * 0.5f;
+            HP = startHP * 0.49f;
         }
 
         
