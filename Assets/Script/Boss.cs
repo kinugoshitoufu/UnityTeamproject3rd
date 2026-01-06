@@ -65,6 +65,12 @@ public class Boss : MonoBehaviour
         if (!waitComplete) return;
         ratioHP = HP / startHP;
 
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Debug.Log("HPを半分にします");
+            HP = startHP * 0.5f;
+        }
+
         
 
     }
