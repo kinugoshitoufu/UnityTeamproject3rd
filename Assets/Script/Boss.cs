@@ -61,8 +61,12 @@ public class Boss : MonoBehaviour
     {
 
         //プレイヤーとの距離から向きを計算
-        distanceX = PlayerPos.position.x - transform.position.x;
-        if (distanceX != 0) direction = (int)(distanceX / Mathf.Abs(distanceX));//ゼロ除算対策
+        if (PlayerPos != null)
+        {
+            distanceX = PlayerPos.position.x - transform.position.x;
+            if (distanceX != 0) direction = (int)(distanceX / Mathf.Abs(distanceX));//ゼロ除算対策
+        }
+        
 
         if (!waitComplete) return;
         ratioHP = HP / startHP;
