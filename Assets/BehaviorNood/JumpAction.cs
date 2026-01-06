@@ -23,7 +23,6 @@ public partial class JumpAction : Action
 
     protected override Status OnUpdate()
     {
-        
         return Elephant.elephant.JumpFinished ? Status.Success:Status.Running;
     }
 

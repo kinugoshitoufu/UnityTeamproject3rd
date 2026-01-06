@@ -92,7 +92,7 @@ public class Elephant : Boss
         //StartJumpAction();
 
         // 自分自身のx座標とPlayerのx座標の差の絶対値を取る
-        float distanceX = Mathf.Abs(transform.position.x - player.position.x);
+        //float distanceX = Mathf.Abs(transform.position.x - player.position.x);
     }
 
     private void Awake()
@@ -131,59 +131,60 @@ public class Elephant : Boss
     {
         isJumping = true;
         JumpFinished = false;
+            // =============================
+            // 1. 上昇フェーズ
+            // =============================
+            Vector2 targetPos = player.position;
 
-        // =============================
-        // 1. 上昇フェーズ
-        // =============================
-        Vector2 targetPos = player.position;
+            rb.gravityScale = riseGravityScale;
+            float dirX = Mathf.Sign(targetPos.x - transform.position.x);
+            float riseHorizontalSpeed = 2f;
 
-        rb.gravityScale = riseGravityScale;
-        float dirX = Mathf.Sign(targetPos.x - transform.position.x);
-        float riseHorizontalSpeed = 2f;
+            rb.linearVelocity = new Vector2(dirX * riseHorizontalSpeed, riseForce);
 
-        rb.linearVelocity = new Vector2(dirX * riseHorizontalSpeed, riseForce);
+            // 上昇が終わるまで待つ
+            while (rb.linearVelocity.y > 0f)
+                yield return null;
 
-        // 上昇が終わるまで待つ
-        while (rb.linearVelocity.y > 0f)
-            yield return null;
+            // =============================
+            // 2. 滞空フェーズ
+            // =============================
+            rb.gravityScale = floatGravityScale;
+            rb.linearVelocity = Vector2.zero;
 
-        // =============================
-        // 2. 滞空フェーズ
-        // =============================
-        rb.gravityScale = floatGravityScale;
-        rb.linearVelocity = Vector2.zero;
+            float floatTimer = 0f;
+            while (floatTimer < floatTime)
+            {
+                floatTimer += Time.deltaTime;
+                float dirX2 = Mathf.Sign(targetPos.x - transform.position.x);
+                rb.linearVelocity = new Vector2(dirX2 * floatMoveSpeed, 0f);
+                yield return null;
+            }
 
-        float floatTimer = 0f;
-        while (floatTimer < floatTime)
+            // =============================
+            // 3. 落下フェーズ
+            // =============================
+            rb.gravityScale = fallGravityScale;
+
+            float startY = transform.position.y;
+            float endY = targetPos.y;
+            float g = Physics2D.gravity.y * fallGravityScale;
+
+            float fallTime = Mathf.Sqrt((2f * (startY - endY)) / -g);
+            float needVx = (targetPos.x - transform.position.x) / fallTime;
+
+            rb.linearVelocity = new Vector2(needVx, 0f);
+
+            // 地面に着くまで待つ
+            while (rb.linearVelocity.y <= 0)
+                yield return null;
+
+            JumpFinished = true;
+            isJumping = false;
+        if (JumpFinished)
         {
-            floatTimer += Time.deltaTime;
-            float dirX2 = Mathf.Sign(targetPos.x - transform.position.x);
-            rb.linearVelocity = new Vector2(dirX2 * floatMoveSpeed, 0f);
-            yield return null;
+            Debug.Log("JumpFinishedがtrueになりました");
         }
-
-        // =============================
-        // 3. 落下フェーズ
-        // =============================
-        rb.gravityScale = fallGravityScale;
-
-        float startY = transform.position.y;
-        float endY = targetPos.y;
-        float g = Physics2D.gravity.y * fallGravityScale;
-
-        float fallTime = Mathf.Sqrt((2f * (startY - endY)) / -g);
-        float needVx = (targetPos.x - transform.position.x) / fallTime;
-
-        rb.linearVelocity = new Vector2(needVx, 0f);
-
-        // 地面に着くまで待つ
-        while (rb.linearVelocity.y <= 0)
-            yield return null;
-
-        JumpFinished = true;
-        isJumping = false;
-
-        Debug.Log("JumpFinishedがtrueになりました");
     }
 
     //右端ジャンプ
