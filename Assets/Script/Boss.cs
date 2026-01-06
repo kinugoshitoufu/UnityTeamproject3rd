@@ -32,6 +32,8 @@ public class Boss : MonoBehaviour
 
 
     protected float ratioHP = 100;//HPの割合
+
+    //protected float ratioHP { get { return HP / startHP; } set { } }//HPの割合
     protected int Direction { get { return direction; } }//向きの取得
     
     protected bool waitComplete = false;//最初の待機
@@ -108,6 +110,7 @@ public class Boss : MonoBehaviour
     //ボスの体力が50%以上かどうか
     public bool CheckHP()
     {
+        ratioHP = HP / startHP;
         return (ratioHP >= 0.5f) ? true : false;
     }
 
