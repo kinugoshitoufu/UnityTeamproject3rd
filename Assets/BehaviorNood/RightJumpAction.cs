@@ -21,8 +21,7 @@ public partial class RightJumpAction : Action
 
     protected override Status OnUpdate()
     {
-        
-        return Elephant.elephant.RightJumpFinished ? Status.Success : Status.Running;
+        return Elephant.elephant.EventEnd ? Status.Success : Status.Running;
     }
 
     protected override void OnEnd()

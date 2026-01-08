@@ -12,6 +12,10 @@ public class Elephant : Boss
     public static Elephant elephant;
     public Transform player;
 
+    //処理が終了したか判定、待機用
+    public bool EventEnd { get { return eventEnd; } }
+    private bool eventEnd = false;
+
     [Header("攻撃パラメータ(待機、余韻など)")]
     public List<ElephantAttackParameters> attackParms = new List<ElephantAttackParameters>(Enum.GetValues(typeof(ElephantTechnique)).Length);
 
@@ -61,6 +65,7 @@ public class Elephant : Boss
     public float interval = 1f;  // 1秒ごと
     private float timer = 0f;
     private float Walktimer = 0f;   //何秒歩いたかの関数
+    private float WalkAfterGlow = 0.4f;//歩いた後の待機余韻時間
 
     public float GetWalktimer()
     {
@@ -118,6 +123,22 @@ public class Elephant : Boss
         }
     }
 
+    public IEnumerator WalkCoroutine()
+    {
+        eventEnd = false;
+        //プレイヤーに到達するまで歩かせる
+        while (Vector2.Distance(transform.position, player.position) >= transform.lossyScale.x * 0.5f)
+        {
+            Walk();
+            yield return null;
+        }
+
+        //移動後、余韻を持たせる
+        yield return new WaitForSeconds(WalkAfterGlow);
+        eventEnd = true;
+
+    }
+
     //ヒップドロップ
     public void StartJumpAction()
     {
@@ -130,87 +151,90 @@ public class Elephant : Boss
     IEnumerator JumpCoroutine()
     {
         isJumping = true;
-        JumpFinished = false;
-            // =============================
-            // 1. 上昇フェーズ
-            // =============================
-            Vector3 targetPos = player.position;
+        //JumpFinished = false;
+        eventEnd = false;
+        // =============================
+        // 1. 上昇フェーズ
+        // =============================
+        Vector3 targetPos = player.position;
 
-            rb.gravityScale = riseGravityScale;
-            float dirX = Mathf.Sign(targetPos.x - transform.position.x);
-            float riseHorizontalSpeed = 2f;
+        rb.gravityScale = riseGravityScale;
+        float dirX = Mathf.Sign(targetPos.x - transform.position.x);
+        float riseHorizontalSpeed = 2f;
 
-            rb.linearVelocity = new Vector2(dirX * riseHorizontalSpeed, riseForce);
+        rb.linearVelocity = new Vector2(dirX * riseHorizontalSpeed, riseForce);
 
-            // 上昇が終わるまで待つ
-            while (rb.linearVelocity.y > 0f)
+        // 上昇が終わるまで待つ
+        while (rb.linearVelocity.y > 0f)
         {
             Debug.Log("1. 上昇フェーズ");
             yield return null;
         }
-                
-            
 
+        // =============================
+        // 2. 滞空フェーズ
+        // =============================
+        rb.gravityScale = floatGravityScale;
+        rb.linearVelocity = Vector2.zero;
 
-            // =============================
-            // 2. 滞空フェーズ
-            // =============================
-            rb.gravityScale = floatGravityScale;
-            rb.linearVelocity = Vector2.zero;
-
-            float floatTimer = 0f;
-            while (floatTimer < floatTime)
-            {
-                floatTimer += Time.deltaTime;
-                float dirX2 = Mathf.Sign(targetPos.x - transform.position.x);
-                rb.linearVelocity = new Vector2(dirX2 * floatMoveSpeed, 0f);
+        float floatTimer = 0f;
+        while (floatTimer < floatTime)
+        {
+            floatTimer += Time.deltaTime;
+            float dirX2 = Mathf.Sign(targetPos.x - transform.position.x);
+            rb.linearVelocity = new Vector2(dirX2 * floatMoveSpeed, 0f);
             Debug.Log("2. 滞空フェーズ");
             yield return null;
-            }
+        }
 
-            // =============================
-            // 3. 落下フェーズ
-            // =============================
-            rb.gravityScale = fallGravityScale;
+        // =============================
+        // 3. 落下フェーズ
+        // =============================
+        rb.gravityScale = fallGravityScale;
 
-            float startY = transform.position.y;
-            float endY = targetPos.y;
-            float g = Physics2D.gravity.y * fallGravityScale;
+        float startY = transform.position.y;
+        float endY = targetPos.y;
+        float g = Physics2D.gravity.y * fallGravityScale;
 
-            float fallTime = Mathf.Sqrt((2f * (startY - endY)) / -g);
-            float needVx = (targetPos.x - transform.position.x) / fallTime;
+        float fallTime = Mathf.Sqrt((2f * (startY - endY)) / -g);
+        float needVx = (targetPos.x - transform.position.x) / fallTime;
 
-            rb.linearVelocity = new Vector2(needVx, 0f);
-            
+        rb.linearVelocity = new Vector2(needVx, 0f);
 
-            // 地面に着くまで待つ
-            while (rb.linearVelocity.y <= 0)
+
+        // 地面に着くまで待つ
+        while (rb.linearVelocity.y <= 0)
         {
-            //if(transform.position == targetPos|| transform.position,y==)
-            //{
-            //    rb.linearVelocity = new Vector2(0f, 0f); ;
-            //}
+            if (transform.position == targetPos || transform.position.y<-3.4f)
+            {
+                rb.linearVelocity = new Vector2(0f, 0f);
+            }
             Debug.Log("3. 落下フェーズ");
             yield return null;
         }
-                
 
-            JumpFinished = true;
-            isJumping = false;
+
+        //JumpFinished = true;
+        eventEnd = true;
+        isJumping = false;
         if (JumpFinished)
         {
-            Debug.Log("JumpFinishedがtrueになりました.JumpFinished="+JumpFinished);
+            Debug.Log("JumpFinishedがtrueになりました.JumpFinished=" + JumpFinished);
 
         }
+
     }
 
     //右端ジャンプ
     public IEnumerator RightJumpCoroutine()
     {
+        
         if (!hasBallJumped)
         {
             if (player.position.x >= -8 && player.position.x <= -5)
             {
+                eventEnd = false;
+
                 float g = Physics2D.gravity.y * rb.gravityScale;
 
                 Vector2 startPos = transform.position;
@@ -237,9 +261,11 @@ public class Elephant : Boss
                 {
                     yield return null;
                 }
+
             }
             hasBallJumped = true;
-            RightJumpFinished= true;
+            eventEnd = true;
+            //RightJumpFinished= true;
 
         }
     }
@@ -269,6 +295,7 @@ public class Elephant : Boss
     //攻撃判定
     public IEnumerator Attack()
     {
+        eventEnd = false;
         ElephantAttackParameters NoseAttack=getParam(ElephantTechnique.NoseAttack);
         //待機時間分、待機
         yield return StartCoroutine(PreparaAttack(NoseAttack.proTime.preparationTime));
@@ -277,7 +304,7 @@ public class Elephant : Boss
         yield return StartCoroutine(AttackCoroutine(NoseAttack.proTime.attackTime));
         AttackCollider.enabled = false;
         yield return StartCoroutine(Afterglow(NoseAttack.proTime.afterglowTime));
-        AttackEnd = true;
+        eventEnd = true;
     }
 
     //攻撃準備

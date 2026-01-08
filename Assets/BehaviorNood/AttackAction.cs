@@ -23,7 +23,7 @@ public partial class AttackAction : Action
 
     protected override Status OnUpdate()
     {
-        return Elephant.elephant.AttackEnd ? Status.Success : Status.Running;
+        return Elephant.elephant.EventEnd ? Status.Success : Status.Running;
     }
 
     protected override void OnEnd()

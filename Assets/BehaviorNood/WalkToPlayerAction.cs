@@ -16,13 +16,13 @@ public partial class WalkToPlayerAction : Action
         {
             return Status.Failure;
         }
+        CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.WalkCoroutine());
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
-        Elephant.elephant.Walk();
-        return Status.Success;
+        return (Elephant.elephant.EventEnd) ? Status.Success : Status.Failure;
     }
 
     protected override void OnEnd()
