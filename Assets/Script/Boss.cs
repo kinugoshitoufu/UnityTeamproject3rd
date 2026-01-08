@@ -67,17 +67,15 @@ public class Boss : MonoBehaviour
             if (distanceX != 0) direction = (int)(distanceX / Mathf.Abs(distanceX));//ゼロ除算対策
         }
         
-
         if (!waitComplete) return;
         ratioHP = HP / startHP;
 
         if (Input.GetKeyDown(KeyCode.H))
         {
             Debug.Log("HPを半分にします");
-            HP = startHP * 0.49f;
+            if (ratioHP > 0.5f) HP = startHP * 0.49f;
+            else HP = 0;
         }
-
-        
 
     }
 
@@ -116,6 +114,12 @@ public class Boss : MonoBehaviour
     {
         ratioHP = HP / startHP;
         return (ratioHP >= 0.5f) ? true : false;
+    }
+
+    //ボスが死亡しているかどうか?
+    public bool CheckDeath()
+    {
+        return (HP <= 0) ? true : false;
     }
 
 
