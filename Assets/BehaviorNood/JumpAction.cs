@@ -13,9 +13,11 @@ public partial class JumpAction : Action
 
     protected override Status OnStart()
     {
-        if(Elephant.elephant==null)
+        if (Elephant.elephant == null)
         {
-            return Status.Failure;
+            Elephant.elephant = GameObject.FindAnyObjectByType<Elephant>();
+
+            // return Status.Failure;
         }
         Elephant.elephant.StartJumpAction();
         return Status.Running;

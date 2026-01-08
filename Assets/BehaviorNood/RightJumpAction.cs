@@ -15,13 +15,14 @@ public partial class RightJumpAction : Action
         {
             return Status.Failure;
         }
-        Elephant.elephant.RightJump();
-        return Elephant.elephant.RightJumpFinished ? Status.Success : Status.Running;
+        CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.RightJumpCoroutine());
+        return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
-        return  Status.Running;
+        
+        return Elephant.elephant.RightJumpFinished ? Status.Success : Status.Running;
     }
 
     protected override void OnEnd()

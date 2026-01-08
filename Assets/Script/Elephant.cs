@@ -134,7 +134,7 @@ public class Elephant : Boss
             // =============================
             // 1. 上昇フェーズ
             // =============================
-            Vector2 targetPos = player.position;
+            Vector3 targetPos = player.position;
 
             rb.gravityScale = riseGravityScale;
             float dirX = Mathf.Sign(targetPos.x - transform.position.x);
@@ -144,7 +144,13 @@ public class Elephant : Boss
 
             // 上昇が終わるまで待つ
             while (rb.linearVelocity.y > 0f)
-                yield return null;
+        {
+            Debug.Log("1. 上昇フェーズ");
+            yield return null;
+        }
+                
+            
+
 
             // =============================
             // 2. 滞空フェーズ
@@ -158,7 +164,8 @@ public class Elephant : Boss
                 floatTimer += Time.deltaTime;
                 float dirX2 = Mathf.Sign(targetPos.x - transform.position.x);
                 rb.linearVelocity = new Vector2(dirX2 * floatMoveSpeed, 0f);
-                yield return null;
+            Debug.Log("2. 滞空フェーズ");
+            yield return null;
             }
 
             // =============================
@@ -174,21 +181,31 @@ public class Elephant : Boss
             float needVx = (targetPos.x - transform.position.x) / fallTime;
 
             rb.linearVelocity = new Vector2(needVx, 0f);
+            
 
             // 地面に着くまで待つ
             while (rb.linearVelocity.y <= 0)
-                yield return null;
+        {
+            //if(transform.position == targetPos|| transform.position,y==)
+            //{
+            //    rb.linearVelocity = new Vector2(0f, 0f); ;
+            //}
+            Debug.Log("3. 落下フェーズ");
+            yield return null;
+        }
+                
 
             JumpFinished = true;
             isJumping = false;
         if (JumpFinished)
         {
-            Debug.Log("JumpFinishedがtrueになりました");
+            Debug.Log("JumpFinishedがtrueになりました.JumpFinished="+JumpFinished);
+
         }
     }
 
     //右端ジャンプ
-    public void RightJump()
+    public IEnumerator RightJumpCoroutine()
     {
         if (!hasBallJumped)
         {
@@ -212,12 +229,18 @@ public class Elephant : Boss
 
                 // 水平速度（一定）
                 float vx = dx / totalTime;
+                
 
                 // 初速ベクトルを与える
                 rb.linearVelocity = new Vector2(vx, vy);
+                while(transform.position.x< targetX&& transform.position.y >= 0)
+                {
+                    yield return null;
+                }
             }
             hasBallJumped = true;
             RightJumpFinished= true;
+
         }
     }
 
