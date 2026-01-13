@@ -41,15 +41,18 @@ public class menuScript : MonoBehaviour
         menubutton.SetActive(menuopen);
         menubutton1.SetActive(menuopen);
 
-        if (Input.GetKeyDown("joystick button 7"))
+        if (PlayerScript.instance.deadFlag == false)
         {
-            button.Select();
-            menuopen = !menuopen;
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            button.Select();
-            menuopen = !menuopen;
+            if (Input.GetKeyDown("joystick button 7"))
+            {
+                button.Select();
+                menuopen = !menuopen;
+            }
+            else if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                button.Select();
+                menuopen = !menuopen;
+            }
         }
     }
     public void BackGameScene()
@@ -62,5 +65,10 @@ public class menuScript : MonoBehaviour
         Time.timeScale = 1.0f;
         menuopen = false;
         SceneManager.LoadScene(s);
+    }
+    public void BacktoTitle()
+    {
+        UnityEngine.SceneManagement.Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
 }

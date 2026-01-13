@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Security.Cryptography;
 using System.Threading;
+using UnityEditor.XR;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,6 +34,9 @@ public class PlayerScript : MonoBehaviour
     private Animator animator;
     private bool _evilStareStop = false;
     private GameObject _clone;
+    public bool StartFlag = false;
+    private bool StartedFlag = false;
+
     public bool EvilStareStop { get { return _evilStareStop; } }//蛇睨み用のパラメータ
     //private bool EvilStareStop = false;
 
@@ -86,11 +90,16 @@ public class PlayerScript : MonoBehaviour
     [Tooltip("弾が発射される位置（Transform）")]
     public Transform shotPoint;
 
-    // ========== 移動関連のパラメータ ==========
+    // ========== 体力関連のパラメータ ==========
     [Header("HP関連")]
     [Tooltip("Hp設定")]
     public int Hp = 5;
     private int HpMax;
+
+    // ========== クリア・ゲームオーバーのパラメータ ==========
+    [Header("クリア・ゲームオーバーフラグ設定")]
+    [Tooltip("ゲームオーバー設定")]
+    public bool deadFlag = false;
 
     // ========== SE用 =============
     [Header("SE関連")]
@@ -112,6 +121,7 @@ public class PlayerScript : MonoBehaviour
         //audioSource = GetComponent<AudioSource>();
         instance = this;
         seAudios = new AudioSource[maxSeAudio];
+        deadFlag = false;
         for (int i = 0; i < maxSeAudio; i++)
         {
             seAudios[i] = gameObject.AddComponent<AudioSource>();
@@ -147,15 +157,24 @@ public class PlayerScript : MonoBehaviour
     /// </summary>
     void Update()
     {
+        
         if (Hp == 0)
         {
-            Destroy(gameObject);
+            deadFlag = true;
+            
+            //Destroy(gameObject);
         }
         // Rキーでシーンをリセット（やり直し機能）
         if (Input.GetKeyDown(KeyCode.R))
         {
             UnityEngine.SceneManagement.Scene currentScene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(currentScene.name);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q) && StartedFlag == false)
+        {
+            StartFlag = true;
+            StartedFlag = true;
         }
 
         if (MoveStopFlag)
@@ -194,7 +213,7 @@ public class PlayerScript : MonoBehaviour
 
         // プレイヤーが完全に停止したらクローンを生成
         // 速度が0で、かつ入力もない状態
-        if (rb.linearVelocity == Vector2.zero && Mathf.Abs(horizontal) == 0.0f && MoveStopFlag == false)
+        if (rb.linearVelocity == Vector2.zero && Mathf.Abs(horizontal) == 0.0f && MoveStopFlag == false && StartedFlag == true)
         {
             CloneTimer += Time.deltaTime;
         }
@@ -230,6 +249,18 @@ public class PlayerScript : MonoBehaviour
                 }
             }
         }
+
+        
+
+        if (animator.GetBool("FlicBool") != flicflag)
+        {
+            animator.SetBool("FlicBool", true);
+        }
+        if (animator.GetBool("FlicBool") != flicflag)
+        {
+            animator.SetBool("FlicBool", false);
+        }
+
         // 右クリックで弾を発射
         // ※この処理はRecordPlayerInput内で記録されます
         if (!MoveStopFlag)
@@ -239,6 +270,29 @@ public class PlayerScript : MonoBehaviour
                 Shot();
             }
         }
+
+        bool RightJump = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerRightJump");
+        bool LeftJump = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerLeftJump");
+        //if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerRightJump")) Debug.Log("露ブロックス");
+        //if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerLeftJump")) Debug.Log("ダンガンロンパ");
+        if (animator.GetBool("JumpBool") && !isGrounded && !MoveStopFlag)
+        {
+            Debug.Log("JUMPBOOOOOOL");
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerRightJump")) Debug.Log("露ブロックス2");
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerLeftJump")) Debug.Log("ダンガンロンパ2");
+
+            if (animator.GetBool("FlicBool") == true && RightJump == true)
+            {
+                Debug.Log("LEFTJUMP");
+                animator.Play("PlayerLeftJump", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+            }
+            if (animator.GetBool("FlicBool") == false && LeftJump == true)
+            {
+                Debug.Log("RIGHTJUMP");
+                animator.Play("PlayerRightJump", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+            }
+        }
+
     }
 
     /// <summary>
@@ -286,33 +340,40 @@ public class PlayerScript : MonoBehaviour
         // 左右の入力がある場合、横方向の速度を設定
         if (!MoveStopFlag)
         {
-            if (Mathf.Abs(horizontal) >= 0.01f)
+            if (deadFlag == false)
             {
-                animator.SetBool("MoveBool", true);
-                rb.linearVelocityX = horizontal * moveSpeed;
+                if (Mathf.Abs(horizontal) >= 0.01f)
+                {
+                    animator.SetBool("MoveBool", true);
+                    rb.linearVelocityX = horizontal * moveSpeed;
+                }
+                else
+                {
+                    // 入力がない場合は横方向の速度を0にする（滑り続けないように）
+                    animator.SetBool("MoveBool", false);
+                    rb.linearVelocityX = 0f;
+                }
             }
-            else
-            {
-                // 入力がない場合は横方向の速度を0にする（滑り続けないように）
-                animator.SetBool("MoveBool", false);
-                rb.linearVelocityX = 0f;
-            }
-        }
-        
+        }        
 
         // 地面に接地していてジャンプボタンが押された場合
         if (isGrounded && jumpPressed && !MoveStopFlag)
         {
-            // 記録が停止していた場合は再開
-            if (!isRecording)
+            if (deadFlag == false)
             {
-                isRecording = true;
-            }
+                // 記録が停止していた場合は再開
+                if (!isRecording)
+                {
+                    isRecording = true;
+                }
 
-            // Y方向に力を加えてジャンプ（X方向の速度は維持）
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            animator.SetBool("JumpBool", true);
+                // Y方向に力を加えてジャンプ（X方向の速度は維持）
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                animator.SetBool("JumpBool", true);
+            }
+            
         }
+        
     }
 
     /// <summary>
@@ -502,6 +563,7 @@ public class PlayerScript : MonoBehaviour
         // クローンタグを持つオブジェクトの場合
         if (collision.CompareTag("Clone"))
         {
+            animator.SetBool("JumpBool",false);
             isGrounded = true;  // 接地状態をtrueに
         }
     }
