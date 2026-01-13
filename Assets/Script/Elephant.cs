@@ -66,10 +66,16 @@ public class Elephant : Boss
     private float timer = 0f;
     private float Walktimer = 0f;   //何秒歩いたかの関数
     private float WalkAfterGlow = 0.4f;//歩いた後の待機余韻時間
+    private bool WalkFinished = false;
 
     public float GetWalktimer()
     {
         return Walktimer;
+    }
+
+    public void ResetWalkTimer()
+    {
+        Walktimer = 0;
     }
     //int rand= Random.Range(0, 2); // 0 または 1 が返る
 
@@ -108,30 +114,45 @@ public class Elephant : Boss
     //移動
     public void Walk()
     {
+        Debug.Log("プレイヤーに向かって移動中");
         timer += Time.deltaTime;
         Walktimer += Time.deltaTime;
         //Debug.Log(Walktimer);
         if (timer >= interval)
         {
             timer = 0f;
+            //Walktimer = 0f;
             Vector3 pos = transform.position;
             // Player の方向 (右なら +1、左なら -1)
             float direction = Mathf.Sign(player.position.x - pos.x);
             // X に 1 ずつ近づく
             pos.x += direction * 1f;
             transform.position = pos;
+            WalkFinished = true;
+
         }
     }
 
     public IEnumerator WalkCoroutine()
     {
         eventEnd = false;
+        WalkFinished = false;
+
+        
+
         //プレイヤーに到達するまで歩かせる
-        while (Vector2.Distance(transform.position, player.position) >= transform.lossyScale.x * 0.5f)
+        while (Vector2.Distance(transform.position, player.position) >= transform.localScale.x * 0.5f)
         {
+            if (player == null) { eventEnd = true; yield break; }
+            if (isJumping) { yield break; }
             Walk();
             yield return null;
         }
+
+        //移動完了を待機
+        yield return new WaitUntil(() => WalkFinished == true);
+
+        Debug.Log("プレイヤーの移動が完了");
 
         //移動後、余韻を持たせる
         yield return new WaitForSeconds(WalkAfterGlow);
@@ -142,8 +163,8 @@ public class Elephant : Boss
     //ヒップドロップ
     public void StartJumpAction()
     {
-        if (!isJumping)
-            StartCoroutine(JumpCoroutine());
+        if (!isJumping) StartCoroutine(JumpCoroutine());
+        else eventEnd = true;
     }
 
     private bool isJumping = false;
@@ -156,6 +177,8 @@ public class Elephant : Boss
         // =============================
         // 1. 上昇フェーズ
         // =============================
+        //プレイヤーが既に死亡していた場合は、処理終了
+        if (player == null) { eventEnd = true; yield break; }
         Vector3 targetPos = player.position;
 
         rb.gravityScale = riseGravityScale;
@@ -203,23 +226,32 @@ public class Elephant : Boss
 
 
         // 地面に着くまで待つ
-        while (rb.linearVelocity.y <= 0)
+        //while (rb.linearVelocity.y <= 0)
+        //{
+        //    if (transform.position == targetPos || transform.position.y<-3f)
+        //    {
+        //        rb.linearVelocity = new Vector2(0f, 0f);
+        //    }
+        //    Debug.Log("3. 落下フェーズ");
+        //    yield return null;
+        //}
+
+        // 地面に着くまで待つ
+        while (transform.position!=targetPos&&transform.position.y>-3f)
         {
-            if (transform.position == targetPos || transform.position.y<-3.4f)
-            {
-                rb.linearVelocity = new Vector2(0f, 0f);
-            }
             Debug.Log("3. 落下フェーズ");
             yield return null;
         }
+
+        rb.linearVelocity = Vector2.zero;
 
 
         //JumpFinished = true;
         eventEnd = true;
         isJumping = false;
-        if (JumpFinished)
+        if (eventEnd)
         {
-            Debug.Log("JumpFinishedがtrueになりました.JumpFinished=" + JumpFinished);
+            Debug.Log("eventEndがtrueになりました.eventEnd=" + eventEnd);
 
         }
 
@@ -231,38 +263,38 @@ public class Elephant : Boss
         
         if (!hasBallJumped)
         {
-            if (player.position.x >= -8 && player.position.x <= -5)
+            eventEnd = false;
+
+            float g = Physics2D.gravity.y * rb.gravityScale;
+
+            Vector2 startPos = transform.position;
+            float dx = targetX - startPos.x;
+
+            // 放物線の最高点を決める
+            float peakY = startPos.y + peakHeight;
+
+            // 垂直初速（上向きなので -g を使う）
+            float vy = Mathf.Sqrt(-2f * g * peakHeight);
+
+            // 空中にいる時間（上昇 + 下降）
+            float tUp = -vy / g;
+            float tDown = Mathf.Sqrt(2f * (peakY - startPos.y) / -g);
+            float totalTime = tUp + tDown;
+
+            // 水平速度（一定）
+            float vx = dx / totalTime;
+
+
+            // 初速ベクトルを与える
+            rb.linearVelocity = new Vector2(vx, vy);
+
+            while (transform.position.x < targetX && transform.position.y >= -3f)
             {
-                eventEnd = false;
-
-                float g = Physics2D.gravity.y * rb.gravityScale;
-
-                Vector2 startPos = transform.position;
-                float dx = targetX - startPos.x;
-
-                // 放物線の最高点を決める
-                float peakY = startPos.y + peakHeight;
-
-                // 垂直初速（上向きなので -g を使う）
-                float vy = Mathf.Sqrt(-2f * g * peakHeight);
-
-                // 空中にいる時間（上昇 + 下降）
-                float tUp = -vy / g;
-                float tDown = Mathf.Sqrt(2f * (peakY - startPos.y) / -g);
-                float totalTime = tUp + tDown;
-
-                // 水平速度（一定）
-                float vx = dx / totalTime;
-                
-
-                // 初速ベクトルを与える
-                rb.linearVelocity = new Vector2(vx, vy);
-                while(transform.position.x< targetX&& transform.position.y >= 0)
-                {
-                    yield return null;
-                }
-
+                Debug.Log("右端ジャンプ中");
+                yield return null;
             }
+
+            rb.linearVelocity = Vector2.zero;
             hasBallJumped = true;
             eventEnd = true;
             //RightJumpFinished= true;
@@ -271,8 +303,31 @@ public class Elephant : Boss
     }
 
     //ボールの生成ジャンプ
-    void BallJump()
+    //void BallJump()
+    //{
+    //    if (!hasBallJumped)
+    //    {
+    //        rb.linearVelocity = new Vector2(rb.linearVelocity.x, ballJumpForce);
+    //        rb.gravityScale = 1f;    // 上昇中は通常重力
+    //        hasBallJumped = true;
+    //    }
+    //    //ジャンプ中のみ高さを監視
+    //    if (hasBallJumped && !hasIncreasedGravity)
+    //    {
+    //        if (transform.position.y >= targetHeight)
+    //        {
+    //            Debug.Log("指定の座標に到達!! 重力を増やして急降下");
+    //            rb.gravityScale = fallGravityScale;
+
+    //            hasIncreasedGravity = true;
+    //        }
+    //    }
+    //}
+
+    //ボールの生成ジャンプ
+    public IEnumerator BallJump()
     {
+        eventEnd = false;
         if (!hasBallJumped)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, ballJumpForce);
@@ -282,14 +337,20 @@ public class Elephant : Boss
         //ジャンプ中のみ高さを監視
         if (hasBallJumped && !hasIncreasedGravity)
         {
-            if (transform.position.y >= targetHeight)
+           
+            //指定の座標に到達するまで、待機
+            while (transform.position.y <= targetHeight)
             {
-                Debug.Log("指定の座標に到達!! 重力を増やして急降下");
-                rb.gravityScale = fallGravityScale;
-
-                hasIncreasedGravity = true;
+                yield return null;
             }
+
+            //到達後の処理
+            Debug.Log("指定の座標に到達!! 重力を増やして急降下");
+            rb.gravityScale = fallGravityScale;
+            hasIncreasedGravity = true;
+
         }
+        eventEnd = true;
     }
 
     //攻撃判定

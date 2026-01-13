@@ -10,7 +10,7 @@ public partial class ChuckWalkSecondCondition : Condition
     public override bool IsTrue()
     {
         float timer= Elephant.elephant.GetWalktimer();
-        if(timer > 5 ) return true;
+        if (timer > 5) { Elephant.elephant.ResetWalkTimer(); return true; }
         else return false;
     }
 

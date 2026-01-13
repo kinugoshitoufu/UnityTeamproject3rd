@@ -71,7 +71,10 @@ public class SnakeScript : Boss
             //if(!eventFlag)StartCoroutine(MoveAttack1());
             //if (!eventFlag) StartCoroutine(Tornado1());
             //if(!eventFlag) StartCoroutine(EvilStare());
-            //if (!eventFlag) StartCoroutine(TongueStab());
+            if (!eventFlag) StartCoroutine(TongueStab());
+
+            //StartCoroutine()
+                //StartCoroutine
         }
         else
         {
@@ -290,8 +293,8 @@ public class SnakeScript : Boss
     IEnumerator PreparaAttack(float waitSeconds,bool colorChange=true)
     {
         //初期設定
-        if(colorChange&&waitSeconds!=0)spr.color = Color.yellow;//攻撃準備中を示す
-        rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
+        //if(colorChange&&waitSeconds!=0)spr.color = Color.yellow;//攻撃準備中を示す
+        //rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
         Debug.Log("攻撃準備を開始");
         //待機アニメーションの再生
         Debug.Log("攻撃待機のアニメーションを再生");
@@ -299,8 +302,8 @@ public class SnakeScript : Boss
         yield return new WaitForSeconds(waitSeconds);
         //完了
         Debug.Log("攻撃準備が完了");
-        spr.color = Color.red;
-        rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        //spr.color = Color.red;
+        //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
 
     }
 
@@ -316,15 +319,15 @@ public class SnakeScript : Boss
         //完了
         Debug.Log("攻撃が完了");
         PlayerScript.instance.SetEvilStareStop(false);
-        spr.color = Color.red;
+        //spr.color = Color.red;
     }
 
     //攻撃余韻
     IEnumerator Afterglow(float afterGlowSeconds)
     {
         //初期設定
-        if(afterGlowSeconds!= 0) spr.color = Color.green;//攻撃準備中を示す
-        rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
+        //if(afterGlowSeconds!= 0) spr.color = Color.green;//攻撃準備中を示す
+        //rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
         Debug.Log("攻撃余韻で待機を開始");
         //余韻アニメーションの再生
         Debug.Log("攻撃余韻のアニメーションを再生");
@@ -332,7 +335,7 @@ public class SnakeScript : Boss
         yield return new WaitForSeconds(afterGlowSeconds);
         //完了
         Debug.Log("攻撃余韻が完了");
-        rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+        //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
         
 
     }

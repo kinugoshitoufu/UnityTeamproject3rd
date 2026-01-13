@@ -11,8 +11,8 @@ public partial class Tornado2Action : Action
 
     protected override Status OnStart()
     {
-        //CoroutineRunner.Instance.StartCoroutine(SnakeScript.SnakeInstance.Tornado2());
-        return Status.Running;
+        CoroutineRunner.Instance.StartCoroutine(SnakeScript.SnakeInstance.Tornado2());
+            return Status.Running;
 
         /*float timer = Elephant.elephant.GetWalkTimer();
         if (timer > 5) return true;

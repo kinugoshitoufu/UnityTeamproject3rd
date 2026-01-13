@@ -98,7 +98,7 @@ MonoBehaviour:
   - rid: 8415058615882220294
   - rid: 8415058615882220295
   - rid: 8415058615882220296
-  m_VersionTimestamp: 639010488044064312
+  m_VersionTimestamp: 639032931252156259
   m_SerializedVersion: 1
   m_DebugInfo: {fileID: 1552580103964216806}
   m_RuntimeGraph: {fileID: 8895822408794041492}
@@ -230,8 +230,7 @@ MonoBehaviour:
   m_Blackboards: []
   m_MainBlackboardAuthoringAsset: {fileID: 178897079989989593}
   m_CommandBuffer:
-    m_Commands:
-    - rid: 8415058615882220502
+    m_Commands: []
   m_SubgraphsInfo: []
   m_BlackboardMissingManagedRef: 0
   m_GraphMissingManagedRef: 0
@@ -273,7 +272,7 @@ MonoBehaviour:
     - rid: 8415058570646913331
       type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: -1173.51, y: 702.3161}
+        Position: {x: -1279.5826, y: 770.3114}
         ID:
           m_Value0: 673123110133317349
           m_Value1: 18166337437642389385
@@ -348,7 +347,7 @@ MonoBehaviour:
     - rid: 8415058570646913364
       type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: -1172.8157, y: 790.81415}
+        Position: {x: -1278.8883, y: 858.80945}
         ID:
           m_Value0: 15177406740786433401
           m_Value1: 2547595855493035757
@@ -630,7 +629,7 @@ MonoBehaviour:
     - rid: 8415058570646913787
       type: {class: BranchingConditionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: -1174.5916, y: 386.6925}
+        Position: {x: -1280.6642, y: 454.68768}
         ID:
           m_Value0: 3348203974001161584
           m_Value1: 11174749773348392961
@@ -666,7 +665,7 @@ MonoBehaviour:
     - rid: 8415058570646913788
       type: {class: FloatingPortNodeModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
-        Position: {x: -1173.4814, y: 624.2155}
+        Position: {x: -1279.5541, y: 692.2108}
         ID:
           m_Value0: 18133688897322118447
           m_Value1: 17056601335635072694
@@ -681,7 +680,7 @@ MonoBehaviour:
     - rid: 8415058570646913789
       type: {class: FloatingPortNodeModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
-        Position: {x: -910.8011, y: 418.8312}
+        Position: {x: -1016.87396, y: 486.82632}
         ID:
           m_Value0: 10242910705773290253
           m_Value1: 16863256873292126942
@@ -796,7 +795,7 @@ MonoBehaviour:
     - rid: 8415058570646913926
       type: {class: BranchingConditionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: -911.74475, y: 506.94403}
+        Position: {x: -1017.8177, y: 574.93933}
         ID:
           m_Value0: 11361023306300995386
           m_Value1: 11273476469032844695
@@ -833,7 +832,7 @@ MonoBehaviour:
     - rid: 8415058570646913927
       type: {class: FloatingPortNodeModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
-        Position: {x: -911.8754, y: 617.44257}
+        Position: {x: -1017.9483, y: 685.43787}
         ID:
           m_Value0: 2960738913912754953
           m_Value1: 8667009462706983454
@@ -848,7 +847,7 @@ MonoBehaviour:
     - rid: 8415058570646913928
       type: {class: FloatingPortNodeModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
-        Position: {x: -623.4291, y: 614.55066}
+        Position: {x: -729.5017, y: 682.54596}
         ID:
           m_Value0: 9131575254320188966
           m_Value1: 4188462395057473254
@@ -1027,7 +1026,7 @@ MonoBehaviour:
     - rid: 8415058575403253968
       type: {class: SetValueNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: -1172.1755, y: 873.37915}
+        Position: {x: -1278.2482, y: 941.37445}
         ID:
           m_Value0: 6725251957082407360
           m_Value1: 18155227991266700633
@@ -1322,7 +1321,7 @@ MonoBehaviour:
     - rid: 8415058615882220208
       type: {class: BranchingConditionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: -912.1877, y: 683.1696}
+        Position: {x: -1018.26056, y: 751.1649}
         ID:
           m_Value0: 9314577695040006820
           m_Value1: 15276461345423553461
@@ -1344,7 +1343,7 @@ MonoBehaviour:
     - rid: 8415058615882220209
       type: {class: FloatingPortNodeModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
-        Position: {x: -911.9364, y: 782.90454}
+        Position: {x: -1018.00934, y: 850.89984}
         ID:
           m_Value0: 15572546594531688064
           m_Value1: 15029854375031502691
@@ -1359,7 +1358,7 @@ MonoBehaviour:
     - rid: 8415058615882220210
       type: {class: FloatingPortNodeModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
-        Position: {x: -586.4778, y: 857.4973}
+        Position: {x: -692.5504, y: 925.4926}
         ID:
           m_Value0: 2836985337897839447
           m_Value1: 6918303511216388259
@@ -1648,13 +1647,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 0
-    - rid: 8415058615882220502
-      type: {class: AddConditionFromSerializedCommand, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        ConditionNodeGUID:
-          m_Value0: 9314577695040006820
-          m_Value1: 15276461345423553461
-        ConditionType: CheckMoveAttackCountCondition
 --- !u!114 &178897079989989593
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1774,7 +1766,7 @@ MonoBehaviour:
           rid: 8415058570646913313
         m_EndedNodes:
           rid: 8415058570646913314
-        m_VersionTimestamp: 639010488044064312
+        m_VersionTimestamp: 639032931252156259
     - rid: 8415058570646913311
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:

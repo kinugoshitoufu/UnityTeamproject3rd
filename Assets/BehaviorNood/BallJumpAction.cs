@@ -11,12 +11,17 @@ public partial class BallJumpAction : Action
 
     protected override Status OnStart()
     {
+        if (Elephant.elephant == null)
+        {
+            return Status.Failure;
+        }
+        CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.BallJump());
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
-        return Status.Success;
+        return (Elephant.elephant.EventEnd) ? Status.Success : Status.Running;
     }
 
     protected override void OnEnd()
