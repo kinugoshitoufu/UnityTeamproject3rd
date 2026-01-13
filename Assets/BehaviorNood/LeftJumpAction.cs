@@ -5,8 +5,8 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "RightJump", story: "RighttoJump", category: "Action", id: "750eec23e37966b5699b628a580429f4")]
-public partial class RightJumpAction : Action
+[NodeDescription(name: "LeftJump", story: "Left to Jump", category: "Action", id: "edad4008e3429e5dc40a5ae34e3190a4")]
+public partial class LeftJumpAction : Action
 {
     protected override Status OnStart()
     {
@@ -14,7 +14,7 @@ public partial class RightJumpAction : Action
         {
             return Status.Failure;
         }
-        CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.RightJumpCoroutine());
+        CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.LeftJumpCoroutine());
         return Status.Running;
     }
 

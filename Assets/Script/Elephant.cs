@@ -101,6 +101,10 @@ public class Elephant : Boss
         //Attack();
         //Walk();
         //StartJumpAction();
+        if (hasBallJumped)
+        {
+
+        }
 
         // 自分自身のx座標とPlayerのx座標の差の絶対値を取る
         //float distanceX = Mathf.Abs(transform.position.x - player.position.x);
@@ -117,11 +121,9 @@ public class Elephant : Boss
         Debug.Log("プレイヤーに向かって移動中");
         timer += Time.deltaTime;
         Walktimer += Time.deltaTime;
-        //Debug.Log(Walktimer);
         if (timer >= interval)
         {
             timer = 0f;
-            //Walktimer = 0f;
             Vector3 pos = transform.position;
             // Player の方向 (右なら +1、左なら -1)
             float direction = Mathf.Sign(player.position.x - pos.x);
@@ -254,13 +256,11 @@ public class Elephant : Boss
             Debug.Log("eventEndがtrueになりました.eventEnd=" + eventEnd);
 
         }
-
     }
 
     //右端ジャンプ
     public IEnumerator RightJumpCoroutine()
     {
-        
         if (!hasBallJumped)
         {
             eventEnd = false;
@@ -270,59 +270,72 @@ public class Elephant : Boss
             Vector2 startPos = transform.position;
             float dx = targetX - startPos.x;
 
-            // 放物線の最高点を決める
             float peakY = startPos.y + peakHeight;
-
-            // 垂直初速（上向きなので -g を使う）
             float vy = Mathf.Sqrt(-2f * g * peakHeight);
 
-            // 空中にいる時間（上昇 + 下降）
             float tUp = -vy / g;
-            float tDown = Mathf.Sqrt(2f * (peakY - startPos.y) / -g);
+            float tDown = Mathf.Sqrt(2f * peakHeight / -g);
             float totalTime = tUp + tDown;
 
-            // 水平速度（一定）
             float vx = dx / totalTime;
 
-
-            // 初速ベクトルを与える
             rb.linearVelocity = new Vector2(vx, vy);
 
-            while (transform.position.x < targetX && transform.position.y >= -3f)
+            while (transform.position.x < targetX)
             {
-                Debug.Log("右端ジャンプ中");
+                yield return null;
+            }
+
+            // ★ ここでピッタリ補正
+            rb.linearVelocity = Vector2.zero;
+            transform.position = new Vector2(targetX, transform.position.y);
+
+            hasBallJumped = true;
+            eventEnd = true;
+        }
+    }
+
+
+    //左端ジャンプ
+    public IEnumerator LeftJumpCoroutine()
+    {
+        if (!hasBallJumped)
+        {
+            eventEnd = false;
+
+            float g = Physics2D.gravity.y * rb.gravityScale;
+
+            Vector2 startPos = transform.position;
+            float dx = targetX - startPos.x;   // targetX を左側に設定すれば負になる
+
+            // 放物線の最高点
+            float peakY = startPos.y + peakHeight;
+
+            // 垂直初速
+            float vy = Mathf.Sqrt(-2f * g * peakHeight);
+
+            // 空中時間
+            float tUp = -vy / g;
+            float tDown = Mathf.Sqrt(2f * peakHeight / -g);
+            float totalTime = tUp + tDown;
+
+            // 水平速度（dx が負なので左向き）
+            float vx = dx / totalTime;
+
+            // 初速を与える
+            rb.linearVelocity = new Vector2(vx, vy);
+
+            while (transform.position.x > targetX)
+            {
+                Debug.Log("左端ジャンプ中");
                 yield return null;
             }
 
             rb.linearVelocity = Vector2.zero;
             hasBallJumped = true;
             eventEnd = true;
-            //RightJumpFinished= true;
-
         }
     }
-
-    //ボールの生成ジャンプ
-    //void BallJump()
-    //{
-    //    if (!hasBallJumped)
-    //    {
-    //        rb.linearVelocity = new Vector2(rb.linearVelocity.x, ballJumpForce);
-    //        rb.gravityScale = 1f;    // 上昇中は通常重力
-    //        hasBallJumped = true;
-    //    }
-    //    //ジャンプ中のみ高さを監視
-    //    if (hasBallJumped && !hasIncreasedGravity)
-    //    {
-    //        if (transform.position.y >= targetHeight)
-    //        {
-    //            Debug.Log("指定の座標に到達!! 重力を増やして急降下");
-    //            rb.gravityScale = fallGravityScale;
-
-    //            hasIncreasedGravity = true;
-    //        }
-    //    }
-    //}
 
     //ボールの生成ジャンプ
     public IEnumerator BallJump()
@@ -468,7 +481,7 @@ public enum ElephantTechnique
     hipdrop2,
 }
 
-// 蛇ボス用の攻撃パラメータ
+//象ボス用の攻撃パラメータ
 [System.Serializable]
 public class ElephantAttackParameters : attackParameters
 {
