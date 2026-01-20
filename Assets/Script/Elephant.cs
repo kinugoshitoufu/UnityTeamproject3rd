@@ -67,7 +67,6 @@ public class Elephant : Boss
     private float Walktimer = 0f;   //何秒歩いたかの関数
     private float WalkAfterGlow = 0.4f;//歩いた後の待機余韻時間
     private bool WalkFinished = false;
-
     public float GetWalktimer()
     {
         return Walktimer;
@@ -77,7 +76,6 @@ public class Elephant : Boss
     {
         Walktimer = 0;
     }
-    //int rand= Random.Range(0, 2); // 0 または 1 が返る
 
     public int GetAttackCount()
     {
@@ -132,6 +130,23 @@ public class Elephant : Boss
             transform.position = pos;
             WalkFinished = true;
 
+        }
+    }
+
+    public bool CheckPlayerDirection()
+    {
+        float dirToPlayer = player.position.x - transform.position.x;
+        float facingDir = Mathf.Sign(transform.localScale.x);
+
+        //プレイヤー自体が向いている方向にいる
+        if(Mathf.Sign(dirToPlayer) == facingDir)
+        {
+            return true;
+        }
+        //向いていなかったら
+        else
+        {
+            return false;
         }
     }
 
@@ -286,7 +301,6 @@ public class Elephant : Boss
                 yield return null;
             }
 
-            // ★ ここでピッタリ補正
             rb.linearVelocity = Vector2.zero;
             transform.position = new Vector2(targetX, transform.position.y);
 
