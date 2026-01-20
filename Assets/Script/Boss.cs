@@ -11,7 +11,13 @@ public class Boss : MonoBehaviour
     // ========== ゲーム用 ==========
     [Header("ゲーム関連")]
     public float HP = 100;//HP
+    [Header("ボスの最大HP")]
+    public float MaxHP = 100;//ボスの最大HP
+    public float Hp { get { return HP; } }
     public float waitTime = 0.9f;//待機時間
+
+    private float beforeMaxHP = 100;
+    private float beforeHP = 100;
 
     //[Header("攻撃パラメータ(待機、余韻など)")]
     //public List<attackParameters> attackParm = new List<attackParameters>();
@@ -23,9 +29,11 @@ public class Boss : MonoBehaviour
 
     // ========== 参照用 ==========
     private int direction = -1;//(右が1,左が-1)
-    private float startHP;
+    //private float startHP;
     private float distanceX;
     private bool invincible = false;//無敵状態かどうか?
+
+    private float beforeNum = 0;
 
     private Vector2 rightEdge;//画面右端
     private Vector2 leftEdge; //画面左端
@@ -68,23 +76,76 @@ public class Boss : MonoBehaviour
         }
         
         if (!waitComplete) return;
-        ratioHP = HP / startHP;
+        ratioHP = HP / MaxHP;
 
-        if (Input.GetKeyDown(KeyCode.H))
+        //if (Input.GetKeyDown(KeyCode.H))
+        //{
+        //    Debug.Log("HPを半分にします");
+        //    if (ratioHP > 0.5f) HP = MaxHP * 0.49f;
+        //    else HP = 0;
+        //}
+
+        //HPもしくはMaxHPが変更されたら
+        if ((beforeMaxHP != MaxHP)||(beforeHP!=HP))
         {
-            Debug.Log("HPを半分にします");
-            if (ratioHP > 0.5f) HP = startHP * 0.49f;
-            else HP = 0;
+            ShowHP();
+            beforeHP = HP;
+            beforeMaxHP = MaxHP;
         }
 
+        //体力を変更するデバッグモード
+        DebugHPMode();
+
+    }
+
+    
+
+    //押したキーの体力に変更
+    void DebugHPMode()
+    {
+        float num = beforeNum;
+
+        for(int i = 1; i <= 9; i++)
+        {
+            if(Input.GetKeyDown(KeyCode.Alpha0 + i))
+            {
+                num = i * 0.1f;
+                Debug.Log(i + "キーが押されました");
+            }
+        }
+
+        //0キーが押されたら体力を100%にする
+        if (Input.GetKeyDown(KeyCode.Alpha0)) num = 1;
+
+        //違うボタンが押されたら採用
+        if (beforeNum == num) return;
+        //if (MaxHP * num == HP) return;
+        beforeNum = num;
+
+        //押されたキーの割合に体力を変更する
+        ChangeDebugHP(MaxHP * num);
+    }
+
+    void ChangeDebugHP(float num)
+    {
+        Debug.Log("ボスのHPを" + HP +"/"+MaxHP+"から" + num + "/" + MaxHP + "から" + "に変更しました");
+        HP = num;
+        //ShowHP();
+    }
+    //HPを表示する
+    void ShowHP()
+    {
+        Debug.Log("<ボス>「最大HP=" + MaxHP + ",現在のHP=" + HP + ",HP割合=" + (HP / MaxHP) * 100 + "%」");
     }
 
     //初期化処理
     void StartInit()
     {
         //ゲーム変数関連の初期化-------------
-        startHP = HP;
-        ratioHP = 1;
+        ratioHP = HP/MaxHP;
+
+        beforeHP = HP;
+        beforeMaxHP= MaxHP;
 
         //画面端の座標を取得(ボスが画面外に出ないように大きさの半分引いておく)
         rightEdge = Camera.main.ViewportToWorldPoint(Vector2.one);
@@ -112,9 +173,10 @@ public class Boss : MonoBehaviour
     //ボスの体力が50%以上かどうか
     public bool CheckHP()
     {
-        ratioHP = HP / startHP;
+        ratioHP = HP / MaxHP;
         return (ratioHP >= 0.5f) ? true : false;
     }
+
 
     //ボスが死亡しているかどうか?
     public bool CheckDeath()
@@ -146,6 +208,24 @@ public class Boss : MonoBehaviour
             break;// SEを鳴らしたらfor文を抜ける
         }
     }
+
+
+    //攻撃受けた際のコード(テスト)
+    //protected virtual void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Bullet"))
+    //    {
+    //        Debug.Log("ボスが攻撃を喰らいました");
+    //    }
+    //}
+
+    //protected virtual void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Bullet"))
+    //    {
+    //        Debug.Log("ボスが攻撃を喰らいました2");
+    //    }
+    //}
 
 
 
