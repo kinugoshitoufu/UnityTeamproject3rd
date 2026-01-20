@@ -16,13 +16,13 @@ public partial class RushAction : Action
         {
             return Status.Failure;
         }
-        CoroutineRunner.Instance.StartCoroutine(CoroutineRunner.Wait( Elephant.elephant.MoveAttack1(),()=>Variable.Value=true));
+        CoroutineRunner.Instance.StartCoroutine(CoroutineRunner.Wait(Elephant.elephant.MoveAttack1(), () => Variable.Value = true));
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
-        return Variable.Value ? Status.Success : Status.Running;
+        return Elephant.elephant.EventEnd ? Status.Success : Status.Running;
     }
 
     protected override void OnEnd()

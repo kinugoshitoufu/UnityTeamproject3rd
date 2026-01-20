@@ -1189,23 +1189,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.data[0].technique
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
+      propertyPath: attackParms.Array.data[1].technique
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.data[0].proTime.attackTime
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
+      propertyPath: attackParms.Array.data[1].proTime.attackTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
+      propertyPath: attackParms.Array.data[1].animeTime.attackTime
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.data[0].proTime.afterglowTime
       value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
+      propertyPath: attackParms.Array.data[1].proTime.afterglowTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.data[0].proTime.preparationTime
       value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
+      propertyPath: attackParms.Array.data[1].animeTime.afterglowTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
+      propertyPath: attackParms.Array.data[1].proTime.preparationTime
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
+      propertyPath: attackParms.Array.data[1].animeTime.preparationTime
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3086582474876247233, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: m_Name
