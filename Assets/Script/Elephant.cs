@@ -87,7 +87,7 @@ public class Elephant : Boss
     void Start()
     {
         base.Start();
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
         AttackCollider.enabled = false;
     }
@@ -109,7 +109,7 @@ public class Elephant : Boss
 
     private void FixedUpdate()
     {
-        //Move();
+        Move();
     }
 
     private void Awake()
@@ -293,7 +293,7 @@ public class Elephant : Boss
         if (moveParm == null || eventEnd == true) yield break;
 
         //処理を開始
-        eventEnd = true;
+        eventEnd = false;
 
         //攻撃準備が終わるまで待機
         yield return StartCoroutine(PreparaAttack(moveParm.proTime.preparationTime));
@@ -306,7 +306,7 @@ public class Elephant : Boss
 
         //処理を終了
         //CountAttack(SnakeTechnique.MoveAttack1);
-        eventEnd = false;
+        eventEnd = true;
         Debug.Log("移動攻撃が完了しました");
 
         //テスト
@@ -325,6 +325,7 @@ public class Elephant : Boss
         //rb.mass = 0;
         //box.isTrigger = true;
         //rb.gravityScale = 0;
+
         //移動開始
         moveFlag = true;
         //画面端までの距離を取得
@@ -347,7 +348,7 @@ public class Elephant : Boss
         rb.linearVelocityX = moveSpeed;
 
         //目的地を超えた場合
-        if (Mathf.Abs(transform.position.x) >= targetPos2.x)
+        if (Vector2.Distance(transform.position,targetPos2)<=0.5f)//Mathf.Abs(transform.position.x) >= targetPos2.x
         {
             if (Mathf.Sign(transform.position.x) != Mathf.Sign(targetPos2.x)) return;
             //停止させる

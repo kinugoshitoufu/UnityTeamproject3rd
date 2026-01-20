@@ -22,7 +22,9 @@ public partial class MoveAttack1Action : Action
 
     protected override Status OnUpdate()
     {
-        return Variable.Value ? Status.Success : Status.Running;
+        //return Variable.Value ? Status.Success : Status.Running;
+
+        return (Elephant.elephant.EventEnd)? Status.Success : Status.Running;
     }
 
     protected override void OnEnd()
