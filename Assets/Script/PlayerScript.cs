@@ -282,18 +282,18 @@ public class PlayerScript : MonoBehaviour
         //if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerLeftJump")) Debug.Log("ダンガンロンパ");
         if (animator.GetBool("JumpBool") && !isGrounded && !MoveStopFlag)
         {
-            Debug.Log("JUMPBOOOOOOL");
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerRightJump")) Debug.Log("露ブロックス2");
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerLeftJump")) Debug.Log("ダンガンロンパ2");
+            //Debug.Log("JUMPBOOOOOOL");
+            //if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerRightJump")) Debug.Log("露ブロックス2");
+            //if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerLeftJump")) Debug.Log("ダンガンロンパ2");
 
             if (animator.GetBool("FlicBool") == true && RightJump == true)
             {
-                Debug.Log("LEFTJUMP");
+                //Debug.Log("LEFTJUMP");
                 animator.Play("PlayerLeftJump", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             }
             if (animator.GetBool("FlicBool") == false && LeftJump == true)
             {
-                Debug.Log("RIGHTJUMP");
+                //Debug.Log("RIGHTJUMP");
                 animator.Play("PlayerRightJump", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             }
         }
