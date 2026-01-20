@@ -15,6 +15,9 @@ public class Elephant : Boss
     //処理が終了したか判定、待機用
     public bool EventEnd { get { return eventEnd; } }
     private bool eventEnd = false;
+    private bool moveFlag=false;
+    private float moveSpeed;
+    private Vector2 targetPos2;
 
     [Header("攻撃パラメータ(待機、余韻など)")]
     public List<ElephantAttackParameters> attackParms = new List<ElephantAttackParameters>(Enum.GetValues(typeof(ElephantTechnique)).Length);
@@ -99,13 +102,14 @@ public class Elephant : Boss
         //Attack();
         //Walk();
         //StartJumpAction();
-        if (hasBallJumped)
-        {
-
-        }
 
         // 自分自身のx座標とPlayerのx座標の差の絶対値を取る
         //float distanceX = Mathf.Abs(transform.position.x - player.position.x);
+    }
+
+    private void FixedUpdate()
+    {
+        //Move();
     }
 
     private void Awake()
@@ -132,6 +136,7 @@ public class Elephant : Boss
 
         }
     }
+
 
     public bool CheckPlayerDirection()
     {
@@ -271,6 +276,91 @@ public class Elephant : Boss
             Debug.Log("eventEndがtrueになりました.eventEnd=" + eventEnd);
 
         }
+    }
+
+    public IEnumerator Rush()
+    {
+        yield return null;
+    }
+
+    //移動攻撃1(低い突進)
+    public IEnumerator MoveAttack1()
+    {
+        //移動攻撃用のパラメータを取得
+        ElephantAttackParameters moveParm = getParam(ElephantTechnique.MoveAttack1);
+
+        //移動攻撃1の設定がされていない場合は終了
+        if (moveParm == null || eventEnd == true) yield break;
+
+        //処理を開始
+        eventEnd = true;
+
+        //攻撃準備が終わるまで待機
+        yield return StartCoroutine(PreparaAttack(moveParm.proTime.preparationTime));
+
+        //攻撃が終わるまで待機
+        yield return StartCoroutine(OnMove(moveParm.proTime.attackTime));
+
+        //攻撃後の待機余韻が終わるまで待機
+        yield return StartCoroutine(Afterglow(moveParm.proTime.afterglowTime));
+
+        //処理を終了
+        //CountAttack(SnakeTechnique.MoveAttack1);
+        eventEnd = false;
+        Debug.Log("移動攻撃が完了しました");
+
+        //テスト
+        //if(tornado1)StartCoroutine(Tornado1());
+        //else StartCoroutine(Tornado2());
+
+    }
+
+    //移動攻撃
+    IEnumerator OnMove(float moveSeconds)
+    {
+        //初期設定
+        Debug.Log("移動攻撃を開始");
+        //プレイヤーを貫通するように
+
+        //rb.mass = 0;
+        //box.isTrigger = true;
+        //rb.gravityScale = 0;
+        //移動開始
+        moveFlag = true;
+        //画面端までの距離を取得
+        targetPos2 = (Direction > 0) ? RightEdge : LeftEdge;
+        //targetPos.x += (-Direction * tornadoPrefab.transform.lossyScale.x * 2);
+        var distance = targetPos2.x - transform.position.x;
+        //速度を計算
+        moveSpeed = (distance / moveSeconds);
+        //攻撃時間分待機
+        yield return new WaitForSeconds(moveSeconds);
+        //完了
+        Debug.Log("移動攻撃が完了");
+    }
+
+    //移動
+    void Move()
+    {
+        if (!moveFlag) return;
+        //移動させる
+        rb.linearVelocityX = moveSpeed;
+
+        //目的地を超えた場合
+        if (Mathf.Abs(transform.position.x) >= targetPos2.x)
+        {
+            if (Mathf.Sign(transform.position.x) != Mathf.Sign(targetPos2.x)) return;
+            //停止させる
+            moveFlag = false;
+            //box.isTrigger = false;
+            //rb.mass = 1;
+            //rb.gravityScale = 1;
+
+            rb.linearVelocityX = 0;
+            transform.position = new Vector3(targetPos2.x, transform.position.y);
+            rb.constraints |= RigidbodyConstraints2D.FreezePositionX;
+        }
+
     }
 
     //右端ジャンプ
@@ -493,6 +583,8 @@ public enum ElephantTechnique
     hipdrop,
     [InspectorName("ヒップドロップ攻撃2")]
     hipdrop2,
+    [InspectorName("移動攻撃1")]
+    MoveAttack1,
 }
 
 //象ボス用の攻撃パラメータ
