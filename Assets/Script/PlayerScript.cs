@@ -36,7 +36,7 @@ public class PlayerScript : MonoBehaviour
     private GameObject _clone;
     public bool StartFlag = false;
     private bool StartedFlag = false;
-
+    private bool AttackFlag = true;
     public bool EvilStareStop { get { return _evilStareStop; } }//蛇睨み用のパラメータ
     //private bool EvilStareStop = false;
 
@@ -267,7 +267,12 @@ public class PlayerScript : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(1) || Input.GetKeyDown("joystick button 2"))
             {
-                Shot();
+                if (AttackFlag == true)
+                {
+                    Shot();
+                    AttackFlag = false;
+                }
+                
             }
         }
 
@@ -459,7 +464,8 @@ public class PlayerScript : MonoBehaviour
         }
 
         // ShotPointの位置と回転で弾を生成
-        animator.SetBool("AttackBool", true);
+        //animator.SetBool("AttackBool", true);
+        animator.Play("PlayerAttack", 0, 0.0f);
         GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
         PlaySE(0);
         Debug.Log("弾を発射しました");
@@ -467,6 +473,7 @@ public class PlayerScript : MonoBehaviour
     public void EndAnimAttackBool()
     {
         animator.SetBool("AttackBool", false);
+        AttackFlag = true;
     }
     public bool Getflicflag()
     {
