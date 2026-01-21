@@ -1,8 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Security.Cryptography;
-using System.Threading;
-using UnityEditor.XR;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -167,7 +163,7 @@ public class PlayerScript : MonoBehaviour
         // Rキーでシーンをリセット（やり直し機能）
         if (Input.GetKeyDown(KeyCode.R))
         {
-            UnityEngine.SceneManagement.Scene currentScene = SceneManager.GetActiveScene();
+            Scene currentScene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(currentScene.name);
         }
 
@@ -297,6 +293,12 @@ public class PlayerScript : MonoBehaviour
                 animator.Play("PlayerRightJump", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             }
         }
+        bool attackflagright = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerAttackRight");
+        bool attackflagleft = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerAttackLeft");
+        if (!attackflagleft && !attackflagright)
+        {
+            AttackFlag = true;
+        }
 
     }
 
@@ -331,12 +333,12 @@ public class PlayerScript : MonoBehaviour
 
         // ========== 実際の移動処理 ==========
 
-        if (horizontal <= -0.01f && !flicflag)
+        if (horizontal <= -0.01f && !flicflag && !MoveStopFlag)
         {
             transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
             flicflag = true;
         }
-        if (horizontal >= 0.01f && flicflag)
+        if (horizontal >= 0.01f && flicflag && !MoveStopFlag)
         {
             transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
             flicflag = false;
@@ -465,7 +467,7 @@ public class PlayerScript : MonoBehaviour
 
         // ShotPointの位置と回転で弾を生成
         //animator.SetBool("AttackBool", true);
-        animator.Play("PlayerAttack", 0, 0.0f);
+        animator.Play("PlayerAttackRight", 0, 0.0f);
         GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
         PlaySE(0);
         Debug.Log("弾を発射しました");
