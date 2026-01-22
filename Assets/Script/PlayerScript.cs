@@ -312,7 +312,19 @@ public class PlayerScript : MonoBehaviour
         {
             animator.Play("PlayerAttackRight", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
         }
-        
+
+        bool JumpRightAttack = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerJumpAttackRight");
+        bool JumpLeftAttack = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerJumpAttackLeft");
+
+        if (animator.GetBool("FlicBool") == true && JumpRightAttack == true)
+        {
+            animator.Play("PlayerJumpAttackLeft", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        }
+        if (animator.GetBool("FlicBool") == false && JumpLeftAttack == true)
+        {
+            animator.Play("PlayerJumpAttackRight", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        }
+
         if (AttackTimer >= AttackTime)
         {
             AttackFlag = true;
@@ -485,13 +497,29 @@ public class PlayerScript : MonoBehaviour
 
         // ShotPointの位置と回転で弾を生成
         //animator.SetBool("AttackBool", true);
-        if (animator.GetBool("FlicBool") == true)
+        if (animator.GetBool("FlicBool") == true && animator.GetBool("MoveBool") == false && animator.GetBool("JumpBool") == false)
         {
-            animator.Play("PlayerAttackLeft",0,0.0f);
+            animator.Play("PlayerAttackLeft", 0, 0.0f);
         }
-        else
+        else if(animator.GetBool("FlicBool") == false && animator.GetBool("MoveBool") == false && animator.GetBool("JumpBool") == false)
         {
             animator.Play("PlayerAttackRight", 0, 0.0f);
+        }
+        else if (animator.GetBool("FlicBool") == true && animator.GetBool("MoveBool") == true && animator.GetBool("JumpBool") == false)
+        {
+            animator.Play("PlayerMoveAttackLeft", 0, 0.0f);
+        }
+        else if (animator.GetBool("FlicBool") == false && animator.GetBool("MoveBool") == true && animator.GetBool("JumpBool") == false)
+        {
+            animator.Play("PlayerMoveAttackRight", 0, 0.0f);
+        }
+        else if (animator.GetBool("FlicBool") == false &&  animator.GetBool("JumpBool") == true)
+        {
+            animator.Play("PlayerJumpAttackRight", 0, 0.0f);
+        }
+        else if (animator.GetBool("FlicBool") == true && animator.GetBool("JumpBool") == true)
+        {
+            animator.Play("PlayerJumpAttackLeft", 0, 0.0f);
         }
         GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
         PlaySE(0);
@@ -501,6 +529,22 @@ public class PlayerScript : MonoBehaviour
     {
         animator.SetBool("AttackBool", false);
         AttackFlag = true;
+    }
+    public void EndAnimMoveRightAttackBool()
+    {
+        animator.Play("PlayerMoveRight", 0, 0.6f);
+    }
+    public void EndAnimMoveLeftAttackBool()
+    {
+        animator.Play("PlayerMoveLeft", 0, 0.6f);
+    }
+    public void EndAnimJumpRightAttackBool()
+    {
+        animator.Play("PlayerRightJump", 0, 0.5f);
+    }
+    public void EndAnimJumpLeftAttackBool()
+    {
+        animator.Play("PlayerLeftJump", 0, 0.5f);
     }
     public bool Getflicflag()
     {
