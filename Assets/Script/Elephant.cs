@@ -44,11 +44,14 @@ public class Elephant : Boss
 
     [Header("ボール生成時関連の設定")]
     //ボール関連の関数達
+    public GameObject Ball;
+    private Transform ballRightSpawner;
+    private Transform ballLeftSpawner;
     public float ballJumpForce = 5f;　　//ジャンプ力
     public float highGravity = 50f;     // 高重力
     public float targetHeight = 2f;   // 指定の高さ
     public bool balljump = false;
-    private bool hasJumped = false;
+    private bool BallCreate = false;
     private bool hasBallJumped = false;
     private bool hasIncreasedGravity = false;
     public bool RightJumpFinished = false;
@@ -183,13 +186,25 @@ public class Elephant : Boss
     }
 
     //ヒップドロップ
-    public void StartJumpAction()
-    {
-        if (!isJumping) StartCoroutine(JumpCoroutine());
-        else eventEnd = true;
-    }
 
     private bool isJumping = false;
+    public IEnumerator StartJumpAction()
+    {
+        eventEnd = false;
+        ElephantAttackParameters HipDrop = getParam(ElephantTechnique.hipdrop);
+        yield return StartCoroutine(PreparaAttack(HipDrop.proTime.preparationTime));
+        if (!isJumping)
+        {
+            Debug.Log("コルーチン起動!!");
+            yield return StartCoroutine(JumpCoroutine());
+        }
+        else
+        {
+            eventEnd = true;
+        }
+        yield return StartCoroutine(Afterglow(HipDrop.proTime.afterglowTime));
+        eventEnd = true;
+    }
 
     IEnumerator JumpCoroutine()
     {
@@ -276,6 +291,19 @@ public class Elephant : Boss
             Debug.Log("eventEndがtrueになりました.eventEnd=" + eventEnd);
 
         }
+    }
+
+    IEnumerator PreparaHipDrop(float waitSeconds, bool colorChange = true)
+    {
+        //初期設定
+        Debug.Log("攻撃準備を開始");
+        //待機アニメーションの再生
+        Debug.Log("攻撃待機のアニメーションを再生");
+        //攻撃準備時間分、待機
+        yield return new WaitForSeconds(waitSeconds);
+        //完了
+        Debug.Log("攻撃準備が完了");
+
     }
 
     public IEnumerator Rush()
@@ -400,7 +428,6 @@ public class Elephant : Boss
         }
     }
 
-
     //左端ジャンプ
     public IEnumerator LeftJumpCoroutine()
     {
@@ -455,18 +482,16 @@ public class Elephant : Boss
         //ジャンプ中のみ高さを監視
         if (hasBallJumped && !hasIncreasedGravity)
         {
-           
             //指定の座標に到達するまで、待機
             while (transform.position.y <= targetHeight)
             {
                 yield return null;
             }
-
             //到達後の処理
             Debug.Log("指定の座標に到達!! 重力を増やして急降下");
             rb.gravityScale = fallGravityScale;
             hasIncreasedGravity = true;
-
+            BallCreate=true;
         }
         eventEnd = true;
     }
@@ -529,30 +554,19 @@ public class Elephant : Boss
         //完了
         Debug.Log("攻撃余韻が完了");
         //rb.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-
-
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (hasJumped && collision.gameObject.CompareTag("Ground"))
+        if (/*BallCreate && */collision.gameObject.CompareTag("Ground"))
         {
             balljump = true;
-            hasJumped = false;
+            //Instantiate(Ball, ballRightSpawner.position, Quaternion.identity);
+            //Instantiate(Ball, ballLeftSpawner.position, Quaternion.identity);
+            BallCreate = false;
+            Debug.Log("ボール生成が可能になりました!!");
         }
     }
-
-    ////連続攻撃回数の取得
-    //public int GetcontinuousAttackCount(SnakeTechnique tecName)
-    //{
-    //    return continuousAttackCounts[(int)tecName];
-    //}
-
-    ////攻撃回数の取得
-    //public int GetAttackCount()
-    //{
-    //    return attackCount;
-    //}
 
     //技のパラメータ取得用関数
     ElephantAttackParameters getParam(ElephantTechnique tecName)
@@ -582,7 +596,7 @@ public enum ElephantTechnique
     NoseAttack,
     [InspectorName("ヒップドロップ攻撃1")]
     hipdrop,
-    [InspectorName("ヒップドロップ攻撃2")]
+    [InspectorName("ヒップドロップ攻撃(ボール生成版)")]
     hipdrop2,
     [InspectorName("移動攻撃1")]
     MoveAttack1,

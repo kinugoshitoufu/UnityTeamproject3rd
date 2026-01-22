@@ -173,11 +173,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5404425984101643223, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.55
+      value: -7.23
       objectReference: {fileID: 0}
     - target: {fileID: 5404425984101643223, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.98
+      value: -2.65
       objectReference: {fileID: 0}
     - target: {fileID: 5404425984101643223, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1193,11 +1193,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.data[0].technique
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.data[1].technique
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.data[0].proTime.attackTime
@@ -1217,7 +1217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.data[1].proTime.afterglowTime
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.data[0].proTime.preparationTime
@@ -1225,7 +1225,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.data[1].animeTime.afterglowTime
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2616681444923285441, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: attackParms.Array.data[1].proTime.preparationTime
@@ -1253,11 +1253,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4830405372546752630, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.13
+      value: 7.15
       objectReference: {fileID: 0}
     - target: {fileID: 4830405372546752630, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.38
+      value: -3.54
       objectReference: {fileID: 0}
     - target: {fileID: 4830405372546752630, guid: c6e7af2c7784a8546b9297f3326a6c3b, type: 3}
       propertyPath: m_LocalPosition.z

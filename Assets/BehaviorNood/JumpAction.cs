@@ -18,7 +18,7 @@ public partial class JumpAction : Action
             Elephant.elephant = GameObject.FindAnyObjectByType<Elephant>();
             // return Status.Failure;
         }
-        Elephant.elephant.StartJumpAction();
+        CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.StartJumpAction());
         return Status.Running;
     }
 
