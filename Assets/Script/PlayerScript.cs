@@ -534,7 +534,7 @@ public class PlayerScript : MonoBehaviour
     //プレイヤーの位置変更
     public void ChangeSetPosition(Vector3 startPos)
     {
-        transform.position = startPos;
+        if(PlayerStareStop)transform.position = startPos;
     }
 
 
