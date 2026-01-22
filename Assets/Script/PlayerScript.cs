@@ -52,6 +52,8 @@ public class PlayerScript : MonoBehaviour
     public float MoveStopTimer = 0.0f;
     private bool MoveStopFlag = false;
 
+    
+
     // ========== コンポーネント参照 ==========
     private Rigidbody2D rb;          // 物理演算用のRigidbody2D
     public bool isGrounded;          // 地面に接地しているかどうか
@@ -85,6 +87,11 @@ public class PlayerScript : MonoBehaviour
     [Header("発射位置（ShotPoint）")]
     [Tooltip("弾が発射される位置（Transform）")]
     public Transform shotPoint;
+
+    [Header("攻撃ができるまでの時間")]
+    [Tooltip("攻撃ができるまでの時間指定")]
+    public float AttackTime = 0.4f;
+    public float AttackTimer = 0.0f;
 
     // ========== 体力関連のパラメータ ==========
     [Header("HP関連")]
@@ -143,6 +150,8 @@ public class PlayerScript : MonoBehaviour
             Debug.LogWarning("ShotPointが設定されていません！Inspectorで設定してください。");
         }
 
+        AttackTimer = AttackTime;
+
         // 最初は記録を停止状態で開始
         isRecording = false;
     }
@@ -153,7 +162,7 @@ public class PlayerScript : MonoBehaviour
     /// </summary>
     void Update()
     {
-        
+        AttackTimer += Time.deltaTime;
         if (Hp == 0)
         {
             deadFlag = true;
@@ -267,6 +276,7 @@ public class PlayerScript : MonoBehaviour
                 {
                     Shot();
                     AttackFlag = false;
+                    AttackTimer = 0.0f;
                 }
                 
             }
@@ -274,28 +284,31 @@ public class PlayerScript : MonoBehaviour
 
         bool RightJump = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerRightJump");
         bool LeftJump = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerLeftJump");
-        //if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerRightJump")) Debug.Log("露ブロックス");
-        //if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerLeftJump")) Debug.Log("ダンガンロンパ");
         if (animator.GetBool("JumpBool") && !isGrounded && !MoveStopFlag)
         {
-            //Debug.Log("JUMPBOOOOOOL");
-            //if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerRightJump")) Debug.Log("露ブロックス2");
-            //if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerLeftJump")) Debug.Log("ダンガンロンパ2");
 
             if (animator.GetBool("FlicBool") == true && RightJump == true)
             {
-                //Debug.Log("LEFTJUMP");
                 animator.Play("PlayerLeftJump", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             }
             if (animator.GetBool("FlicBool") == false && LeftJump == true)
             {
-                //Debug.Log("RIGHTJUMP");
                 animator.Play("PlayerRightJump", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
             }
         }
-        bool attackflagright = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerAttackRight");
-        bool attackflagleft = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerAttackLeft");
-        if (!attackflagleft && !attackflagright)
+        bool RightAttack = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerAttackRight");
+        bool LeftAttack = animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerAttackLeft");
+
+        if (animator.GetBool("FlicBool") == true && RightAttack == true)
+        {
+            animator.Play("PlayerAttackLeft", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        }
+        if (animator.GetBool("FlicBool") == false && LeftAttack == true)
+        {
+            animator.Play("PlayerAttackRight", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        }
+        
+        if (AttackTimer >= AttackTime)
         {
             AttackFlag = true;
         }
@@ -467,7 +480,14 @@ public class PlayerScript : MonoBehaviour
 
         // ShotPointの位置と回転で弾を生成
         //animator.SetBool("AttackBool", true);
-        animator.Play("PlayerAttackRight", 0, 0.0f);
+        if (animator.GetBool("FlicBool") == true)
+        {
+            animator.Play("PlayerAttackLeft",0,0.0f);
+        }
+        else
+        {
+            animator.Play("PlayerAttackRight", 0, 0.0f);
+        }
         GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
         PlaySE(0);
         Debug.Log("弾を発射しました");
@@ -512,6 +532,25 @@ public class PlayerScript : MonoBehaviour
             isGrounded = true;  // 接地状態をtrueに
         }
         if (collision.collider.CompareTag("Enemy") && !MoveStopFlag)
+        {
+            if (flicflag)
+            {
+                MoveStopFlag = true;
+                rb.linearVelocity = Vector2.zero;
+                rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+                rb.AddForce(Vector2.right * knockpower.x, ForceMode2D.Impulse);
+            }
+            else
+            {
+                MoveStopFlag = true;
+                rb.linearVelocity = Vector2.zero;
+                rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+                rb.AddForce(Vector2.left * knockpower.x, ForceMode2D.Impulse);
+            }
+            Hp--;
+            animator.SetBool("DamageBool", true);
+        }
+        if (collision.collider.CompareTag("CloneBullet"))
         {
             if (flicflag)
             {

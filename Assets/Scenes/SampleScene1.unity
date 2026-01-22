@@ -3029,6 +3029,10 @@ PrefabInstance:
       value: 5.8
       objectReference: {fileID: 0}
     - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+      propertyPath: AttackTime
+      value: 0.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: knockpower
       value: 500
       objectReference: {fileID: 0}
