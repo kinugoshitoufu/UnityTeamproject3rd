@@ -214,8 +214,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.00805831, y: -0.19276579}
-  m_Size: {x: 0.41373014, y: 2.0763357}
+  m_Offset: {x: 0.00805831, y: -0.17653109}
+  m_Size: {x: 0.41373014, y: 2.0438664}
   m_Direction: 0
 --- !u!50 &3239919626640938534
 Rigidbody2D:
@@ -268,6 +268,8 @@ MonoBehaviour:
   CloneTime: 0.8
   Bullet: {fileID: 2812918182328086363, guid: bd6318b06120bb14d9ef32bfc3cc434c, type: 3}
   shotPoint: {fileID: 8539316250187020039}
+  AttackTime: 0.4
+  AttackTimer: 0
   Hp: 5
   deadFlag: 0
   seClips:
