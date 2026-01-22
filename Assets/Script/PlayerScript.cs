@@ -28,12 +28,14 @@ public class PlayerScript : MonoBehaviour
     private bool TempCloneFlag = false;
     public static PlayerScript instance;
     private Animator animator;
-    private bool _evilStareStop = false;
+    //private bool _evilStareStop = false;
+    private bool _playerStop = false;
     private GameObject _clone;
     public bool StartFlag = false;
     private bool StartedFlag = false;
     private bool AttackFlag = true;
-    public bool EvilStareStop { get { return _evilStareStop; } }//蛇睨み用のパラメータ
+    //public bool EvilStareStop { get { return _evilStareStop; } }//蛇睨み用のパラメータ
+    public bool PlayerStareStop { get { return _playerStop; } }//蛇睨み用のパラメータ
     //private bool EvilStareStop = false;
 
     // ========== 移動関連のパラメータ ==========
@@ -195,8 +197,11 @@ public class PlayerScript : MonoBehaviour
         }
 
         //蛇睨み中の場合は、処理を終了
-        if (EvilStareStop) return;
-        
+        //if (EvilStareStop) return;
+
+        //プレイヤー停止中は移動をはじく
+        if (PlayerStareStop) return;
+
         // 左右の入力を取得（-1.0 ～ 1.0 の範囲）
         float horizontal = Input.GetAxis("Horizontal");
 
@@ -502,16 +507,34 @@ public class PlayerScript : MonoBehaviour
         return flicflag;
     }
 
-    //蛇睨みを受けた時用の関数
-    public void SetEvilStareStop(bool flag)
+    //プレイヤーを停止する用の関数
+    public void StopPlayer(bool flag)
     {
-        _evilStareStop = flag;
+        _playerStop = flag;
         if (flag)
         {
             rb.linearVelocityX = 0;
             Debug.Log("蛇睨みで動くことが出来ません");
         }
         else Debug.Log("蛇睨みが解除されて動けるようになりました");
+    }
+
+    //蛇睨みを受けた時用の関数
+    //public void SetEvilStareStop(bool flag)
+    //{
+    //    _evilStareStop = flag;
+    //    if (flag)
+    //    {
+    //        rb.linearVelocityX = 0;
+    //        Debug.Log("蛇睨みで動くことが出来ません");
+    //    }
+    //    else Debug.Log("蛇睨みが解除されて動けるようになりました");
+    //}
+
+    //プレイヤーの位置変更
+    public void ChangeSetPosition(Vector3 startPos)
+    {
+        transform.position = startPos;
     }
 
 
