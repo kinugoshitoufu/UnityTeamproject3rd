@@ -15,7 +15,7 @@ public partial class BallJumpAction : Action
         {
             return Status.Failure;
         }
-        CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.BallJump());
+        CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.BallandJump());
         return Status.Running;
     }
 

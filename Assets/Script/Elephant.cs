@@ -28,9 +28,9 @@ public class Elephant : Boss
     public float riseGravityScale = 0.8f;
 
     [Header("Phase2: 滞空")]
-    public float floatTime = 0.6f;
+    public float floatTime = 2.0f;
     public float floatGravityScale = 0.05f;
-    public float floatMoveSpeed = 2f;
+    public float floatMoveSpeed = 4f;
 
     [Header("Phase3: 急降下")]
     public float fallGravityScale = 4f;
@@ -90,7 +90,6 @@ public class Elephant : Boss
     void Start()
     {
         base.Start();
-        //rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
         AttackCollider.enabled = false;
     }
@@ -139,8 +138,6 @@ public class Elephant : Boss
 
         }
     }
-
-
     public bool CheckPlayerDirection()
     {
         float dirToPlayer = player.position.x - transform.position.x;
@@ -186,126 +183,100 @@ public class Elephant : Boss
     }
 
     //ヒップドロップ
-
     private bool isJumping = false;
-    public IEnumerator StartJumpAction()
-    {
-        eventEnd = false;
-        ElephantAttackParameters HipDrop = getParam(ElephantTechnique.hipdrop);
-        yield return StartCoroutine(PreparaAttack(HipDrop.proTime.preparationTime));
-        if (!isJumping)
-        {
-            Debug.Log("コルーチン起動!!");
-            yield return StartCoroutine(JumpCoroutine());
-        }
-        else
-        {
-            eventEnd = true;
-        }
-        yield return StartCoroutine(Afterglow(HipDrop.proTime.afterglowTime));
-        eventEnd = true;
-    }
 
     IEnumerator JumpCoroutine()
     {
         isJumping = true;
-        //JumpFinished = false;
         eventEnd = false;
-        // =============================
-        // 1. 上昇フェーズ
-        // =============================
-        //プレイヤーが既に死亡していた場合は、処理終了
-        if (player == null) { eventEnd = true; yield break; }
-        Vector3 targetPos = player.position;
 
-        rb.gravityScale = riseGravityScale;
-        float dirX = Mathf.Sign(targetPos.x - transform.position.x);
-        float riseHorizontalSpeed = 2f;
-
-        rb.linearVelocity = new Vector2(dirX * riseHorizontalSpeed, riseForce);
-
-        // 上昇が終わるまで待つ
-        while (rb.linearVelocity.y > 0f)
+        if (player == null)
         {
-            Debug.Log("1. 上昇フェーズ");
-            yield return null;
+            eventEnd = true;
+            yield break;
         }
 
         // =============================
-        // 2. 滞空フェーズ
+        // 1. 上昇フェーズ
+        // =============================
+        rb.gravityScale = riseGravityScale;
+
+        float riseHorizontalSpeed = 2f;
+        float dirX = Mathf.Sign(player.position.x - transform.position.x);
+
+        rb.linearVelocity = new Vector2(dirX * riseHorizontalSpeed, riseForce);
+
+        while (rb.linearVelocity.y > 0f)
+        {
+            yield return null;
+        }
+        
+        // =============================
+        // 2. 浮遊フェーズ
         // =============================
         rb.gravityScale = floatGravityScale;
         rb.linearVelocity = Vector2.zero;
 
         float floatTimer = 0f;
+        float maxFloatSpeed = 8f; // 画面端対応用（調整可）
+        Vector3 lockedTargetPos = Vector3.zero;
+        bool isTargetLocked = false;
+
         while (floatTimer < floatTime)
         {
+            Vector3 targetPos = player.position;
+
+            float remainTime = floatTime - floatTimer;
+            float dx = targetPos.x - transform.position.x;
+
+            // 残り時間で必ず届くための横速度
+            float needSpeedX = dx / Mathf.Max(remainTime, 0.01f);
+
+            // 速度上限をかけて不自然な加速を防ぐ
+            float clampedSpeedX = Mathf.Clamp(
+                needSpeedX,
+                -maxFloatSpeed,
+                maxFloatSpeed
+            );
+
+            rb.linearVelocity = new Vector2(clampedSpeedX, 0f);
+
             floatTimer += Time.deltaTime;
-            float dirX2 = Mathf.Sign(targetPos.x - transform.position.x);
-            rb.linearVelocity = new Vector2(dirX2 * floatMoveSpeed, 0f);
             Debug.Log("2. 滞空フェーズ");
             yield return null;
         }
 
         // =============================
-        // 3. 落下フェーズ
+        // 3. 落下フェーズ（ヒップドロップ）
         // =============================
         rb.gravityScale = fallGravityScale;
 
-        float startY = transform.position.y;
-        float endY = targetPos.y;
-        float g = Physics2D.gravity.y * fallGravityScale;
+        // 落下開始時の位置とターゲット
+        Vector3 startPos = transform.position;
+        Vector3 target = isTargetLocked ? lockedTargetPos : player.position;
 
-        float fallTime = Mathf.Sqrt((2f * (startY - endY)) / -g);
-        float needVx = (targetPos.x - transform.position.x) / fallTime;
+        float g = Physics2D.gravity.y * fallGravityScale;
+        float fallTime = Mathf.Sqrt((2f * Mathf.Max(0.01f, startPos.y - target.y)) / -g);
+
+        float needVx = (target.x - startPos.x) / fallTime;
 
         rb.linearVelocity = new Vector2(needVx, 0f);
 
-
-        // 地面に着くまで待つ
-        //while (rb.linearVelocity.y <= 0)
-        //{
-        //    if (transform.position == targetPos || transform.position.y<-3f)
-        //    {
-        //        rb.linearVelocity = new Vector2(0f, 0f);
-        //    }
-        //    Debug.Log("3. 落下フェーズ");
-        //    yield return null;
-        //}
-
-        // 地面に着くまで待つ
-        while (transform.position!=targetPos&&transform.position.y>-3f)
+        while (transform.position.y > target.y && transform.position.y > -3f)
         {
-            Debug.Log("3. 落下フェーズ");
             yield return null;
         }
 
         rb.linearVelocity = Vector2.zero;
 
-
-        //JumpFinished = true;
         eventEnd = true;
         isJumping = false;
-        if (eventEnd)
-        {
-            Debug.Log("eventEndがtrueになりました.eventEnd=" + eventEnd);
-
-        }
     }
 
-    IEnumerator PreparaHipDrop(float waitSeconds, bool colorChange = true)
-    {
-        //初期設定
-        Debug.Log("攻撃準備を開始");
-        //待機アニメーションの再生
-        Debug.Log("攻撃待機のアニメーションを再生");
-        //攻撃準備時間分、待機
-        yield return new WaitForSeconds(waitSeconds);
-        //完了
-        Debug.Log("攻撃準備が完了");
 
-    }
 
+
+    //突進
     public IEnumerator Rush()
     {
         yield return null;
@@ -485,13 +456,13 @@ public class Elephant : Boss
             //指定の座標に到達するまで、待機
             while (transform.position.y <= targetHeight)
             {
+                BallCreate = true;
                 yield return null;
             }
             //到達後の処理
             Debug.Log("指定の座標に到達!! 重力を増やして急降下");
             rb.gravityScale = fallGravityScale;
             hasIncreasedGravity = true;
-            BallCreate=true;
         }
         eventEnd = true;
     }
@@ -508,6 +479,36 @@ public class Elephant : Boss
         yield return StartCoroutine(AttackCoroutine(NoseAttack.proTime.attackTime));
         AttackCollider.enabled = false;
         yield return StartCoroutine(Afterglow(NoseAttack.proTime.afterglowTime));
+        eventEnd = true;
+    }
+
+    //ジャンプ攻撃判定
+    public IEnumerator StartJumpAction()
+    {
+        eventEnd = false;
+        ElephantAttackParameters HipDrop = getParam(ElephantTechnique.hipdrop);
+        yield return StartCoroutine(PreparaAttack(HipDrop.proTime.preparationTime));
+        if (!isJumping)
+        {
+            Debug.Log("コルーチン起動!!");
+            yield return StartCoroutine(JumpCoroutine());
+        }
+        else
+        {
+            eventEnd = true;
+        }
+        yield return StartCoroutine(Afterglow(HipDrop.proTime.afterglowTime));
+        eventEnd = true;
+    }
+
+    //ボールジャンプ攻撃判定
+    public IEnumerator BallandJump()
+    {
+        eventEnd = false;
+        ElephantAttackParameters balljump = getParam(ElephantTechnique.hipdrop);
+        yield return StartCoroutine(PreparaAttack(balljump.proTime.preparationTime));
+        yield return StartCoroutine(BallJump());
+        yield return StartCoroutine(Afterglow(balljump.proTime.afterglowTime));
         eventEnd = true;
     }
 
@@ -558,7 +559,7 @@ public class Elephant : Boss
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (/*BallCreate && */collision.gameObject.CompareTag("Ground"))
+        if (BallCreate && collision.gameObject.CompareTag("Ground"))
         {
             balljump = true;
             //Instantiate(Ball, ballRightSpawner.position, Quaternion.identity);
