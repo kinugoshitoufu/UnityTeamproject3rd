@@ -28,13 +28,13 @@ public class PlayerScript : MonoBehaviour
     private bool TempCloneFlag = false;
     public static PlayerScript instance;
     private Animator animator;
-    //private bool _evilStareStop = false;
+    private bool _evilStareStop = false;
     private bool _playerStop = false;
     private GameObject _clone;
     public bool StartFlag = false;
     private bool StartedFlag = false;
     private bool AttackFlag = true;
-    //public bool EvilStareStop { get { return _evilStareStop; } }//蛇睨み用のパラメータ
+    public bool EvilStareStop { get { return _evilStareStop; } }//蛇睨み用のパラメータ
     public bool PlayerStareStop { get { return _playerStop; } }//蛇睨み用のパラメータ
     //private bool EvilStareStop = false;
 
@@ -520,16 +520,16 @@ public class PlayerScript : MonoBehaviour
     }
 
     //蛇睨みを受けた時用の関数
-    //public void SetEvilStareStop(bool flag)
-    //{
-    //    _evilStareStop = flag;
-    //    if (flag)
-    //    {
-    //        rb.linearVelocityX = 0;
-    //        Debug.Log("蛇睨みで動くことが出来ません");
-    //    }
-    //    else Debug.Log("蛇睨みが解除されて動けるようになりました");
-    //}
+    public void SetEvilStareStop(bool flag)
+    {
+        _evilStareStop = flag;
+        if (flag)
+        {
+            rb.linearVelocityX = 0;
+            Debug.Log("蛇睨みで動くことが出来ません");
+        }
+        else Debug.Log("蛇睨みが解除されて動けるようになりました");
+    }
 
     //プレイヤーの位置変更
     public void ChangeSetPosition(Vector3 startPos)
