@@ -16,6 +16,7 @@ public class StartAnimation : MonoBehaviour
         {
             StartCoroutine(Move(banner,new Vector3(0,10,0),2.0f,Easing.Ease.OutQuart,false));
             PlayerScript.instance.StartFlag = false;
+            ScreenManager.instance.ShowSleepBoss();
         }
         
     }

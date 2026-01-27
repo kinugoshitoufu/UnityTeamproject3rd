@@ -567,6 +567,11 @@ public class PlayerScript : MonoBehaviour
         if (flag)
         {
             rb.linearVelocityX = 0;
+            //アニメーションを切る
+            animator.SetBool("MoveBool", false);
+            //向きを揃える
+            ChangeSetDirectionToRight();
+
             Debug.Log("蛇睨みで動くことが出来ません");
         }
         else Debug.Log("蛇睨みが解除されて動けるようになりました");
@@ -588,6 +593,17 @@ public class PlayerScript : MonoBehaviour
     public void ChangeSetPosition(Vector3 startPos)
     {
         if(PlayerStareStop)transform.position = startPos;
+    }
+
+    //プレイヤーの向き変更
+    public void ChangeSetDirectionToRight()
+    {
+        //プレイヤーが左を向いていたら
+        if (flicflag)
+        {
+            flicflag = false;
+            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        }
     }
 
 
