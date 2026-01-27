@@ -20,6 +20,8 @@ public class ScreenManager : MonoBehaviour
 
     private SpriteRenderer sprRender;
     private bool openFlag = false;//幕が上がっているかどうか?
+    public bool StartLecoding { get { return startLecoding; } }
+    private bool startLecoding = false;
 
     private void Awake()
     {
@@ -69,6 +71,9 @@ public class ScreenManager : MonoBehaviour
 
         //後ろの暗転を消す
         Bg_Black.gameObject.SetActive(false);
+
+        //プレイヤーの録画開始をONにする
+        startLecoding = true;
 
         //ライトをつける
         foreach (var light in charcterLight) light.intensity = 1;
