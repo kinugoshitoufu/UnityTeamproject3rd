@@ -177,7 +177,16 @@ public class PlayerScript : MonoBehaviour
             Scene currentScene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(currentScene.name);
         }
-
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            HpMax = 99999;
+            Hp = 99999;
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            HpMax = 1;
+            Hp = 1;
+        }
         if (Input.GetKeyDown(KeyCode.Q) && StartedFlag == false)
         {
             StartFlag = true;
