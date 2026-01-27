@@ -194,6 +194,55 @@ public class CloneController : MonoBehaviour
             transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
             flicflag = false;
         }
+
+        if (animator.GetBool("FlicBool") != flicflag)
+        {
+            animator.SetBool("FlicBool", true);
+        }
+        if (animator.GetBool("FlicBool") != flicflag)
+        {
+            animator.SetBool("FlicBool", false);
+        }
+
+        bool RightJump = animator.GetCurrentAnimatorStateInfo(0).IsName("CloneJumpRight");
+        bool LeftJump = animator.GetCurrentAnimatorStateInfo(0).IsName("CloneJumpLeft");
+        if (animator.GetBool("JumpBool") && !isGrounded)
+        {
+
+            if (animator.GetBool("FlicBool") == true && RightJump == true)
+            {
+                animator.Play("CloneJumpLeft", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+            }
+            if (animator.GetBool("FlicBool") == false && LeftJump == true)
+            {
+                animator.Play("CloneJumpRight", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+            }
+        }
+
+        bool RightAttack = animator.GetCurrentAnimatorStateInfo(0).IsName("CloneAttackRight");
+        bool LeftAttack = animator.GetCurrentAnimatorStateInfo(0).IsName("CloneAttackLeft");
+
+        if (animator.GetBool("FlicBool") == true && RightAttack == true)
+        {
+            animator.Play("CloneAttackLeft", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        }
+        if (animator.GetBool("FlicBool") == false && LeftAttack == true)
+        {
+            animator.Play("CloneAttackRight", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        }
+
+        bool JumpRightAttack = animator.GetCurrentAnimatorStateInfo(0).IsName("CloneJumpAttackRight");
+        bool JumpLeftAttack = animator.GetCurrentAnimatorStateInfo(0).IsName("CloneJumpAttackLeft");
+
+        if (animator.GetBool("FlicBool") == true && JumpRightAttack == true)
+        {
+            animator.Play("CloneJumpAttackLeft", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        }
+        if (animator.GetBool("FlicBool") == false && JumpLeftAttack == true)
+        {
+            animator.Play("CloneJumpAttackRight", 0, animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        }
+
     }
 
     /// <summary>
@@ -288,7 +337,7 @@ public class CloneController : MonoBehaviour
 
     void Shot()
     {
-        animator.SetBool("AttackBool", true);
+        //animator.SetBool("AttackBool", true);
         // 弾のプレハブとShotPointが設定されているか確認
         if (Bullet == null)
         {
@@ -305,7 +354,53 @@ public class CloneController : MonoBehaviour
         // ShotPointの位置と回転で弾を生成
         GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
 
+        if (animator.GetBool("FlicBool") == true && animator.GetBool("MoveBool") == false && animator.GetBool("JumpBool") == false)
+        {
+            animator.Play("CloneAttackLeft", 0, 0.0f);
+        }
+        else if (animator.GetBool("FlicBool") == false && animator.GetBool("MoveBool") == false && animator.GetBool("JumpBool") == false)
+        {
+            animator.Play("CloneAttackRight", 0, 0.0f);
+        }
+        else if (animator.GetBool("FlicBool") == true && animator.GetBool("MoveBool") == true && animator.GetBool("JumpBool") == false)
+        {
+            animator.Play("CloneMoveAttackLeft", 0, 0.0f);
+        }
+        else if (animator.GetBool("FlicBool") == false && animator.GetBool("MoveBool") == true && animator.GetBool("JumpBool") == false)
+        {
+            animator.Play("CloneMoveAttackRight", 0, 0.0f);
+        }
+        else if (animator.GetBool("FlicBool") == false && animator.GetBool("JumpBool") == true)
+        {
+            animator.Play("CloneJumpAttackRight", 0, 0.0f);
+        }
+        else if (animator.GetBool("FlicBool") == true && animator.GetBool("JumpBool") == true)
+        {
+            animator.Play("CloneJumpAttackLeft", 0, 0.0f);
+        }
+
         Debug.Log("クローンが弾を発射しました");
+    }
+
+    public void EndAnimAttackBool()
+    {
+        animator.SetBool("AttackBool", false);
+    }
+    public void EndAnimMoveRightAttackBool()
+    {
+        animator.Play("CloneMoveRight", 0, 0.6f);
+    }
+    public void EndAnimMoveLeftAttackBool()
+    {
+        animator.Play("CloneMoveLeft", 0, 0.6f);
+    }
+    public void EndAnimJumpRightAttackBool()
+    {
+        animator.Play("CloneJumpRight", 0, 0.5f);
+    }
+    public void EndAnimJumpLeftAttackBool()
+    {
+        animator.Play("CloneJumpLeft", 0, 0.5f);
     }
 
     public float GetDefCloneScaleX()
