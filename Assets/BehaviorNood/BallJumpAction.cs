@@ -13,7 +13,8 @@ public partial class BallJumpAction : Action
     {
         if (Elephant.elephant == null)
         {
-            return Status.Failure;
+            Elephant.elephant = GameObject.FindAnyObjectByType<Elephant>();
+            //return Status.Failure;
         }
         CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.BallandJump());
         return Status.Running;
