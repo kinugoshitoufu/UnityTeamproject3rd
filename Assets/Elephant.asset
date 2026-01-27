@@ -121,7 +121,7 @@ MonoBehaviour:
   - rid: 3619592776638792424
   - rid: 3619592776638792530
   - rid: 3619592778787324104
-  m_VersionTimestamp: 639051029765874360
+  m_VersionTimestamp: 639051060906444529
   m_SerializedVersion: 1
   m_DebugInfo: {fileID: 3782914838088839461}
   m_RuntimeGraph: {fileID: 3031259686699998231}
@@ -881,7 +881,7 @@ MonoBehaviour:
     - rid: 3619592731395883546
       type: {class: BranchingConditionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
-        Position: {x: -195.85698, y: 536.8689}
+        Position: {x: -261.07202, y: 544.1634}
         ID:
           m_Value0: 7258267298093758481
           m_Value1: 16143803337030752607
@@ -3359,7 +3359,7 @@ MonoBehaviour:
           rid: 6892242662680428550
         m_EndedNodes:
           rid: 6892242662680428551
-        m_VersionTimestamp: 639051029765874360
+        m_VersionTimestamp: 639051060906444529
     - rid: 6892242662680428548
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
