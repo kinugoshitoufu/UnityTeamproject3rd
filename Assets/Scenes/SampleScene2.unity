@@ -1181,7 +1181,7 @@ MonoBehaviour:
   SleepBoss: {fileID: 1997105704}
   fadeOut: 1
   fadeSpeed: 1
-  showTime: 3
+  showTime: 2
 --- !u!4 &535934997
 Transform:
   m_ObjectHideFlags: 0
