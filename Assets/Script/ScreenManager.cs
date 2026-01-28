@@ -72,11 +72,16 @@ public class ScreenManager : MonoBehaviour
         //後ろの暗転を消す
         Bg_Black.gameObject.SetActive(false);
 
-        //プレイヤーの録画開始をONにする
-        startLecoding = true;
 
         //ライトをつける
         foreach (var light in charcterLight) light.intensity = 1;
+
+        //動けるようにする
+        PlayerScript.instance.StopPlayer(false);
+
+        //プレイヤーの録画開始をONにする
+        startLecoding = true;
+
 
         //プレイヤーと立ったボスを見せる時間
         yield return new WaitForSeconds(showTime);
@@ -85,8 +90,7 @@ public class ScreenManager : MonoBehaviour
         if (fadeOut) yield return StartCoroutine(LightToBright(stageLight));
         else stageLight.intensity = 1f;
 
-        //動けるようにする
-        PlayerScript.instance.StopPlayer(false);
+        
 
     }
 
