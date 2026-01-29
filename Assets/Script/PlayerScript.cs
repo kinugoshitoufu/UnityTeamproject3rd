@@ -202,13 +202,18 @@ public class PlayerScript : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            HpMax = 1;
+            HpMax = 5;
             Hp = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            HpMax = 5;
+            Hp = 0;
         }
         if (Input.GetKeyDown(KeyCode.Q) && StartedFlag == false)
         {
-            StartFlag = true;
-            StartedFlag = true;
+            //StartFlag = true;
+            //StartedFlag = true;
         }
 
         if (MoveStopFlag)
@@ -240,6 +245,12 @@ public class PlayerScript : MonoBehaviour
         if (Mathf.Abs(horizontal) >= 0.01f || jumpPressed)
         {
             isRecording = true;
+        }
+
+        if (StartedFlag == false && Mathf.Abs(horizontal) >= 0.01f || jumpPressed)
+        {
+            StartFlag = true;
+            StartedFlag = true;
         }
 
         // 記録中の場合、プレイヤーの入力と状態を記録
