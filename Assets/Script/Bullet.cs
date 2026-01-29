@@ -9,9 +9,11 @@ public class Bullet : MonoBehaviour
     private float timer = 0.0f;
     private bool isFrozen = false;
     private Collider2D coll;
+    public GameObject bulletEffect;
     void Start()
     {
         coll = GetComponent<Collider2D>();
+        
         if (PlayerScript.instance.Getflicflag() == false)
         {
             moveDirection = Vector2.right;
@@ -50,6 +52,12 @@ public class Bullet : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Clone"))
         {
+            Instantiate(bulletEffect, gameObject.transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Instantiate(bulletEffect, gameObject.transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

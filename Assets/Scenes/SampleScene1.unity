@@ -3033,6 +3033,14 @@ PrefabInstance:
       value: 0.37
       objectReference: {fileID: 0}
     - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+      propertyPath: DashEffect
+      value: 
+      objectReference: {fileID: 1022406516289432657, guid: 9b9a14a964f03d94aab610a283d38488, type: 3}
+    - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+      propertyPath: JumpEffect
+      value: 
+      objectReference: {fileID: 3120970466209680628, guid: f71fa8cf7ba7cec49922c45616a4b623, type: 3}
+    - target: {fileID: 1477824051409943486, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: knockpower
       value: 500
       objectReference: {fileID: 0}
@@ -3082,7 +3090,7 @@ PrefabInstance:
       objectReference: {fileID: 884532942, guid: 48dde117e18e0a04383c2c29b33c42fb, type: 3}
     - target: {fileID: 4884192309742326077, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4884192309742326077, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: m_WasSpriteAssigned
@@ -3135,6 +3143,18 @@ PrefabInstance:
     - target: {fileID: 7105136619591731172, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539316250187020039, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539316250187020039, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539316250187020039, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 8983785623553068900, guid: 7915da3ac85a63740a63b6bd33ba042e, type: 3}
       propertyPath: m_Size.x

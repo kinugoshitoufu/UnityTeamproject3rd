@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -48,13 +49,13 @@ public class PlayerScript : MonoBehaviour
 
     [Tooltip("ノックバックの強さ")]
     public Vector2 knockpower = Vector2.one;
-        
+
     [Tooltip("ダメージを受けたときに何秒で動けるか")]
     public float MoveStopTime = 0.5f;
     public float MoveStopTimer = 0.0f;
     private bool MoveStopFlag = false;
 
-    
+
 
     // ========== コンポーネント参照 ==========
     private Rigidbody2D rb;          // 物理演算用のRigidbody2D
@@ -113,6 +114,16 @@ public class PlayerScript : MonoBehaviour
     private AudioSource[] seAudios;
     [Tooltip("seClipsの最大数指定")]
     public int maxSeAudio = 10;
+
+    // ========== UI用 =============
+    [Header("UI関連")]
+    [Tooltip("走ったときの煙")]
+    public GameObject DashEffect;
+    private bool DashEffectFlag;
+    [Tooltip("ジャンプしたときの煙")]
+    public GameObject JumpEffect;
+    private bool JumpEffectFlag;
+
     /// <summary>
     /// 初期化処理
     /// Rigidbody2Dコンポーネントを取得
@@ -153,7 +164,8 @@ public class PlayerScript : MonoBehaviour
         }
 
         AttackTimer = AttackTime;
-
+        DashEffectFlag = false;
+        JumpEffectFlag = false;
         // 最初は記録を停止状態で開始
         isRecording = false;
     }
@@ -165,6 +177,12 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
         AttackTimer += Time.deltaTime;
+        //if (ScreenManager.instance.StartLecoding == false)
+        //{
+        //    CloneTimer = 0.0f;
+        //    recordedActions.Clear();
+        //    //isRecording = false;
+        //}
         if (Hp == 0)
         {
             deadFlag = true;
@@ -228,6 +246,11 @@ public class PlayerScript : MonoBehaviour
         if (isRecording)
         {
             RecordPlayerInput();
+        }
+
+        if (isGrounded && JumpEffectFlag)
+        {
+            JumpEffectFlag = false;
         }
 
         // プレイヤーが完全に停止したらクローンを生成
@@ -353,7 +376,7 @@ public class PlayerScript : MonoBehaviour
         bool jumpPressed = (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 0")) ? true : false;
 
         // 右クリック（弾の発射）が押されたかを取得
-        bool shotPressed = (Input.GetMouseButtonDown(1) || Input.GetKeyDown("joystick button 2")) ? true : false;
+        bool shotPressed = (AttackTimer >= AttackTime && Input.GetMouseButtonDown(1) || Input.GetKeyDown("joystick button 2")) ? true : false;
 
         // ========== 現在の状態を記録 ==========
         PlayerAction action = new PlayerAction
@@ -392,12 +415,28 @@ public class PlayerScript : MonoBehaviour
                 {
                     animator.SetBool("MoveBool", true);
                     rb.linearVelocityX = horizontal * moveSpeed;
+                    if (DashEffectFlag == false && isGrounded && flicflag == false)
+                    {
+                        DashEffect.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
+                        Instantiate(DashEffect, new Vector2(gameObject.transform.position.x - gameObject.transform.localScale.x,
+                            gameObject.transform.position.y - gameObject.transform.localScale.y + 0.2f), Quaternion.identity);
+                        DashEffectFlag = true;
+                    }
+                    else if(DashEffectFlag == false && isGrounded && flicflag == true)
+                    {
+                        DashEffect.transform.localScale = new Vector3(-2.0f, 2.0f, 2.0f);
+                        Instantiate(DashEffect, new Vector2(gameObject.transform.position.x - gameObject.transform.localScale.x,
+                          gameObject.transform.position.y - gameObject.transform.localScale.y + 0.2f), Quaternion.identity);
+                        DashEffectFlag = true;
+                    }
+
                 }
                 else
                 {
                     // 入力がない場合は横方向の速度を0にする（滑り続けないように）
                     animator.SetBool("MoveBool", false);
                     rb.linearVelocityX = 0f;
+                    DashEffectFlag = false;
                 }
             }
         }        
@@ -416,6 +455,11 @@ public class PlayerScript : MonoBehaviour
                 // Y方向に力を加えてジャンプ（X方向の速度は維持）
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 animator.SetBool("JumpBool", true);
+                if (JumpEffectFlag == false)
+                {
+                    Instantiate(JumpEffect, new Vector2(gameObject.transform.position.x - 0.12f,
+                        gameObject.transform.position.y - gameObject.transform.localScale.y + 0.16f), Quaternion.identity);
+                }
             }
             
         }
@@ -625,39 +669,41 @@ public class PlayerScript : MonoBehaviour
         }
         if (collision.collider.CompareTag("Enemy") && !MoveStopFlag)
         {
-            if (flicflag)
-            {
-                MoveStopFlag = true;
-                rb.linearVelocity = Vector2.zero;
-                rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
-                rb.AddForce(Vector2.right * knockpower.x, ForceMode2D.Impulse);
-            }
-            else
-            {
-                MoveStopFlag = true;
-                rb.linearVelocity = Vector2.zero;
-                rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
-                rb.AddForce(Vector2.left * knockpower.x, ForceMode2D.Impulse);
-            }
+            MoveStopFlag = true;
+            rb.linearVelocity = Vector2.zero;
+            //if (flicflag)
+            //{
+            //    rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+            //    rb.AddForce(Vector2.right * knockpower.x, ForceMode2D.Impulse);
+            //}
+            //else
+            //{
+            //    rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+            //    rb.AddForce(Vector2.left * knockpower.x, ForceMode2D.Impulse);
+            //}
+            Vector2 distination = (transform.position - collision.transform.position).normalized;
+            rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+            rb.AddForce(distination * knockpower, ForceMode2D.Impulse);
             Hp--;
             animator.SetBool("DamageBool", true);
         }
         if (collision.collider.CompareTag("CloneBullet"))
         {
-            if (flicflag)
-            {
-                MoveStopFlag = true;
-                rb.linearVelocity = Vector2.zero;
-                rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
-                rb.AddForce(Vector2.right * knockpower.x, ForceMode2D.Impulse);
-            }
-            else
-            {
-                MoveStopFlag = true;
-                rb.linearVelocity = Vector2.zero;
-                rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
-                rb.AddForce(Vector2.left * knockpower.x, ForceMode2D.Impulse);
-            }
+            MoveStopFlag = true;
+            rb.linearVelocity = Vector2.zero;
+            //if (flicflag)
+            //{
+            //    rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+            //    rb.AddForce(Vector2.right * knockpower.x, ForceMode2D.Impulse);
+            //}
+            //else
+            //{
+            //    rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+            //    rb.AddForce(Vector2.left * knockpower.x, ForceMode2D.Impulse);
+            //}
+            Vector2 distination = (transform.position - collision.transform.position).normalized;
+            rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+            rb.AddForce(distination * knockpower, ForceMode2D.Impulse);
             Hp--;
             animator.SetBool("DamageBool", true);
         }

@@ -9,6 +9,7 @@ public class CloneBullet : MonoBehaviour
     public bool isFrozen = false;
     public GameObject Clone;
     private Collider2D coll;
+    public GameObject bulletEffect;
     void Start()
     {
         coll = GetComponent<Collider2D>();
@@ -73,6 +74,12 @@ public class CloneBullet : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Destroy(gameObject);
+            Instantiate(bulletEffect, gameObject.transform.position, Quaternion.identity);
+        }
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+            Instantiate(bulletEffect, gameObject.transform.position, Quaternion.identity);
         }
     }
 }
