@@ -16,13 +16,13 @@ public partial class BallJumpAction : Action
             Elephant.elephant = GameObject.FindAnyObjectByType<Elephant>();
             //return Status.Failure;
         }
-        CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.BallandJump());
-        return Status.Running;
+            CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.BallandJump());
+            return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
-        return (Elephant.elephant.EventEnd) ? Status.Success : Status.Running;
+        return Elephant.elephant.EventEnd ? Status.Success : Status.Running;
     }
 
     protected override void OnEnd()

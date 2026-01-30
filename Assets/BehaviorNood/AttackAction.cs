@@ -15,7 +15,7 @@ public partial class AttackAction : Action
     {
         if (Elephant.elephant == null)
         {
-            return Status.Failure;
+            Elephant.elephant = GameObject.FindAnyObjectByType<Elephant>();
         }
         CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.Attack());
         return Status.Running;

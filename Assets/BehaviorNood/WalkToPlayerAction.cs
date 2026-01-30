@@ -14,7 +14,7 @@ public partial class WalkToPlayerAction : Action
     {
         if (Elephant.elephant == null)
         {
-            return Status.Failure;
+            Elephant.elephant = GameObject.FindAnyObjectByType<Elephant>();
         }
         CoroutineRunner.Instance.StartCoroutine(Elephant.elephant.WalkCoroutine());
         return Status.Running;
