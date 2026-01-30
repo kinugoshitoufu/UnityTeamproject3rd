@@ -125,20 +125,27 @@ public class Elephant : Boss
     public void Walk()
     {
         walking=true;
-        //Debug.Log("プレイヤーに向かって移動中");
-        timer += Time.deltaTime;
-        Walktimer += Time.deltaTime;
-        if (timer >= interval)
+        if (eventEnd)
         {
-            timer = 0f;
-            Vector3 pos = transform.position;
-            // Player の方向 (右なら +1、左なら -1)
-            float direction = Mathf.Sign(player.position.x - pos.x);
-            // X に 1 ずつ近づく
-            pos.x += direction * 1f;
-            transform.position = pos;
-            WalkFinished = true;
+            return;
+        }
+        if (walking)
+        {
+            Debug.Log("プレイヤーに向かって移動中");
+            timer += Time.deltaTime;
+            Walktimer += Time.deltaTime;
+            if (timer >= interval)
+            {
+                timer = 0f;
+                Vector3 pos = transform.position;
+                // Player の方向 (右なら +1、左なら -1)
+                float direction = Mathf.Sign(player.position.x - pos.x);
+                // X に 1 ずつ近づく
+                pos.x += direction * 1f;
+                transform.position = pos;
+                WalkFinished = true;
 
+            }
         }
         walking=false;
     }
@@ -161,24 +168,20 @@ public class Elephant : Boss
 
     public IEnumerator WalkCoroutine()
     {
+        if (eventEnd)
+        {
+            yield break;
+        }
         Debug.Log("移動開始!!!");
         eventEnd = false;
         WalkFinished = false;
-        if(isballjump)
-        {
-            yield return null;
-        }
-        if(isJumping) 
-        {
-            yield return null;
-        }
+        
 
         //プレイヤーに到達するまで歩かせる
         while (Vector2.Distance(transform.position, player.position) >= transform.localScale.x * 0.5f)
         {
             if (player == null) { eventEnd = true; yield break; }
-            if (isJumping) { yield break; }
-            if (!isballjump) { yield break; }
+            if (eventEnd) { yield break; }
             Walk();
             yield return null;
         }
@@ -204,6 +207,11 @@ public class Elephant : Boss
         if (player == null)
         {
             eventEnd = true;
+            yield break;
+        }
+
+        if (eventEnd)
+        {
             yield break;
         }
 
@@ -296,6 +304,10 @@ public class Elephant : Boss
     //移動攻撃1(低い突進)
     public IEnumerator MoveAttack1()
     {
+        if (eventEnd)
+        {
+            yield break;
+        }
         //移動攻撃用のパラメータを取得
         ElephantAttackParameters moveParm = getParam(ElephantTechnique.MoveAttack1);
 
@@ -449,6 +461,10 @@ public class Elephant : Boss
 
     public IEnumerator BallJump()
     {
+        if (eventEnd)
+        {
+            yield break;
+        }
         //if (isballjump) yield break;
         isballjump = true;
         eventEnd = false;
@@ -582,6 +598,10 @@ public class Elephant : Boss
     //攻撃中
     IEnumerator AttackCoroutine(float waitSeconds)
     {
+        if (eventEnd)
+        {
+            yield break;
+        }
         //初期設定
         Debug.Log("攻撃を開始");
         //移動攻撃のアニメーションの再生
