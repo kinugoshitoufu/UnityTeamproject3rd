@@ -1,46 +1,43 @@
 fileFormatVersion: 2
-guid: 3209f84b3010ed14aa45071af7d5477a
+guid: 026e092de211dbf42a44666c7fbed394
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 566831699247205163
-    second: "Bos_\u653B\u6483_0"
+      213: 2901988728995853260
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_0"
   - first:
-      213: -5626952348586360977
-    second: "Bos_\u653B\u6483_1"
+      213: -882628148105897894
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_1"
   - first:
-      213: -7485727313159046283
-    second: "Bos_\u653B\u6483_2"
+      213: 3095188082532095326
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_2"
   - first:
-      213: -5479654226131989610
-    second: "Bos_\u653B\u6483_3"
+      213: -9120153607784131219
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_3"
   - first:
-      213: -1580228399410942726
-    second: "Bos_\u653B\u6483_4"
+      213: 866892997483225551
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_4"
   - first:
-      213: -914877959622568262
-    second: "Bos_\u653B\u6483_5"
+      213: -5657780276651195839
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_5"
   - first:
-      213: 7755920478087272224
-    second: "Bos_\u653B\u6483_6"
+      213: -2670215734233895089
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_6"
   - first:
-      213: -6846498294318111581
-    second: "Bos_\u653B\u6483_7"
+      213: 2966705292446277750
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_7"
   - first:
-      213: -7240502667192336214
-    second: "Bos_\u653B\u6483_8"
+      213: -7349885295900704654
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_8"
   - first:
-      213: 6216748265732743326
-    second: "Bos_\u653B\u6483_9"
+      213: 8245953253101069663
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_9"
   - first:
-      213: -1250389027258351733
-    second: "Bos_\u653B\u6483_10"
+      213: 609081167467699498
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_10"
   - first:
-      213: 7246420223507542539
-    second: "Bos_\u653B\u6483_11"
-  - first:
-      213: 8169438425384092186
-    second: "Bos_\u653B\u6483_12"
+      213: -4355957085634282779
+    second: "houkou 1 \u306E\u30B3\u30D4\u30FC_11"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -108,10 +105,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -162,13 +159,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_0"
+      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_0"
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -177,20 +174,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 59f100153dfd535478580e34c2a91e34
-      internalID: -167091691
+      spriteID: cf06b3e4b31988348ad4845f6f1256a9
+      internalID: -36194767
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_1"
+      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_1"
       rect:
         serializedVersion: 2
         x: 1000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -199,20 +196,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7c00b0806ca991841ab98484b6d689e8
-      internalID: 1732258259
+      spriteID: 3385b551fc8ac4a4e84f277bdf830b60
+      internalID: -2830589
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_2"
+      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_2"
       rect:
         serializedVersion: 2
         x: 2000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -221,20 +218,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b2ed168eb98ea4d43b816ce11d27ea7a
-      internalID: 1961515386
+      spriteID: 477affca226f84544a8e47f02ad8049f
+      internalID: -616078592
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_3"
+      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_3"
       rect:
         serializedVersion: 2
         x: 3000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -243,20 +240,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 220443d3ba6c61f4996a245aac4851c7
-      internalID: 687099198
+      spriteID: e805c3fed0ec80c45ab336139505d396
+      internalID: 706476107
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_4"
+      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_4"
       rect:
         serializedVersion: 2
         x: 4000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -265,20 +262,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1f64b5990e73e194fb055b485c06314c
-      internalID: -404258037
+      spriteID: 711aa32f00fa2e14eb199598398dbbbf
+      internalID: 889925966
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_5"
+      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_5"
       rect:
         serializedVersion: 2
         x: 5000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,20 +284,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 40dbf2a4c7c0f404a9c9d74cbbb3a8b1
-      internalID: -1170979791
+      spriteID: cc752a41369ce5047ad60d8b2beac350
+      internalID: -437395530
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_6"
+      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_6"
       rect:
         serializedVersion: 2
         x: 6000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -309,20 +306,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 67b6ec7270933fa48b1452f10bc1e8f0
-      internalID: -143734071
+      spriteID: 011c81d005923614e95438de97d0e608
+      internalID: 473523455
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_7"
+      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_7"
       rect:
         serializedVersion: 2
         x: 7000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -331,20 +328,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 40efee7c37749c742a57e84faf609b56
-      internalID: -1828397025
+      spriteID: 65bac9e21b59e6946aa5e41b0075d1f0
+      internalID: -1124606015
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_8"
+      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_8"
       rect:
         serializedVersion: 2
         x: 8000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -353,52 +350,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fd503cd1b02b53643bef0355ab5481cf
-      internalID: -1813759499
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "Bos_\u653B\u6483_9"
-      rect:
-        serializedVersion: 2
-        x: 9000
-        y: 0
-        width: 1000
-        height: 650
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 53d963e8672b494429b8cc259ff7fda0
-      internalID: -1244204148
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "Bos_\u653B\u6483_10"
-      rect:
-        serializedVersion: 2
-        x: 10000
-        y: 0
-        width: 1000
-        height: 650
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 077a786205c9b0f4d9d89db809ec6358
-      internalID: 1690803401
+      spriteID: b52b75fd4f4a0b842be131aea47c6106
+      internalID: 10619123
       vertices: []
       indices: 
       edges: []
@@ -407,7 +360,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 66a5c24044edfa846a7f307f09807eaf
+    spriteID: dfb3fbdf6a367c6408814ebad934e839
     internalID: 0
     vertices: []
     indices: 
@@ -417,17 +370,15 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "Bos_\u653B\u6483_0": -167091691
-      "Bos_\u653B\u6483_1": 1732258259
-      "Bos_\u653B\u6483_10": 1690803401
-      "Bos_\u653B\u6483_2": 1961515386
-      "Bos_\u653B\u6483_3": 687099198
-      "Bos_\u653B\u6483_4": -404258037
-      "Bos_\u653B\u6483_5": -1170979791
-      "Bos_\u653B\u6483_6": -143734071
-      "Bos_\u653B\u6483_7": -1828397025
-      "Bos_\u653B\u6483_8": -1813759499
-      "Bos_\u653B\u6483_9": -1244204148
+      "houkou 1 \u306E\u30B3\u30D4\u30FC_0": -36194767
+      "houkou 1 \u306E\u30B3\u30D4\u30FC_1": -2830589
+      "houkou 1 \u306E\u30B3\u30D4\u30FC_2": -616078592
+      "houkou 1 \u306E\u30B3\u30D4\u30FC_3": 706476107
+      "houkou 1 \u306E\u30B3\u30D4\u30FC_4": 889925966
+      "houkou 1 \u306E\u30B3\u30D4\u30FC_5": -437395530
+      "houkou 1 \u306E\u30B3\u30D4\u30FC_6": 473523455
+      "houkou 1 \u306E\u30B3\u30D4\u30FC_7": -1124606015
+      "houkou 1 \u306E\u30B3\u30D4\u30FC_8": 10619123
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
