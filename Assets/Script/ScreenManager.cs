@@ -7,6 +7,7 @@ using NUnit.Framework;
 public class ScreenManager : MonoBehaviour
 {
     public static ScreenManager instance;
+    public BannerAnimation[] banners=new BannerAnimation[2];
 
     [SerializeField] private GameObject Bg_InFront;//背景手前のやつ
     [SerializeField] private GameObject Bg_Black;// 黒背景
@@ -49,13 +50,26 @@ public class ScreenManager : MonoBehaviour
             if (openFlag) return;
             //SleepBoss.gameObject.SetActive(true);
             openFlag = true;
+            foreach (var banner in banners) banner.Open();
+            //banner.Open();
         }
 
 
         if (PlayerScript.instance.deadFlag)
         {
-            Debug.Log("プレイヤーの死亡を確認。垂幕を閉じます");
+            //if (PlayerScript.instance.StartFlag == false) return;
+            Debug.Log("プレイヤーの死亡を確認。世界の幕が閉じます");
+            foreach (var banner in banners) banner.Close();
+            openFlag = false;
+            //banner.Close();
         }
+    }
+
+    public void Death()
+    {
+        Debug.Log("プレイヤーの死亡を確認。世界の幕が閉じます");
+        foreach (var banner in banners) banner.Close();
+        openFlag = false;
     }
 
     public void ShowSleepBoss()
