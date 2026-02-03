@@ -192,6 +192,9 @@ public class PlayerScript : MonoBehaviour
             
 
             deadFlag = true;
+
+            ScreenManager.instance.Death();
+
             if (!MoveStopFlag && SmokeEffectFlag == false)
             {
                 animator.SetBool("MoveBool", false);
