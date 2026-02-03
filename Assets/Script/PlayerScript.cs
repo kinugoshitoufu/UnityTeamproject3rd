@@ -123,6 +123,9 @@ public class PlayerScript : MonoBehaviour
     [Tooltip("ジャンプしたときの煙")]
     public GameObject JumpEffect;
     private bool JumpEffectFlag;
+    [Tooltip("ジャンプしたときの煙")]
+    public GameObject SmokeEffect;
+    private bool SmokeEffectFlag;
 
     /// <summary>
     /// 初期化処理
@@ -166,6 +169,7 @@ public class PlayerScript : MonoBehaviour
         AttackTimer = AttackTime;
         DashEffectFlag = false;
         JumpEffectFlag = false;
+        SmokeEffectFlag = false;
         // 最初は記録を停止状態で開始
         isRecording = false;
     }
@@ -185,7 +189,15 @@ public class PlayerScript : MonoBehaviour
         //}
         if (Hp == 0)
         {
+            
+
             deadFlag = true;
+            if (!MoveStopFlag && SmokeEffectFlag == false)
+            {
+                animator.SetBool("MoveBool", false);
+                Instantiate(SmokeEffect, new Vector2(transform.position.x + 0.55f,transform.position.y +0.42f), Quaternion.identity);
+                SmokeEffectFlag = true;
+            }
             
             //Destroy(gameObject);
         }
@@ -680,8 +692,6 @@ public class PlayerScript : MonoBehaviour
         }
         if (collision.collider.CompareTag("Enemy") && !MoveStopFlag)
         {
-            MoveStopFlag = true;
-            rb.linearVelocity = Vector2.zero;
             //if (flicflag)
             //{
             //    rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
@@ -692,6 +702,8 @@ public class PlayerScript : MonoBehaviour
             //    rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
             //    rb.AddForce(Vector2.left * knockpower.x, ForceMode2D.Impulse);
             //}
+            MoveStopFlag = true;
+            rb.linearVelocity = Vector2.zero;
             Vector2 distination = (transform.position - collision.transform.position).normalized;
             rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
             rb.AddForce(distination * knockpower, ForceMode2D.Impulse);
