@@ -10,9 +10,11 @@ public class ScreenManager : MonoBehaviour
 
     [SerializeField] private GameObject Bg_InFront;//背景手前のやつ
     [SerializeField] private GameObject Bg_Black;// 黒背景
+    [SerializeField] private GameObject Banner_InFront;//手前の垂幕
     [SerializeField] private Light2D stageLight;//ステージ全体のライト
     [SerializeField] private List<Light2D> charcterLight = new List<Light2D>();//プレイヤーやボスを照らすライト
     [SerializeField] private GameObject SleepBoss;//寝ているボス
+    [SerializeField] private Vector3 setPosition = new Vector3(-5, -2.86f, 0);//ライトが当たるポジション
 
     [SerializeField] private bool fadeOut = false;
     [SerializeField] private float fadeSpeed = 1.0f;
@@ -45,8 +47,14 @@ public class ScreenManager : MonoBehaviour
         if (PlayerScript.instance.StartFlag==true)
         {
             if (openFlag) return;
-            SleepBoss.gameObject.SetActive(true);
+            //SleepBoss.gameObject.SetActive(true);
             openFlag = true;
+        }
+
+
+        if (PlayerScript.instance.deadFlag)
+        {
+            Debug.Log("プレイヤーの死亡を確認。垂幕を閉じます");
         }
     }
 
@@ -64,17 +72,20 @@ public class ScreenManager : MonoBehaviour
         //プレイヤーが動けないようにする
         PlayerScript.instance.StopPlayer(true);
         //プレイヤーの位置変更
-        PlayerScript.instance.ChangeSetPosition(new Vector3(-5, -2.86f, 0));
+        PlayerScript.instance.ChangeSetPosition(setPosition);
         
         //寝ているボスを非表示にする
         SleepBoss.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
 
         //後ろの暗転を消す
         Bg_Black.gameObject.SetActive(false);
-
+        Banner_InFront.gameObject.SetActive(false);
 
         //ライトをつける
         foreach (var light in charcterLight) light.intensity = 1;
+
+        //プレイヤーと立ったボスを見せる時間
+        yield return new WaitForSeconds(showTime*0.3f);
 
         //動けるようにする
         PlayerScript.instance.StopPlayer(false);
@@ -82,11 +93,11 @@ public class ScreenManager : MonoBehaviour
         //プレイヤーの録画開始をONにする
         startLecoding = true;
 
-
-        //プレイヤーと立ったボスを見せる時間
+        //画面全体が明るくなるまで待機
         yield return new WaitForSeconds(showTime);
 
         //明るくなる
+        Banner_InFront.gameObject.SetActive(true);
         if (fadeOut) yield return StartCoroutine(LightToBright(stageLight));
         else stageLight.intensity = 1f;
 
