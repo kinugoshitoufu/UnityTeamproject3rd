@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections;
 using NUnit.Framework;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class ScreenManager : MonoBehaviour
 {
@@ -29,12 +31,18 @@ public class ScreenManager : MonoBehaviour
     [Header("垂幕クローズ～リザルト表示")]
     [SerializeField] private Image result;//リザルト画面のUI
     [SerializeField] private GameObject smoke;//煙幕
-
+    [SerializeField] private GameObject boss;//ボスの画像
+    [SerializeField] private Image panel;//リザルトが見やすくなるような黒背景
+    [SerializeField] private GameObject fadeBg;// 黒背景
+    [SerializeField] private Vector3 floorPos = new Vector3(-5, -2.86f, 0);
+    [SerializeField] private Vector3 bossPos = new Vector3(5, 3f, 0);
 
     private SpriteRenderer sprRender;
     private bool openFlag = false;//幕が上がっているかどうか?
     public bool StartLecoding { get { return startLecoding; } }
     private bool startLecoding = false;
+    private bool checkInputStart = false;
+    private bool completeInput = false;
 
     private void Awake()
     {
@@ -49,6 +57,8 @@ public class ScreenManager : MonoBehaviour
         foreach (var light in charcterLight) light.intensity = 0;
         //ボスを消す
         SleepBoss.gameObject.SetActive(false);
+
+        sprRender=fadeBg.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -63,6 +73,8 @@ public class ScreenManager : MonoBehaviour
             foreach (var banner in banners) banner.Open();
             //banner.Open();
         }
+
+        WaitUntilInput();
 
 
         //if (PlayerScript.instance.deadFlag)
@@ -81,15 +93,50 @@ public class ScreenManager : MonoBehaviour
         
     }
 
-    public void Close()
+    public IEnumerator Close()
     {
         //既に垂幕が閉じている場合は、呼び出さない
-        if (!openFlag) return;
+        if (!openFlag) yield break;
         Debug.Log("プレイヤーの死亡を確認。世界の幕が閉じます");
+
+        //垂幕を閉じる
         foreach (var banner in banners) banner.Close();
-        Instantiate(smoke, new Vector3(0, -2.86f, 0), Quaternion.identity);
-        result.GetComponent<UIFloatingMove>().MoveFlutterSmooth(new Vector2(0, 0), 2f, 10f, 2f);
+        //煙幕を中央に出現
+        Instantiate(smoke,floorPos, Quaternion.identity);
+        Instantiate(boss, bossPos, Quaternion.identity);
+        //リザルトを降ろす
+        StartCoroutine(result.GetComponent<UIFloatingMove>().FlutterMoveSmoothCoroutine(new Vector2(-50, 0f), 2f, 10f, 2f));
+        panel.gameObject.SetActive(true);
         openFlag = false;
+
+        Debug.Log("パネルはtrueになりました");
+
+        //何かのキーが押されるまで待機
+        checkInputStart = true;
+
+    }
+
+    void WaitUntilInput()
+    {
+        if (checkInputStart == false) return;
+        if (Input.anyKey)
+        {
+            completeInput = true;
+            checkInputStart = false;
+            Debug.Log("キーが押されました");
+            StartCoroutine(SceneChange());
+            
+        }
+        
+    }
+
+    IEnumerator SceneChange()
+    {
+        result.gameObject.SetActive(false);
+        fadeBg.gameObject.SetActive(true);
+        sprRender.sortingOrder = 6;
+        yield return FadeIn();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ShowSleepBoss()
@@ -134,8 +181,6 @@ public class ScreenManager : MonoBehaviour
         Banner_InFront.gameObject.SetActive(true);
         if (fadeOut) yield return StartCoroutine(LightToBright(stageLight));
         else stageLight.intensity = 1f;
-
-        
 
     }
 

@@ -13,6 +13,7 @@ public class BannerAnimation : MonoBehaviour
     private bool openFlag = false;
     private bool eventFlag = false;
 
+    private bool first = false;
     void Start()
     {
         animator=GetComponent<Animator>();
@@ -24,7 +25,7 @@ public class BannerAnimation : MonoBehaviour
         //プレイヤーがゲーム開始した場合
         if (PlayerScript.instance.StartFlag == true&&!openFlag)
         {
-            Debug.Log("垂幕を上げるぜ");
+            //Debug.Log("垂幕を上げるぜ");
             //Open();
         }
 
@@ -39,6 +40,7 @@ public class BannerAnimation : MonoBehaviour
 
     public void Open()
     {
+        if (first) return;
         //アニメーションを開始させる
         animator.SetBool("OpenFlag", true);
         //垂幕を移動させる
@@ -47,6 +49,7 @@ public class BannerAnimation : MonoBehaviour
         openFlag = true;
         //ボスを表示させる
         ScreenManager.instance.ShowSleepBoss();
+        first = true;
     }
 
     public void Close()

@@ -8,7 +8,7 @@ public class UIFloatingMove : MonoBehaviour
     /// <summary>
     /// 紙のようにひらひらしながら自然に着地する移動
     /// </summary>
-    public void MoveFlutterSmooth(
+    public IEnumerator MoveFlutterSmooth(
         Vector2 targetPos,
         float duration,
         float waveStrength,
@@ -16,9 +16,11 @@ public class UIFloatingMove : MonoBehaviour
     {
         StartCoroutine(FlutterMoveSmoothCoroutine(
             targetPos, duration, waveStrength, waveSpeed));
+
+        yield return null;
     }
 
-    private IEnumerator FlutterMoveSmoothCoroutine(
+    public IEnumerator FlutterMoveSmoothCoroutine(
         Vector2 targetPos,
         float duration,
         float waveStrength,
@@ -52,8 +54,14 @@ public class UIFloatingMove : MonoBehaviour
             yield return null;
         }
 
+        Debug.Log("2/3　完了");
+
         // もう補正しない（そのまま自然停止）
         rect.anchoredPosition = targetPos;
         rect.localRotation = startRot;
+
+        Debug.Log("2/4　完了");
+
+        yield break;
     }
 }
