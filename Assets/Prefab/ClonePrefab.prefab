@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 884532942, guid: 48dde117e18e0a04383c2c29b33c42fb, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.89411765, g: 0, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -214,6 +214,8 @@ MonoBehaviour:
   useInterpolation: 1
   Bullet: {fileID: 2812918182328086363, guid: d5d1368941c7879419bef57295967a4a, type: 3}
   shotPoint: {fileID: 6790267385851230903}
+  knockpower: {x: 3, y: 2}
+  Deadspeed: 1
 --- !u!95 &2127634906944887808
 Animator:
   serializedVersion: 7

@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
+using System.Drawing;
+using UnityEngine;
 
 /// <summary>
 /// クローンの行動を制御するスクリプト
@@ -14,6 +15,9 @@ public class CloneController : MonoBehaviour
     private float CloneScale;
     public static CloneController instance;
     private Animator animator;
+    private SpriteRenderer spriteRenderer;
+    private UnityEngine.Color color;
+    private bool movestop = false;
 
     // ========== 記録データ関連 ==========
     [Tooltip("再生する行動データのリスト")]
@@ -47,6 +51,11 @@ public class CloneController : MonoBehaviour
     [Tooltip("弾が発射される位置（Transform）")]
     public Transform shotPoint;
 
+    [Header("ダメージヒット時")]
+    [Tooltip("ノックバックの強さ")]
+    public Vector2 knockpower;
+    [Tooltip("ダメージを食らってから消えるまでの時間")]
+    public float Deadspeed = 10.0f;
     // 前フレームで弾を撃ったかどうかを記憶（連続発射防止用）
     private bool previousShotInput = false;
 
@@ -60,6 +69,8 @@ public class CloneController : MonoBehaviour
         // Rigidbody2Dコンポーネントを取得（物理演算に必要）
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        color = spriteRenderer.color;
         DefCloneScale = transform.localScale.x;
         instance = this;
         // クローンは重力の影響を受けないようにする（記録通りに動かすため）
@@ -136,11 +147,15 @@ public class CloneController : MonoBehaviour
         }
 
         // 再生時間を進める
-        playbackTime += Time.deltaTime;
+        if (!movestop)
+        {
+            playbackTime += Time.deltaTime;
+        }
+        
 
         // ========== ループ処理 ==========
         // 記録時間を超えたら最初に戻る
-        if (playbackTime > totalRecordingTime)
+        if (playbackTime > totalRecordingTime && !movestop)
         {
             // 再生時間をリセット（少しオーバーした分は考慮）
             playbackTime = playbackTime - totalRecordingTime;
@@ -164,7 +179,22 @@ public class CloneController : MonoBehaviour
         }
 
         // 現在の時刻に対応する行動を再生
-        ReplayActions();
+        if (!movestop)
+        {
+            ReplayActions();
+        }
+
+        if (movestop)
+        {
+            rb.linearVelocity = Vector2.zero;
+            color.a -= Deadspeed * Time.deltaTime;
+            spriteRenderer.color = color;
+        }
+
+        if (color.a <= 0.0f)
+        {
+            Destroy(gameObject);
+        }
 
         if (Mathf.Abs(rb.linearVelocityX) >= 0.01f)
         {
@@ -178,10 +208,6 @@ public class CloneController : MonoBehaviour
         if (rb.linearVelocityY >= 0.01f)
         {
             animator.SetBool("JumpBool", true);
-        }
-        else
-        {
-            
         }
 
         if (rb.linearVelocityX <= -0.01f && !flicflag)
@@ -428,11 +454,39 @@ public class CloneController : MonoBehaviour
         }
         if (collision.collider.CompareTag("Bullet"))
         {
-            Destroy(gameObject);
+            rb.linearVelocity = Vector2.zero;
+            Vector2 distination = (transform.position - collision.transform.position).normalized;
+            rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Force);
+            rb.AddForce(distination * knockpower, ForceMode2D.Impulse);
+            animator.SetBool("DamageBool", true);
+            if (animator.GetBool("FlicBool") == true && animator.GetBool("DamageBool") == true)
+            {
+                animator.Play("CloneDamageLeft");
+            }
+            else if (animator.GetBool("FlicBool") == false && animator.GetBool("DamageBool") == true)
+            {
+                animator.Play("CloneDamageRight");
+            }
+            movestop = true;
+            //Destroy(gameObject);
         }
         if (collision.collider.CompareTag("Enemy"))
         {
-            Destroy(gameObject);
+            rb.linearVelocity = Vector2.zero;
+            Vector2 distination = (transform.position - collision.transform.position).normalized;
+            rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+            rb.AddForce(distination * knockpower, ForceMode2D.Impulse);
+            animator.SetBool("DamageBool", true);
+            if (animator.GetBool("FlicBool") == true && animator.GetBool("DamageBool") == true)
+            {
+                animator.Play("CloneDamageLeft");
+            }
+            else if (animator.GetBool("FlicBool") == false && animator.GetBool("DamageBool") == true)
+            {
+                animator.Play("CloneDamageRight");
+            }
+            movestop = true;
+            //Destroy(gameObject);
         }
     }
 

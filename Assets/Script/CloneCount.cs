@@ -4,7 +4,7 @@ using UnityEngine;
 public class CloneCount : MonoBehaviour
 {
 
-    public string targetTag = "Item"; // カウントしたいタグ名
+    public string targetTag = "Clone"; // カウントしたいタグ名
     private int objectCount = 0;
     public TextMeshProUGUI clonecount;
 

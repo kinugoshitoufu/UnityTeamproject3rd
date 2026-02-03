@@ -275,6 +275,9 @@ MonoBehaviour:
   seClips:
   - {fileID: 0}
   maxSeAudio: 10
+  DashEffect: {fileID: 1022406516289432657, guid: 9b9a14a964f03d94aab610a283d38488, type: 3}
+  JumpEffect: {fileID: 3120970466209680628, guid: f71fa8cf7ba7cec49922c45616a4b623, type: 3}
+  SmokeEffect: {fileID: 1888469766082707791, guid: 49c0820bbcadfa841bf4876ea1ae09cd, type: 3}
 --- !u!82 &313750671483665323
 AudioSource:
   m_ObjectHideFlags: 0

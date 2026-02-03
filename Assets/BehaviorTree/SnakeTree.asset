@@ -98,7 +98,7 @@ MonoBehaviour:
   - rid: 8415058615882220294
   - rid: 8415058615882220295
   - rid: 8415058615882220296
-  m_VersionTimestamp: 639053085262609835
+  m_VersionTimestamp: 639057054948806058
   m_SerializedVersion: 1
   m_DebugInfo: {fileID: 1552580103964216806}
   m_RuntimeGraph: {fileID: 8895822408794041492}
@@ -144,7 +144,7 @@ MonoBehaviour:
       m_Value1: 1653129699170235504
     Variables: []
     NamedChildren: []
-    IsPlaceholder: 1
+    IsPlaceholder: 0
   - Name: Tornado1
     Story: Tornado1
     RuntimeTypeString: Tornado1Action, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
@@ -1766,7 +1766,7 @@ MonoBehaviour:
           rid: 8415058570646913313
         m_EndedNodes:
           rid: 8415058570646913314
-        m_VersionTimestamp: 639032931252156259
+        m_VersionTimestamp: 639057054948806058
     - rid: 8415058570646913311
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:

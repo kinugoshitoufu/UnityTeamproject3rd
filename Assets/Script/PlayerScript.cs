@@ -189,19 +189,14 @@ public class PlayerScript : MonoBehaviour
         //}
         if (Hp == 0)
         {
-            
-
             deadFlag = true;
-
-            ScreenManager.instance.Death();
-
             if (!MoveStopFlag && SmokeEffectFlag == false)
             {
                 animator.SetBool("MoveBool", false);
-                Instantiate(SmokeEffect, new Vector2(transform.position.x + 0.55f,transform.position.y +0.42f), Quaternion.identity);
+                Instantiate(SmokeEffect, new Vector2(transform.position.x + 0.55f, transform.position.y + 0.42f), Quaternion.identity);
                 SmokeEffectFlag = true;
             }
-            
+            //ScreenManager.instance.Death();
             //Destroy(gameObject);
         }
         // Rキーでシーンをリセット（やり直し機能）
