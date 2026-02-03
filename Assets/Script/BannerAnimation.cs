@@ -25,14 +25,14 @@ public class BannerAnimation : MonoBehaviour
         if (PlayerScript.instance.StartFlag == true&&!openFlag)
         {
             Debug.Log("垂幕を上げるぜ");
-            Open();
+            //Open();
         }
 
 
         if (PlayerScript.instance.deadFlag&&openFlag)
         {
-            Close();
-            Debug.Log("プレイヤーの死亡を確認。垂幕を閉じます");
+            //Close();
+            //Debug.Log("プレイヤーの死亡を確認。垂幕を閉じます");
         }
 
     }

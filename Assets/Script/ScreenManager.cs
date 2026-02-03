@@ -3,12 +3,15 @@ using UnityEngine.Rendering.Universal;
 using System.Collections.Generic;
 using System.Collections;
 using NUnit.Framework;
+using UnityEngine.UI;
 
 public class ScreenManager : MonoBehaviour
 {
     public static ScreenManager instance;
     public BannerAnimation[] banners=new BannerAnimation[2];
 
+    //垂幕オープン～ライトアップまでに必要なもの
+    [Header("垂幕オープン～ライトアップ")]
     [SerializeField] private GameObject Bg_InFront;//背景手前のやつ
     [SerializeField] private GameObject Bg_Black;// 黒背景
     [SerializeField] private GameObject Banner_InFront;//手前の垂幕
@@ -17,9 +20,16 @@ public class ScreenManager : MonoBehaviour
     [SerializeField] private GameObject SleepBoss;//寝ているボス
     [SerializeField] private Vector3 setPosition = new Vector3(-5, -2.86f, 0);//ライトが当たるポジション
 
+    [Header("フェード・ライトの時間設定")]
     [SerializeField] private bool fadeOut = false;
     [SerializeField] private float fadeSpeed = 1.0f;
     [SerializeField] private float showTime = 1.0f;
+
+    //垂幕クローズ、リザルト表示までに必要なもの
+    [Header("垂幕クローズ～リザルト表示")]
+    [SerializeField] private Image result;//リザルト画面のUI
+    [SerializeField] private GameObject smoke;//煙幕
+
 
     private SpriteRenderer sprRender;
     private bool openFlag = false;//幕が上がっているかどうか?
@@ -55,20 +65,30 @@ public class ScreenManager : MonoBehaviour
         }
 
 
-        if (PlayerScript.instance.deadFlag)
-        {
-            //if (PlayerScript.instance.StartFlag == false) return;
-            Debug.Log("プレイヤーの死亡を確認。世界の幕が閉じます");
-            foreach (var banner in banners) banner.Close();
-            openFlag = false;
-            //banner.Close();
-        }
+        //if (PlayerScript.instance.deadFlag)
+        //{
+        //    //if (PlayerScript.instance.StartFlag == false) return;
+        //    Debug.Log("プレイヤーの死亡を確認。世界の幕が閉じます");
+        //    foreach (var banner in banners) banner.Close();
+        //    openFlag = false;
+        //    //banner.Close();
+        //}
     }
+
 
     public void Death()
     {
+        
+    }
+
+    public void Close()
+    {
+        //既に垂幕が閉じている場合は、呼び出さない
+        if (!openFlag) return;
         Debug.Log("プレイヤーの死亡を確認。世界の幕が閉じます");
         foreach (var banner in banners) banner.Close();
+        Instantiate(smoke, new Vector3(0, -2.86f, 0), Quaternion.identity);
+        result.GetComponent<UIFloatingMove>().MoveFlutterSmooth(new Vector2(0, 0), 2f, 10f, 2f);
         openFlag = false;
     }
 
