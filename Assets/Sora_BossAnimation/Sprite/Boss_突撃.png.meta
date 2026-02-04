@@ -1,46 +1,40 @@
 fileFormatVersion: 2
-guid: 3209f84b3010ed14aa45071af7d5477a
+guid: 055059f783f39914aa1664e74e95d40a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 566831699247205163
-    second: "Bos_\u653B\u6483_0"
+      213: -1012095379764137160
+    second: "Boss_\u7A81\u6483_0"
   - first:
-      213: -5626952348586360977
-    second: "Bos_\u653B\u6483_1"
+      213: 3068495911492430663
+    second: "Boss_\u7A81\u6483_1"
   - first:
-      213: -7485727313159046283
-    second: "Bos_\u653B\u6483_2"
+      213: 8870235085675982016
+    second: "Boss_\u7A81\u6483_2"
   - first:
-      213: -5479654226131989610
-    second: "Bos_\u653B\u6483_3"
+      213: -214219211340052759
+    second: "Boss_\u7A81\u6483_3"
   - first:
-      213: -1580228399410942726
-    second: "Bos_\u653B\u6483_4"
+      213: 1576727001561050683
+    second: "Boss_\u7A81\u6483_4"
   - first:
-      213: -914877959622568262
-    second: "Bos_\u653B\u6483_5"
+      213: -675741615045521866
+    second: "Boss_\u7A81\u6483_5"
   - first:
-      213: 7755920478087272224
-    second: "Bos_\u653B\u6483_6"
+      213: 7405200775334788509
+    second: "Boss_\u7A81\u6483_6"
   - first:
-      213: -6846498294318111581
-    second: "Bos_\u653B\u6483_7"
+      213: 5672614088103549660
+    second: "Boss_\u7A81\u6483_7"
   - first:
-      213: -7240502667192336214
-    second: "Bos_\u653B\u6483_8"
+      213: -2891078397382019868
+    second: "Boss_\u7A81\u6483_8"
   - first:
-      213: 6216748265732743326
-    second: "Bos_\u653B\u6483_9"
+      213: -3730045870602788883
+    second: "Boss_\u7A81\u6483_9"
   - first:
-      213: -1250389027258351733
-    second: "Bos_\u653B\u6483_10"
-  - first:
-      213: 7246420223507542539
-    second: "Bos_\u653B\u6483_11"
-  - first:
-      213: 8169438425384092186
-    second: "Bos_\u653B\u6483_12"
+      213: 5520206738548861654
+    second: "Boss_\u7A81\u6483_10"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -111,7 +105,7 @@ TextureImporter:
     maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -162,13 +156,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_0"
+      name: "Boss_\u7A81\u6483_0"
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -177,20 +171,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 59f100153dfd535478580e34c2a91e34
-      internalID: -167091691
+      spriteID: 473628011cb05864fa97c5c46aee763f
+      internalID: 1122708688
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_1"
+      name: "Boss_\u7A81\u6483_1"
       rect:
         serializedVersion: 2
         x: 1000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -199,20 +193,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7c00b0806ca991841ab98484b6d689e8
-      internalID: 1732258259
+      spriteID: c27c420393d610b41babcae1009657b4
+      internalID: 1621079472
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_2"
+      name: "Boss_\u7A81\u6483_2"
       rect:
         serializedVersion: 2
         x: 2000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -221,20 +215,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b2ed168eb98ea4d43b816ce11d27ea7a
-      internalID: 1961515386
+      spriteID: 745b85e74c2262f49bc71098b6058dc7
+      internalID: -2007791095
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_3"
+      name: "Boss_\u7A81\u6483_3"
       rect:
         serializedVersion: 2
         x: 3000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -243,20 +237,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 220443d3ba6c61f4996a245aac4851c7
-      internalID: 687099198
+      spriteID: ce7032369317f1f489c299747a5c0b43
+      internalID: 1382833506
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_4"
+      name: "Boss_\u7A81\u6483_4"
       rect:
         serializedVersion: 2
         x: 4000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -265,20 +259,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1f64b5990e73e194fb055b485c06314c
-      internalID: -404258037
+      spriteID: 3a8e159a28ffdde418db588799cabe9e
+      internalID: -124904167
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_5"
+      name: "Boss_\u7A81\u6483_5"
       rect:
         serializedVersion: 2
         x: 5000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,20 +281,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 40dbf2a4c7c0f404a9c9d74cbbb3a8b1
-      internalID: -1170979791
+      spriteID: e2b73bbf0ef45a84c9da4ef2ed98f82d
+      internalID: -1809318684
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_6"
+      name: "Boss_\u7A81\u6483_6"
       rect:
         serializedVersion: 2
         x: 6000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -309,20 +303,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 67b6ec7270933fa48b1452f10bc1e8f0
-      internalID: -143734071
+      spriteID: ce97a8fae555f63408cf3df7f8c224d8
+      internalID: -638963971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "Bos_\u653B\u6483_7"
+      name: "Boss_\u7A81\u6483_7"
       rect:
         serializedVersion: 2
         x: 7000
         y: 0
         width: 1000
-        height: 650
+        height: 750
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -331,74 +325,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 40efee7c37749c742a57e84faf609b56
-      internalID: -1828397025
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "Bos_\u653B\u6483_8"
-      rect:
-        serializedVersion: 2
-        x: 8000
-        y: 0
-        width: 1000
-        height: 650
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fd503cd1b02b53643bef0355ab5481cf
-      internalID: -1813759499
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "Bos_\u653B\u6483_9"
-      rect:
-        serializedVersion: 2
-        x: 9000
-        y: 0
-        width: 1000
-        height: 650
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 53d963e8672b494429b8cc259ff7fda0
-      internalID: -1244204148
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "Bos_\u653B\u6483_10"
-      rect:
-        serializedVersion: 2
-        x: 10000
-        y: 0
-        width: 1000
-        height: 650
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 077a786205c9b0f4d9d89db809ec6358
-      internalID: 1690803401
+      spriteID: 8648073cbd986664395a8d4e84a0caad
+      internalID: 1681733468
       vertices: []
       indices: 
       edges: []
@@ -407,7 +335,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 66a5c24044edfa846a7f307f09807eaf
+    spriteID: 0d3364a4bd9b31240a5d0548481051b7
     internalID: 0
     vertices: []
     indices: 
@@ -417,17 +345,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "Bos_\u653B\u6483_0": -167091691
-      "Bos_\u653B\u6483_1": 1732258259
-      "Bos_\u653B\u6483_10": 1690803401
-      "Bos_\u653B\u6483_2": 1961515386
-      "Bos_\u653B\u6483_3": 687099198
-      "Bos_\u653B\u6483_4": -404258037
-      "Bos_\u653B\u6483_5": -1170979791
-      "Bos_\u653B\u6483_6": -143734071
-      "Bos_\u653B\u6483_7": -1828397025
-      "Bos_\u653B\u6483_8": -1813759499
-      "Bos_\u653B\u6483_9": -1244204148
+      "Boss_\u7A81\u6483_0": 1122708688
+      "Boss_\u7A81\u6483_1": 1621079472
+      "Boss_\u7A81\u6483_2": -2007791095
+      "Boss_\u7A81\u6483_3": 1382833506
+      "Boss_\u7A81\u6483_4": -124904167
+      "Boss_\u7A81\u6483_5": -1809318684
+      "Boss_\u7A81\u6483_6": -638963971
+      "Boss_\u7A81\u6483_7": 1681733468
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
