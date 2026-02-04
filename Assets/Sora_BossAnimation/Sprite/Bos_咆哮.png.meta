@@ -105,7 +105,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -159,7 +159,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_0"
+      name: "Bos_\u5486\u54EE_0"
       rect:
         serializedVersion: 2
         x: 0
@@ -174,14 +174,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cf06b3e4b31988348ad4845f6f1256a9
-      internalID: -36194767
+      spriteID: 7786316dc59d5d74f9b4f7cb3b4b0e59
+      internalID: 1400376279
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_1"
+      name: "Bos_\u5486\u54EE_1"
       rect:
         serializedVersion: 2
         x: 1000
@@ -196,14 +196,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3385b551fc8ac4a4e84f277bdf830b60
-      internalID: -2830589
+      spriteID: 826b10ea5276bd54aa6cdbc3b60c8f06
+      internalID: -1646865428
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_2"
+      name: "Bos_\u5486\u54EE_2"
       rect:
         serializedVersion: 2
         x: 2000
@@ -218,14 +218,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 477affca226f84544a8e47f02ad8049f
-      internalID: -616078592
+      spriteID: b05a39729a426e247a9b180b73b8fb8c
+      internalID: 1940385410
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_3"
+      name: "Bos_\u5486\u54EE_3"
       rect:
         serializedVersion: 2
         x: 3000
@@ -240,14 +240,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e805c3fed0ec80c45ab336139505d396
-      internalID: 706476107
+      spriteID: 820f666c9512d1e469f6d9b08c1c5b08
+      internalID: -1552484921
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_4"
+      name: "Bos_\u5486\u54EE_4"
       rect:
         serializedVersion: 2
         x: 4000
@@ -262,14 +262,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 711aa32f00fa2e14eb199598398dbbbf
-      internalID: 889925966
+      spriteID: 72a9914b6ebfe2347a6e8ba4dd37fe60
+      internalID: 1634533787
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_5"
+      name: "Bos_\u5486\u54EE_5"
       rect:
         serializedVersion: 2
         x: 5000
@@ -284,14 +284,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cc752a41369ce5047ad60d8b2beac350
-      internalID: -437395530
+      spriteID: 0ad3a967767624b499dd71cf9135c0f6
+      internalID: -2000710269
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_6"
+      name: "Bos_\u5486\u54EE_6"
       rect:
         serializedVersion: 2
         x: 6000
@@ -306,14 +306,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 011c81d005923614e95438de97d0e608
-      internalID: 473523455
+      spriteID: 88cb4595cc8bf9d4795dc95def60b287
+      internalID: 1158336793
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_7"
+      name: "Bos_\u5486\u54EE_7"
       rect:
         serializedVersion: 2
         x: 7000
@@ -328,14 +328,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 65bac9e21b59e6946aa5e41b0075d1f0
-      internalID: -1124606015
+      spriteID: f67cd8c7b77949947ade30cfd2854a05
+      internalID: -663809282
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "houkou 1 \u306E\u30B3\u30D4\u30FC_8"
+      name: "Bos_\u5486\u54EE_8"
       rect:
         serializedVersion: 2
         x: 8000
@@ -350,8 +350,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b52b75fd4f4a0b842be131aea47c6106
-      internalID: 10619123
+      spriteID: 765e553428ad9e145a2f6959231887ad
+      internalID: 1634476274
       vertices: []
       indices: 
       edges: []
@@ -360,7 +360,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: dfb3fbdf6a367c6408814ebad934e839
+    spriteID: edade8cb748fa8a4ca698db5aefb2c8d
     internalID: 0
     vertices: []
     indices: 
@@ -370,15 +370,15 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "houkou 1 \u306E\u30B3\u30D4\u30FC_0": -36194767
-      "houkou 1 \u306E\u30B3\u30D4\u30FC_1": -2830589
-      "houkou 1 \u306E\u30B3\u30D4\u30FC_2": -616078592
-      "houkou 1 \u306E\u30B3\u30D4\u30FC_3": 706476107
-      "houkou 1 \u306E\u30B3\u30D4\u30FC_4": 889925966
-      "houkou 1 \u306E\u30B3\u30D4\u30FC_5": -437395530
-      "houkou 1 \u306E\u30B3\u30D4\u30FC_6": 473523455
-      "houkou 1 \u306E\u30B3\u30D4\u30FC_7": -1124606015
-      "houkou 1 \u306E\u30B3\u30D4\u30FC_8": 10619123
+      "Bos_\u5486\u54EE_0": 1400376279
+      "Bos_\u5486\u54EE_1": -1646865428
+      "Bos_\u5486\u54EE_2": 1940385410
+      "Bos_\u5486\u54EE_3": -1552484921
+      "Bos_\u5486\u54EE_4": 1634533787
+      "Bos_\u5486\u54EE_5": -2000710269
+      "Bos_\u5486\u54EE_6": 1158336793
+      "Bos_\u5486\u54EE_7": -663809282
+      "Bos_\u5486\u54EE_8": 1634476274
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
