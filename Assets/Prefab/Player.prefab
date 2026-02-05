@@ -273,7 +273,8 @@ MonoBehaviour:
   Hp: 5
   deadFlag: 0
   seClips:
-  - {fileID: 0}
+  - {fileID: 8300000, guid: ace2f0a606e7d6548bf8755fab3ec531, type: 3}
+  - {fileID: 8300000, guid: b90109c5930c43b47938b299d13505b9, type: 3}
   maxSeAudio: 10
   DashEffect: {fileID: 1022406516289432657, guid: 9b9a14a964f03d94aab610a283d38488, type: 3}
   JumpEffect: {fileID: 3120970466209680628, guid: f71fa8cf7ba7cec49922c45616a4b623, type: 3}

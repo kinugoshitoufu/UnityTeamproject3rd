@@ -50,7 +50,7 @@ public class CloneController : MonoBehaviour
     [Header("発射位置（ShotPoint）")]
     [Tooltip("弾が発射される位置（Transform）")]
     public Transform shotPoint;
-
+    // ========== Damage用 ==========
     [Header("ダメージヒット時")]
     [Tooltip("ノックバックの強さ")]
     public Vector2 knockpower;

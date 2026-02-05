@@ -100,7 +100,7 @@ public class PlayerScript : MonoBehaviour
     [Header("HP関連")]
     [Tooltip("Hp設定")]
     public int Hp = 5;
-    private int HpMax;
+    public int HpMax;
 
     // ========== クリア・ゲームオーバーのパラメータ ==========
     [Header("クリア・ゲームオーバーフラグ設定")]
@@ -115,6 +115,8 @@ public class PlayerScript : MonoBehaviour
     [Tooltip("seClipsの最大数指定")]
     public int maxSeAudio = 10;
 
+    private bool timeSEFlag = false;
+
     // ========== UI用 =============
     [Header("UI関連")]
     [Tooltip("走ったときの煙")]
@@ -126,6 +128,8 @@ public class PlayerScript : MonoBehaviour
     [Tooltip("ジャンプしたときの煙")]
     public GameObject SmokeEffect;
     private bool SmokeEffectFlag;
+    // ========== TIME用 ============
+    public float ClearTime = 0.0f;
 
     /// <summary>
     /// 初期化処理
@@ -141,6 +145,7 @@ public class PlayerScript : MonoBehaviour
         instance = this;
         seAudios = new AudioSource[maxSeAudio];
         deadFlag = false;
+        ClearTime = 0.0f;
         for (int i = 0; i < maxSeAudio; i++)
         {
             seAudios[i] = gameObject.AddComponent<AudioSource>();
@@ -181,6 +186,10 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
         AttackTimer += Time.deltaTime;
+        if (StartedFlag)
+        {
+            ClearTime += Time.deltaTime;
+        }
         //if (ScreenManager.instance.StartLecoding == false)
         //{
         //    CloneTimer = 0.0f;
@@ -278,6 +287,11 @@ public class PlayerScript : MonoBehaviour
         // 速度が0で、かつ入力もない状態
         if (rb.linearVelocity == Vector2.zero && Mathf.Abs(horizontal) == 0.0f && MoveStopFlag == false && StartedFlag == true)
         {
+            if (!timeSEFlag)
+            {
+                //PlaySE(2);
+                timeSEFlag = true;
+            }
             CloneTimer += Time.deltaTime;
         }
         else
@@ -287,6 +301,7 @@ public class PlayerScript : MonoBehaviour
                 Destroy(_clone);
                 TempCloneFlag = false;
             }
+            timeSEFlag = false;
             CloneTimer = 0.0f;
         }
         if (CloneTimer > 0.0f && CloneTimer < CloneTime)
@@ -474,6 +489,7 @@ public class PlayerScript : MonoBehaviour
                 }
 
                 // Y方向に力を加えてジャンプ（X方向の速度は維持）
+                PlaySE(0);
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 animator.SetBool("JumpBool", true);
                 if (JumpEffectFlag == false)
@@ -596,7 +612,7 @@ public class PlayerScript : MonoBehaviour
             animator.Play("PlayerJumpAttackLeft", 0, 0.0f);
         }
         GameObject bullet = Instantiate(Bullet, shotPoint.position, shotPoint.rotation);
-        PlaySE(0);
+        PlaySE(1);
         Debug.Log("弾を発射しました");
     }
     public void EndAnimAttackBool()

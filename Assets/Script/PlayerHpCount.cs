@@ -5,11 +5,11 @@ using UnityEngine.UI;
 public class PlayerHpCount : MonoBehaviour
 {
     public GameObject[] image;
-    private int temphp = PlayerScript.instance.Hp;
+    public int temphp;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        temphp = PlayerScript.instance.Hp;
+        temphp = PlayerScript.instance.HpMax;
     }
 
     // Update is called once per frame
