@@ -79,6 +79,9 @@ public class Elephant : Boss
     [Header("開始時の咆哮")]
     private bool roared = false;
 
+
+
+
     public float GetWalktimer()
     {
         return Walktimer;
@@ -115,6 +118,19 @@ public class Elephant : Boss
     //{
 
     //}
+
+    public bool Playerdistance()
+    {
+        if (player.position.x - transform.position.x <= 4)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 
     private void Awake()
     {
