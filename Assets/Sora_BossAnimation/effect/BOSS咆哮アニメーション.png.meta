@@ -1,0 +1,595 @@
+fileFormatVersion: 2
+guid: 73351d270f4e45545b9d880fd90d90f0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3339366071818216822
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_0"
+  - first:
+      213: -7645605699610295187
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_1"
+  - first:
+      213: 6152988109755822785
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_2"
+  - first:
+      213: 3959628480800952046
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_3"
+  - first:
+      213: -5027991062644264021
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_4"
+  - first:
+      213: -5607638860059489581
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_5"
+  - first:
+      213: -2259500682687441124
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_6"
+  - first:
+      213: 7343508333401438934
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_7"
+  - first:
+      213: -5164454002028814263
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_8"
+  - first:
+      213: -7273915324832230272
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_9"
+  - first:
+      213: 9074577360689903063
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_10"
+  - first:
+      213: -1055920800252398672
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_11"
+  - first:
+      213: -6146256804322744117
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_12"
+  - first:
+      213: 3500486603869135526
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_13"
+  - first:
+      213: -8969417754221620775
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_14"
+  - first:
+      213: -4842222718859146269
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_15"
+  - first:
+      213: -1012402309400963263
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_16"
+  - first:
+      213: 7399114298974519892
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_17"
+  - first:
+      213: 6912448585302920220
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_18"
+  - first:
+      213: 8916564584516508097
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_19"
+  - first:
+      213: 2130066821358394231
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_20"
+  - first:
+      213: 5820741854653194233
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_21"
+  - first:
+      213: -6634314324513379186
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_22"
+  - first:
+      213: 5228729518031816160
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_23"
+  - first:
+      213: -1467507209892559593
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_24"
+  - first:
+      213: 9214400108292579481
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_25"
+  - first:
+      213: -7925717845834494618
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_26"
+  - first:
+      213: 2822601504747586509
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_27"
+  - first:
+      213: -4836933659746254850
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_28"
+  - first:
+      213: -4281090678598875072
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_29"
+  - first:
+      213: 7151286819334954663
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_30"
+  - first:
+      213: 2342379618979642620
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_31"
+  - first:
+      213: -8665624822450393054
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_32"
+  - first:
+      213: -2608502013070898376
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_33"
+  - first:
+      213: -5715167628638854611
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_34"
+  - first:
+      213: 2193929455188871161
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_35"
+  - first:
+      213: -186900182446034717
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_36"
+  - first:
+      213: -6239085304392659336
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_37"
+  - first:
+      213: -655995762256419104
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_38"
+  - first:
+      213: 4483636321715343840
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_39"
+  - first:
+      213: 1920435157490398525
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_40"
+  - first:
+      213: -4111027490305769311
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_41"
+  - first:
+      213: -5986641158521014100
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_42"
+  - first:
+      213: -668092420587244767
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_43"
+  - first:
+      213: -1337193941336345601
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_44"
+  - first:
+      213: -6473675645004205494
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_45"
+  - first:
+      213: -3553401517572644804
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_46"
+  - first:
+      213: -4119535331829083173
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_47"
+  - first:
+      213: 1461091358434613656
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_48"
+  - first:
+      213: -3949537685640509936
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_49"
+  - first:
+      213: -4608432031767794968
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_50"
+  - first:
+      213: 1067540005953131168
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_51"
+  - first:
+      213: 82596205931977671
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_52"
+  - first:
+      213: -6309416833412826876
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_53"
+  - first:
+      213: 8633185610798028734
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_54"
+  - first:
+      213: -5912017310113444456
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_55"
+  - first:
+      213: 8790867545003491778
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_56"
+  - first:
+      213: 3149510603870425635
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_57"
+  - first:
+      213: 4326597031440587029
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_58"
+  - first:
+      213: -1597334015149931684
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_59"
+  - first:
+      213: 4775529514572371365
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_60"
+  - first:
+      213: 7139866356177791681
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_61"
+  - first:
+      213: -8575752200623876714
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_62"
+  - first:
+      213: 8102772518128408975
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_63"
+  - first:
+      213: 4963207353331250156
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_64"
+  - first:
+      213: -6525335856166947813
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_65"
+  - first:
+      213: 8169837784679662389
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_66"
+  - first:
+      213: -894826214846784910
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_67"
+  - first:
+      213: -42671282153920768
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_68"
+  - first:
+      213: -1302862183360140913
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_69"
+  - first:
+      213: -772927139984267753
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_70"
+  - first:
+      213: -5399337263385957866
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_71"
+  - first:
+      213: 1524276164975254900
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_72"
+  - first:
+      213: -3171789267183726295
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_73"
+  - first:
+      213: -3317138041318036908
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_74"
+  - first:
+      213: -8659706547316790883
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_75"
+  - first:
+      213: -2471978755293638465
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_76"
+  - first:
+      213: -7232376617668810249
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_77"
+  - first:
+      213: 2011605958455489972
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_78"
+  - first:
+      213: -6359756457810891458
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_79"
+  - first:
+      213: -3949864953933918015
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_80"
+  - first:
+      213: -815256426695158734
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_81"
+  - first:
+      213: -5783975027670327674
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_82"
+  - first:
+      213: 9017988997758548233
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_83"
+  - first:
+      213: -6153992555800954147
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_84"
+  - first:
+      213: -4521930420023623378
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_85"
+  - first:
+      213: 780652801228156866
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_86"
+  - first:
+      213: -5063276455999808799
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_87"
+  - first:
+      213: 6094189755345863277
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_88"
+  - first:
+      213: -4557673861374290659
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_89"
+  - first:
+      213: -8102163075280658134
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_90"
+  - first:
+      213: 7528265622844609345
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_91"
+  - first:
+      213: -6976992994476843544
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_92"
+  - first:
+      213: 5880502726747184512
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_93"
+  - first:
+      213: 4813570622322781619
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_94"
+  - first:
+      213: 1167006305520092384
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_95"
+  - first:
+      213: 621835396296340408
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_96"
+  - first:
+      213: -7624091689354135777
+    second: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_97"
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_0"
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0ec42b4409fcaf488e251db5656d8c1
+      internalID: -541918997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_1"
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 0
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc76f5fc1d6eb5442b5508567437d870
+      internalID: 38949016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_2"
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 0
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 809d38843920af740b2c208aaf52a833
+      internalID: 1607050809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_3"
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 0
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e28c923ab7e7a1429995df839ee2b09
+      internalID: -1757084874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_4"
+      rect:
+        serializedVersion: 2
+        x: 2000
+        y: 0
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 581dd2619814db74b9ab231d2e5e8727
+      internalID: -106698123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_5"
+      rect:
+        serializedVersion: 2
+        x: 2500
+        y: 0
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53253d330a6bd0047acfb2e4b1e20020
+      internalID: 1514351913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_6"
+      rect:
+        serializedVersion: 2
+        x: 3000
+        y: 0
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ae0b167b49d38c47bac6eff7681a55a
+      internalID: 1819684343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_7"
+      rect:
+        serializedVersion: 2
+        x: 3500
+        y: 0
+        width: 500
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16390f1b8fbb2834c8841597a06bd5a3
+      internalID: 1349175923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 8d7a40114eb193d4ab8a4250a7802722
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_0": -541918997
+      "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_1": 38949016
+      "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_2": 1607050809
+      "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_3": -1757084874
+      "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_4": -106698123
+      "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_5": 1514351913
+      "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_6": 1819684343
+      "BOSS\u5486\u54EE\u30A2\u30CB\u30E1\u30FC\u30B7\u30E7\u30F3_7": 1349175923
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
