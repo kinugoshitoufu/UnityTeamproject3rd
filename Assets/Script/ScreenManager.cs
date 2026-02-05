@@ -6,6 +6,7 @@ using NUnit.Framework;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using static System.TimeZoneInfo;
 
 public class ScreenManager : MonoBehaviour
 {
@@ -36,9 +37,19 @@ public class ScreenManager : MonoBehaviour
     [SerializeField] private GameObject fadeBg;// 黒背景
     [SerializeField] private Vector3 floorPos = new Vector3(-5, -2.86f, 0);
     [SerializeField] private Vector3 bossPos = new Vector3(5, 3f, 0);
+    [SerializeField] private Camera mainCamera;//メインカメラ
+    [SerializeField] private Camera zoomCamra;//ズームカメラ
+    [SerializeField] private float transitionTime = 0.5f;
+    [SerializeField] private float targetScale = 0.5f;//スローモーションの速さ
+
 
     private SpriteRenderer sprRender;
     private bool openFlag = false;//幕が上がっているかどうか?
+
+    //カメラのサイズの初期値
+    private Vector3 startPos;
+    private float startSize;
+
     public bool StartLecoding { get { return startLecoding; } }
     private bool startLecoding = false;
     private bool checkInputStart = false;
@@ -51,6 +62,10 @@ public class ScreenManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //カメラの初期値を保存しておく
+        startPos = mainCamera.transform.position;
+        startSize = mainCamera.orthographicSize;
+
         //背景手前を非表示
         if (Bg_InFront != null) Bg_InFront.gameObject.SetActive(false);
         //ライトを消す
@@ -64,6 +79,9 @@ public class ScreenManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Time.timeScale = targetScale;
+        //Time.fixedDeltaTime = 0.02f * Time.timeScale;
+
         //幕が上がったら、寝ているボスを表示する
         if (PlayerScript.instance.StartFlag==true)
         {
@@ -88,9 +106,32 @@ public class ScreenManager : MonoBehaviour
     }
 
 
-    public void Death()
+    public IEnumerator Clear()
     {
+        //スローモーションを開始
+        //StartCoroutine(changeSlow(targetScale));
+
+        //ボスを倒したらカメラをzoomさせる
+        //yield return StartCoroutine(ZoomCamera(mainCamera, zoomCamra));
+
+        StartCoroutine(ZoomCamera(mainCamera, zoomCamra));
+        StartCoroutine(RotateBoss(Elephant.elephant.gameObject, -90f, transitionTime));
+
+        //yield return CoroutineRunner.WaitAll(ZoomCamera(mainCamera, zoomCamra),RotateBoss(Elephant.elephant.gameObject,-90f,transitionTime));
+
+        yield return new WaitForSeconds(transitionTime);
+
+        Debug.Log("zoom終了です。リザルト表示に移行していきます");
+
+        //カメラを戻す
+        mainCamera.transform.position = startPos;
+        mainCamera.orthographicSize = startSize;
+
+        StartCoroutine(Close());
         
+
+
+
     }
 
     public IEnumerator Close()
@@ -125,7 +166,6 @@ public class ScreenManager : MonoBehaviour
             checkInputStart = false;
             Debug.Log("キーが押されました");
             StartCoroutine(SceneChange());
-            
         }
         
     }
@@ -134,7 +174,7 @@ public class ScreenManager : MonoBehaviour
     {
         result.gameObject.SetActive(false);
         fadeBg.gameObject.SetActive(true);
-        sprRender.sortingOrder = 6;
+        sprRender.sortingOrder = 8;
         yield return FadeIn();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
@@ -217,6 +257,82 @@ public class ScreenManager : MonoBehaviour
         }
 
         Debug.Log("画面を明るくしました");
+    }
+
+    IEnumerator ZoomCamera(Camera start,Camera end)
+    {
+        //始点カメラと終点カメラから取得
+        float  timer = 0;
+        Vector3 startPos = start.transform.position;
+        Vector3 endPos = end.transform.position;
+        float startSize = start.orthographicSize;
+        float endSize = end.orthographicSize;
+
+        bool isZooming = true;
+
+        while (isZooming)
+        {
+            timer += Time.unscaledDeltaTime; // スローでも一定速度
+            float t = Mathf.Clamp01(timer / transitionTime);
+
+            // 位置補間
+            mainCamera.transform.position = Vector3.Lerp(startPos, endPos, t);
+            // サイズ補間（2Dの場合はorthographicSizeでズーム）
+            mainCamera.orthographicSize = Mathf.Lerp(startSize, endSize, t);
+
+            if (t >= 1f)
+            {
+                isZooming = false;
+            }
+
+            yield return null;
+        }
+        
+    }
+
+    IEnumerator RotateBoss(GameObject rotateObj,float targetAngle,float rotateSeconds)
+    {
+        float rotateSpeed = targetAngle / rotateSeconds;
+
+        while (rotateObj.transform.eulerAngles.z != targetAngle)
+        {
+            // 現在の回転
+            float currentAngle = rotateObj.transform.eulerAngles.z;
+
+            // 角度をなめらかに近づける
+            float newAngle = Mathf.MoveTowardsAngle(
+                currentAngle,
+                targetAngle,
+                Mathf.Abs(rotateSpeed) * Time.deltaTime
+            );
+
+            rotateObj.transform.rotation = Quaternion.Euler(0f, 0f, newAngle);
+
+            if (rotateObj.transform.rotation.z == targetAngle) yield break;
+
+            yield return null;
+        }
+        
+
+    }
+
+
+    IEnumerator changeSlow(float targetScale)
+    {
+        Time.timeScale = targetScale;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        yield return null;
+
+        //while (Time.timeScale!=targetScale)
+        //{
+        //    //スローモーションにグラデーションを持たせる
+        //    Time.timeScale = Mathf.Lerp(Time.timeScale, targetScale, 10 * Time.unscaledDeltaTime);
+        //    //物理演算がカクつかないように周期の倍率を合わせる
+        //    Time.fixedDeltaTime = 0.02f * Time.timeScale;
+
+        //    yield return null;
+        //}
+        
     }
 
     IEnumerator FadeOut()

@@ -38,8 +38,11 @@ public class Boss : MonoBehaviour
     private Vector2 rightEdge;//画面右端
     private Vector2 leftEdge; //画面左端
 
-
     protected float ratioHP = 100;//HPの割合
+
+
+    public bool Death { get { return death; } }
+    private bool death = false;
 
     //protected float ratioHP { get { return HP / startHP; } set { } }//HPの割合
     protected int Direction { get { return direction; } }//向きの取得
@@ -93,6 +96,16 @@ public class Boss : MonoBehaviour
             beforeMaxHP = MaxHP;
         }
 
+        //HPが0以下になったら死亡判定にする
+        if (HP <= 0&&death==false)
+        {
+            death = true;
+            Debug.Log("ボスの死亡を確認");
+            //クリア関数を呼び出す
+            StartCoroutine(ScreenManager.instance.Clear());
+
+        }
+
         //体力を変更するデバッグモード
         DebugHPMode();
 
@@ -114,8 +127,8 @@ public class Boss : MonoBehaviour
             }
         }
 
-        //0キーが押されたら体力を100%にする
-        if (Input.GetKeyDown(KeyCode.Alpha0)) num = 1;
+        //0キーが押されたら体力を0%にする
+        if (Input.GetKeyDown(KeyCode.Alpha0)) num = 0;
 
         //違うボタンが押されたら採用
         if (beforeNum == num) return;
