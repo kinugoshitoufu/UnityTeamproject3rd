@@ -5,6 +5,7 @@ using System.Collections;
 using static UnityEngine.GraphicsBuffer;
 using System.Collections.Generic;
 using System;
+using Unity.Behavior;
 [RequireComponent(typeof(Rigidbody2D))]
 
 public class Elephant : Boss
@@ -79,6 +80,9 @@ public class Elephant : Boss
     [Header("開始時の咆哮")]
     private bool roared = false;
 
+    public GameObject PlayerTransform;
+
+    private BehaviorGraphAgent agent;
 
 
 
@@ -101,6 +105,8 @@ public class Elephant : Boss
         base.Start();
         rb.gravityScale = gravityScale;
         AttackCollider.enabled = false;
+        agent=GetComponent<BehaviorGraphAgent>();
+        agent.BlackboardReference.SetVariableValue<Transform>("Player",PlayerTransform.transform);
     }
 
     void Update()
