@@ -1565,6 +1565,8 @@ MonoBehaviour:
   showTime: 2
   result: {fileID: 1835137837}
   smoke: {fileID: 3062167695470231075, guid: 9f7f751eeaf1b234fb057fcdac46a7f1, type: 3}
+  clearSmoke: {fileID: 3062167695470231075, guid: dee604e80b70afa46b967698c440589a, type: 3}
+  bossSmoke: {fileID: 3062167695470231075, guid: f605ce7d42b1e4c458903fdec174173a, type: 3}
   boss: {fileID: 3545987914908370051, guid: 4516c440afb296d4a92e006227d3a8fd, type: 3}
   panel: {fileID: 1422581458}
   fadeBg: {fileID: 377331272}
