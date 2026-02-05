@@ -1,0 +1,9 @@
+diff a/Assets/Elephant.asset b/Assets/Elephant.asset	(rejected hunks)
+@@ -93,7 +93,6 @@
+   m_Nodes:
+   - rid: 6892242662680428545
+   - rid: 6892242710563389452
+-  - rid: 3619592572767567935
+   - rid: 3619592572767568037
+   - rid: 3619592572767568147
+   - rid: 3619592731945599327

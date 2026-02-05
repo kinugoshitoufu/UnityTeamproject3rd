@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Nodes:
   - rid: 6892242662680428545
   - rid: 6892242710563389452
+  - rid: -2
   - rid: 3619592572767568037
   - rid: 3619592572767568147
   - rid: 3619592731945599327
@@ -140,7 +141,7 @@ MonoBehaviour:
   - rid: 1917430746581827932
   - rid: 1917430746581828013
   - rid: 1917430746581828081
-  m_VersionTimestamp: 639058874632330998
+  m_VersionTimestamp: 639058874851845192
   m_SerializedVersion: 1
   m_DebugInfo: {fileID: 3782914838088839461}
   m_RuntimeGraph: {fileID: 3031259686699998231}
@@ -226,7 +227,7 @@ MonoBehaviour:
       m_Value1: 3404519316014793281
     Variables: []
     NamedChildren: []
-    IsPlaceholder: 0
+    IsPlaceholder: 1
   - Name: Conditional Branch
     Story: 
     RuntimeTypeString: Unity.Behavior.BranchingConditionComposite, Unity.Behavior,
@@ -3888,7 +3889,7 @@ MonoBehaviour:
           rid: 6892242662680428550
         m_EndedNodes:
           rid: 6892242662680428551
-        m_VersionTimestamp: 639058874632330998
+        m_VersionTimestamp: 639058874851845192
     - rid: 6892242662680428548
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
