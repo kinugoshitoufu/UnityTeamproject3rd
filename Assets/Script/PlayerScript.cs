@@ -101,6 +101,7 @@ public class PlayerScript : MonoBehaviour
     [Tooltip("Hp設定")]
     public int Hp = 5;
     public int HpMax;
+    private int TempHp;
 
     // ========== クリア・ゲームオーバーのパラメータ ==========
     [Header("クリア・ゲームオーバーフラグ設定")]
@@ -130,6 +131,13 @@ public class PlayerScript : MonoBehaviour
     private bool SmokeEffectFlag;
     // ========== TIME用 ============
     public float ClearTime = 0.0f;
+    private float ScoreTimer = 0.0f;
+    private float ScoreTime = 1.0f;
+    // ========== TIME用 ============
+    public int Score = 3000;
+    public int ScoreTimeMinus = 10;
+    public int ScoreHpMinus = 100;
+
 
     /// <summary>
     /// 初期化処理
@@ -139,6 +147,7 @@ public class PlayerScript : MonoBehaviour
     {
         // Rigidbody2Dコンポーネントを取得（物理演算に必要）
         HpMax = Hp;
+        TempHp = HpMax;
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         //audioSource = GetComponent<AudioSource>();
@@ -185,10 +194,21 @@ public class PlayerScript : MonoBehaviour
     /// </summary>
     void Update()
     {
-        AttackTimer += Time.deltaTime;
+        AttackTimer += Time.deltaTime;        
         if (StartedFlag)
         {
+            ScoreTimer += Time.deltaTime;
             ClearTime += Time.deltaTime;
+        }
+        if (ScoreTime < ScoreTimer)
+        {
+            Score -= ScoreTimeMinus;
+            ScoreTimer = 0.0f;
+        }
+        if (Hp < TempHp)
+        {
+            Score -= ScoreHpMinus;
+            TempHp--;
         }
         //if (ScreenManager.instance.StartLecoding == false)
         //{
@@ -788,6 +808,26 @@ public class PlayerScript : MonoBehaviour
         {
             animator.SetBool("JumpBool",false);
             isGrounded = true;  // 接地状態をtrueに
+        }
+        if (collision.CompareTag("Enemy") && !MoveStopFlag)
+        {
+            //if (flicflag)
+            //{
+            //    rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+            //    rb.AddForce(Vector2.right * knockpower.x, ForceMode2D.Impulse);
+            //}
+            //else
+            //{
+            //    rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+            //    rb.AddForce(Vector2.left * knockpower.x, ForceMode2D.Impulse);
+            //}
+            MoveStopFlag = true;
+            rb.linearVelocity = Vector2.zero;
+            Vector2 distination = (transform.position - collision.transform.position).normalized;
+            rb.AddForce(Vector2.up * knockpower.y, ForceMode2D.Impulse);
+            rb.AddForce(distination * knockpower, ForceMode2D.Impulse);
+            Hp--;
+            animator.SetBool("DamageBool", true);
         }
     }
 
