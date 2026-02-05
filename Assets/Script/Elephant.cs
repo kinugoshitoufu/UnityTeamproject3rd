@@ -201,6 +201,7 @@ public class Elephant : Boss
     
     IEnumerator JumpCoroutine()
     {
+        Debug.Log("ヒップドロップ開始");
         isJumping = true;
         eventEnd = false;
 
@@ -233,7 +234,6 @@ public class Elephant : Boss
         {
             yield return null;
         }
-        
         // =============================
         // 2. 浮遊フェーズ
         // =============================
@@ -272,6 +272,7 @@ public class Elephant : Boss
         // =============================
         // 3. 落下フェーズ（ヒップドロップ）
         // =============================
+
         rb.gravityScale = fallGravityScale;
         
         // 落下開始時の位置とターゲット
@@ -284,11 +285,11 @@ public class Elephant : Boss
         float needVx = (target.x - startPos.x) / fallTime;
 
         rb.linearVelocity = new Vector2(needVx, 0f);
-        while (transform.position.y > target.y && transform.position.y > -2.5f)
-        {
-            //Debug.Log("3. 落下フェーズ");
-            yield return null;
-        }
+        //while (transform.position.y > target.y && transform.position.y > -2.5f)
+        //{
+        //    //Debug.Log("3. 落下フェーズ");
+        //    yield return null;
+        //}
         rb.linearVelocity = Vector2.zero;
         Jumping = true;
         eventEnd = true;
@@ -461,6 +462,7 @@ public class Elephant : Boss
 
     public IEnumerator BallJump()
     {
+        Debug.Log("垂直ドロップ開始");
         if (eventEnd)
         {
             yield break;
@@ -511,12 +513,14 @@ public class Elephant : Boss
         eventEnd = false;
         ElephantAttackParameters NoseAttack=getParam(ElephantTechnique.NoseAttack);
         //待機時間分、待機
-        yield return StartCoroutine(PreparaAttack(NoseAttack.proTime.preparationTime));
+        //yield return StartCoroutine(PreparaAttack(NoseAttack.proTime.preparationTime));
+        yield return new WaitForSeconds(3.0f);
         AttackCollider.enabled = true;
         AttackCount++;
         yield return StartCoroutine(AttackCoroutine(NoseAttack.proTime.attackTime));
         AttackCollider.enabled = false;
-        yield return StartCoroutine(Afterglow(NoseAttack.proTime.afterglowTime));
+        //yield return StartCoroutine(Afterglow(NoseAttack.proTime.afterglowTime));
+        yield return new WaitForSeconds(3.0f);
         eventEnd = true;
     }
 
@@ -525,7 +529,8 @@ public class Elephant : Boss
     {
         eventEnd = false;
         ElephantAttackParameters HipDrop = getParam(ElephantTechnique.hipdrop);
-        yield return StartCoroutine(PreparaAttack(HipDrop.proTime.preparationTime));
+        //yield return StartCoroutine(PreparaAttack(HipDrop.proTime.preparationTime));
+        yield return new WaitForSeconds(3.0f);
         if (!isJumping)
         {
             yield return StartCoroutine(JumpCoroutine());
@@ -534,7 +539,8 @@ public class Elephant : Boss
         {
             eventEnd = true;
         }
-        yield return StartCoroutine(Afterglow(HipDrop.proTime.afterglowTime));
+        yield return new WaitForSeconds(3.0f);
+        //yield return StartCoroutine(Afterglow(HipDrop.proTime.afterglowTime));
         eventEnd = true;
     }
 
@@ -542,8 +548,9 @@ public class Elephant : Boss
     public IEnumerator BallandJump()
     {
         eventEnd = false;
-        ElephantAttackParameters balljump = getParam(ElephantTechnique.hipdrop);
-        yield return StartCoroutine(PreparaAttack(balljump.proTime.preparationTime));
+        ElephantAttackParameters balljump = getParam(ElephantTechnique.hipdrop2);
+        //yield return StartCoroutine(PreparaAttack(balljump.proTime.preparationTime));
+        yield return new WaitForSeconds(3.0f);
         if (isballjump)
         {
             yield return StartCoroutine(BallJump());
@@ -552,7 +559,8 @@ public class Elephant : Boss
         {
             eventEnd = true;
         }
-        yield return StartCoroutine(Afterglow(balljump.proTime.afterglowTime));
+        yield return new WaitForSeconds(3.0f);
+        //yield return StartCoroutine(Afterglow(balljump.proTime.afterglowTime));
         eventEnd = true;
     }
 
